@@ -1,0 +1,10 @@
+{
+ "initialized": true,
+ "seen": [],
+ "heartbeat": {
+  "last_sent_date": null,
+  "checks": 1,
+  "trades_found": 0,
+  "errors": 2
+ }
+}
