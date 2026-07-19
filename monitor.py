@@ -1,12 +1,17 @@
 #!/usr/bin/env python3
 """
-Congress Trade Bot
-------------------
+Congress Trade Bot (v2 — CapitolTrades primary source)
+------------------------------------------------------
 Checks congressional stock-trade disclosures and pings a Discord webhook
 when new trades appear. Designed to run on a GitHub Actions cron schedule.
 
-State (already-seen trades, heartbeat counters) lives in state.json, which
-the workflow commits back to the repo after each run.
+v2 changes:
+  * Primary source is now CapitolTrades' public JSON API (the old
+    Senate/House Stock Watcher S3 buckets were shut down -> 403).
+  * Finnhub remains as an optional per-ticker backup (finnhub_enrichment).
+  * Initialization only "counts" if data was actually fetched, and an
+    initialized-but-empty state self-heals. This prevents a flood of
+    historical trades after a failed first run.
 
 Env vars required:
   DISCORD_WEBHOOK_URL   (GitHub secret)
@@ -27,15 +32,16 @@ import yaml
 CONFIG_PATH = "config.yaml"
 STATE_PATH = "state.json"
 
-SENATE_URL = (
-    "https://senate-stock-watcher-data.s3-us-west-2.amazonaws.com"
-    "/aggregate/all_transactions.json"
-)
-HOUSE_URL = (
-    "https://house-stock-watcher-data.s3-us-west-2.amazonaws.com"
-    "/data/all_transactions.json"
-)
+CAPITOLTRADES_URL = "https://bff.capitoltrades.com/trades"
 FINNHUB_URL = "https://finnhub.io/api/v1/stock/congressional-trading"
+
+HEADERS = {
+    "User-Agent": (
+        "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 "
+        "(KHTML, like Gecko) Chrome/126.0 Safari/537.36"
+    ),
+    "Accept": "application/json",
+}
 
 GREEN = 0x2ECC71   # buys
 RED = 0xE74C3C     # sells
@@ -58,9 +64,9 @@ def load_state() -> dict:
             return json.load(f)
     return {
         "initialized": False,
-        "seen": [],  # list of trade hashes
+        "seen": [],
         "heartbeat": {
-            "last_sent_date": None,   # "YYYY-MM-DD"
+            "last_sent_date": None,
             "checks": 0,
             "trades_found": 0,
             "errors": 0,
@@ -69,7 +75,6 @@ def load_state() -> dict:
 
 
 def save_state(state: dict) -> None:
-    # Keep the seen-set bounded so state.json doesn't grow forever.
     state["seen"] = state["seen"][-50000:]
     with open(STATE_PATH, "w", encoding="utf-8") as f:
         json.dump(state, f, indent=1)
@@ -80,7 +85,6 @@ def save_state(state: dict) -> None:
 # ----------------------------------------------------------------------
 
 def discord_post(payload: dict) -> None:
-    """Post to the webhook with basic 429 retry."""
     url = os.environ["DISCORD_WEBHOOK_URL"]
     for _ in range(4):
         r = requests.post(url, json=payload, timeout=15)
@@ -109,9 +113,9 @@ def send_trade_alert(cfg: dict, t: dict) -> None:
         "title": f"{emoji} {t['person']} {verb} {t['ticker'] or t['asset']}",
         "color": GREEN if is_buy else RED,
         "fields": [
-            {"name": "Chamber", "value": t["chamber"], "inline": True},
+            {"name": "Chamber", "value": t["chamber"] or "n/a", "inline": True},
+            {"name": "Party", "value": t.get("party") or "n/a", "inline": True},
             {"name": "Amount", "value": t["amount"] or "n/a", "inline": True},
-            {"name": "Owner", "value": t.get("owner") or "n/a", "inline": True},
             {"name": "Trade date", "value": t["transaction_date"] or "n/a", "inline": True},
             {"name": "Disclosed", "value": t["disclosure_date"] or "n/a", "inline": True},
         ],
@@ -122,7 +126,7 @@ def send_trade_alert(cfg: dict, t: dict) -> None:
     if t.get("link"):
         embed["url"] = t["link"]
     discord_post({"content": content, "embeds": [embed]})
-    time.sleep(1.2)  # stay friendly with webhook rate limits
+    time.sleep(1.2)
 
 
 def send_simple(cfg: dict, title: str, description: str, color: int,
@@ -144,7 +148,7 @@ def send_simple(cfg: dict, title: str, description: str, color: int,
 # ----------------------------------------------------------------------
 
 def parse_amount_low(amount: str) -> int:
-    """'$1,001 - $15,000' -> 1001. Unknown formats -> 0."""
+    """'$1,001 - $15,000' or '~$15,000' -> first number. Unknown -> 0."""
     if not amount:
         return 0
     nums = re.findall(r"[\d,]+", amount)
@@ -157,94 +161,129 @@ def parse_amount_low(amount: str) -> int:
 
 
 def classify_side(raw_type: str) -> str | None:
-    """Normalize transaction type -> 'buy' / 'sell' / None (exchange etc.)."""
     t = (raw_type or "").lower()
     if "purchase" in t or t == "buy":
         return "buy"
     if "sale" in t or "sell" in t or "sold" in t:
         return "sell"
-    return None
+    return None  # exchange / receive / unknown
 
 
 def parse_date(s: str) -> datetime | None:
     if not s:
         return None
+    s = s.strip()[:10]  # tolerate ISO timestamps like 2026-07-18T12:00:00Z
     for fmt in ("%Y-%m-%d", "%m/%d/%Y", "%m/%d/%y"):
         try:
-            return datetime.strptime(s.strip(), fmt).replace(tzinfo=timezone.utc)
+            return datetime.strptime(s, fmt).replace(tzinfo=timezone.utc)
         except ValueError:
             continue
     return None
 
 
 def trade_hash(t: dict) -> str:
+    if t.get("uid"):
+        return f"uid:{t['uid']}"
     key = "|".join(str(t.get(k, "")) for k in (
         "chamber", "person", "ticker", "asset",
-        "transaction_date", "side", "amount", "owner",
+        "transaction_date", "side", "amount",
     ))
     return hashlib.sha256(key.encode()).hexdigest()[:24]
 
 
 # ----------------------------------------------------------------------
-# Data sources
+# Data source: CapitolTrades (primary — all members, both chambers)
 # ----------------------------------------------------------------------
 
-def fetch_json(url: str) -> list:
-    r = requests.get(url, timeout=60)
-    r.raise_for_status()
-    return r.json()
+def fetch_capitoltrades(pages: int) -> list:
+    """Fetch recent trades from CapitolTrades' public JSON endpoint.
+    Newest trades come first; each page is up to ~96 rows."""
+    rows = []
+    for page in range(1, max(1, pages) + 1):
+        r = requests.get(
+            CAPITOLTRADES_URL,
+            params={"page": page, "pageSize": 96},
+            headers=HEADERS,
+            timeout=30,
+        )
+        r.raise_for_status()
+        payload = r.json()
+        batch = payload.get("data") or []
+        if not batch:
+            break
+        rows.extend(batch)
+        time.sleep(0.7)  # be polite
+    return rows
 
 
-def normalize_senate(rows: list) -> list[dict]:
+def _fmt_party(p: str) -> str:
+    return {"democrat": "Democrat", "republican": "Republican"}.get(
+        (p or "").lower(), (p or "").title()
+    )
+
+
+def normalize_capitoltrades(rows: list) -> list[dict]:
     out = []
     for r in rows:
-        side = classify_side(r.get("type"))
-        if not side:
-            continue
-        out.append({
-            "chamber": "Senate",
-            "person": (r.get("senator") or "").strip(),
-            "ticker": (r.get("ticker") or "").replace("--", "").strip(),
-            "asset": (r.get("asset_description") or "").strip(),
-            "side": side,
-            "amount": (r.get("amount") or "").strip(),
-            "owner": (r.get("owner") or "").strip(),
-            "transaction_date": (r.get("transaction_date") or "").strip(),
-            "disclosure_date": (r.get("disclosure_date") or "").strip(),
-            "link": (r.get("ptr_link") or "").strip(),
-        })
+        try:
+            side = classify_side(r.get("txType"))
+            if not side:
+                continue
+
+            pol = r.get("politician") or {}
+            person = " ".join(
+                x for x in [pol.get("firstName"), pol.get("lastName")] if x
+            ).strip() or str(r.get("_politicianId") or "Unknown member")
+            chamber = (pol.get("chamber") or "").title() or "Congress"
+
+            asset = r.get("asset") or {}
+            issuer = r.get("issuer") or {}
+            raw_ticker = asset.get("assetTicker") or issuer.get("issuerTicker") or ""
+            ticker = raw_ticker.split(":")[0].strip()  # "AAPL:US" -> "AAPL"
+            asset_name = (issuer.get("issuerName") or "").strip()
+
+            low, high = r.get("sizeRangeLow"), r.get("sizeRangeHigh")
+            value = r.get("value")
+            if low and high:
+                amount = f"${low:,.0f} - ${high:,.0f}"
+            elif value:
+                amount = f"~${value:,.0f}"
+            else:
+                amount = ""
+
+            tx_id = r.get("_txId")
+            link = (r.get("filingURL") or "").strip()
+            if not link and tx_id:
+                link = f"https://www.capitoltrades.com/trades/{tx_id}"
+
+            out.append({
+                "uid": f"ct-{tx_id}" if tx_id else "",
+                "chamber": chamber,
+                "party": _fmt_party(pol.get("party")),
+                "person": person,
+                "ticker": ticker,
+                "asset": asset_name,
+                "side": side,
+                "amount": amount,
+                "transaction_date": (r.get("txDate") or "")[:10],
+                "disclosure_date": (r.get("pubDate") or r.get("filingDate") or "")[:10],
+                "link": link,
+            })
+        except Exception as e:
+            print(f"WARN: skipped malformed CapitolTrades row: {e}", file=sys.stderr)
     return out
 
 
-def normalize_house(rows: list) -> list[dict]:
-    out = []
-    for r in rows:
-        side = classify_side(r.get("type"))
-        if not side:
-            continue
-        out.append({
-            "chamber": "House",
-            "person": (r.get("representative") or "").strip(),
-            "ticker": (r.get("ticker") or "").replace("--", "").strip(),
-            "asset": (r.get("asset_description") or "").strip(),
-            "side": side,
-            "amount": (r.get("amount") or "").strip(),
-            "owner": (r.get("owner") or "").strip(),
-            "transaction_date": (r.get("transaction_date") or "").strip(),
-            "disclosure_date": (r.get("disclosure_date") or "").strip(),
-            "link": (r.get("ptr_link") or "").strip(),
-        })
-    return out
-
+# ----------------------------------------------------------------------
+# Data source: Finnhub (backup — per-ticker, needs watch_tickers)
+# ----------------------------------------------------------------------
 
 def fetch_finnhub(tickers: list[str]) -> list[dict]:
-    """Optional per-ticker enrichment. Finnhub's congressional endpoint is
-    symbol-based, so this only runs against watch_tickers."""
     key = os.environ.get("FINNHUB_API_KEY", "")
     if not key:
         return []
     out = []
-    for sym in tickers[:25]:  # respect free-tier rate limits
+    for sym in tickers[:25]:
         try:
             r = requests.get(
                 FINNHUB_URL,
@@ -256,24 +295,24 @@ def fetch_finnhub(tickers: list[str]) -> list[dict]:
                 side = classify_side(row.get("transactionType"))
                 if not side:
                     continue
-                amt_from = row.get("amountFrom")
-                amt_to = row.get("amountTo")
+                amt_from, amt_to = row.get("amountFrom"), row.get("amountTo")
                 amount = ""
                 if amt_from is not None and amt_to is not None:
                     amount = f"${amt_from:,.0f} - ${amt_to:,.0f}"
                 out.append({
+                    "uid": "",
                     "chamber": row.get("position") or "Congress",
+                    "party": "",
                     "person": (row.get("name") or "").strip(),
                     "ticker": (row.get("symbol") or sym).strip(),
                     "asset": (row.get("assetName") or "").strip(),
                     "side": side,
                     "amount": amount,
-                    "owner": (row.get("ownerType") or "").strip(),
-                    "transaction_date": (row.get("transactionDate") or "").strip(),
-                    "disclosure_date": (row.get("filingDate") or "").strip(),
+                    "transaction_date": (row.get("transactionDate") or "")[:10],
+                    "disclosure_date": (row.get("filingDate") or "")[:10],
                     "link": "",
                 })
-            time.sleep(1.1)  # ~60 req/min free tier
+            time.sleep(1.1)
         except Exception as e:
             print(f"WARN: Finnhub failed for {sym}: {e}", file=sys.stderr)
     return out
@@ -358,25 +397,29 @@ def main() -> int:
     feats = cfg["features"]
     state["heartbeat"]["checks"] += 1
 
+    # Self-heal: a previous "initialized" run that indexed nothing doesn't count.
+    effectively_initialized = state["initialized"] and len(state["seen"]) > 0
+
     all_trades: list[dict] = []
     errors: list[str] = []
 
-    if feats.get("senate_source", True):
+    if feats.get("capitoltrades_source", True):
         try:
-            all_trades += normalize_senate(fetch_json(SENATE_URL))
+            pages = int(cfg.get(
+                "seed_pages" if not effectively_initialized else "pages_per_run",
+                10 if not effectively_initialized else 3,
+            ))
+            all_trades += normalize_capitoltrades(fetch_capitoltrades(pages))
         except Exception as e:
-            errors.append(f"Senate source failed: {e}")
-
-    if feats.get("house_source", True):
-        try:
-            all_trades += normalize_house(fetch_json(HOUSE_URL))
-        except Exception as e:
-            errors.append(f"House source failed: {e}")
+            errors.append(f"CapitolTrades source failed: {e}")
 
     if feats.get("finnhub_enrichment", False):
         watch = cfg["filters"].get("watch_tickers") or []
         if watch:
-            all_trades += fetch_finnhub(watch)
+            try:
+                all_trades += fetch_finnhub(watch)
+            except Exception as e:
+                errors.append(f"Finnhub source failed: {e}")
 
     for msg in errors:
         print(f"ERROR: {msg}", file=sys.stderr)
@@ -394,23 +437,29 @@ def main() -> int:
         state["seen"].append(h)
         new_trades.append(t)
 
-    # First run: seed state silently so you don't get years of backfill.
-    if not state["initialized"]:
-        state["initialized"] = True
-        save_state(state)
-        send_simple(
-            cfg, "🏛️ Congress Trade Bot initialized",
-            f"Indexed **{len(state['seen'])}** historical trades as already-seen. "
-            f"You'll be pinged for anything new from now on.",
-            BLUE, mention_user=True,
-        )
-        print(f"Initialized with {len(state['seen'])} historical trades.")
+    # First *successful* run: seed silently so you don't get flooded
+    # with historical backfill. Only counts if we actually got data.
+    if not effectively_initialized:
+        if all_trades:
+            state["initialized"] = True
+            save_state(state)
+            send_simple(
+                cfg, "🏛️ Congress Trade Bot initialized",
+                f"Connected to data source and indexed "
+                f"**{len(state['seen'])}** recent trades as already-seen. "
+                f"You'll be pinged for anything new from now on.",
+                BLUE, mention_user=True,
+            )
+            print(f"Initialized with {len(state['seen'])} trades.")
+        else:
+            save_state(state)
+            print("No data fetched; initialization deferred to next run.")
         return 0
 
     alertable = [t for t in new_trades if passes_filters(cfg, t)]
-    # Newest disclosures first
     alertable.sort(
-        key=lambda t: parse_date(t["disclosure_date"]) or datetime.min.replace(tzinfo=timezone.utc),
+        key=lambda t: parse_date(t["disclosure_date"])
+        or datetime.min.replace(tzinfo=timezone.utc),
         reverse=True,
     )
 
