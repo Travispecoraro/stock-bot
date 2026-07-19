@@ -76,7 +76,8 @@ def load_state() -> dict:
         "initialized": False,
         "seen": [],
         "seen_filings": [],
-        "daily": {"date": None, "count": 0},
+        "daily": {"date": None, "count": 0, "section_sent": False},
+        "positions": {},
         "heartbeat": {
             "last_sent_date": None,
             "checks": 0,
@@ -117,7 +118,8 @@ def mention(cfg: dict) -> str:
     return ""
 
 
-def send_trade_alert(cfg: dict, t: dict, others_today: int) -> None:
+def send_trade_alert(cfg: dict, t: dict, others_today: int,
+                     extra_section: str = "") -> None:
     """One digest-style alert: featured trade + count of other trades today.
 
     Congressional Trading Alert
@@ -140,6 +142,8 @@ def send_trade_alert(cfg: dict, t: dict, others_today: int) -> None:
     if others_today > 0:
         plural = "trade was" if others_today == 1 else "trades were"
         lines.append(f"\n**{others_today}** other notable {plural} disclosed today.")
+    if extra_section:
+        lines.append(extra_section)
     content = mention(cfg) if cfg["discord"].get("mention_on_trade") else ""
     embed = {
         "title": "Congressional Trading Alert",
@@ -302,6 +306,7 @@ def efd_parse_ptr(s: requests.Session, filing: dict) -> list[dict]:
         ticker = tds[3].replace("--", "").strip()
         trades.append({
             "uid": f"efd-{filing_uid}-{tds[0]}",
+            "raw_type": tds[6],
             "chamber": "Senate",
             "party": "",
             "person": filing["name"],
@@ -459,6 +464,7 @@ def fetch_finnhub(tickers: list[str]) -> list[dict]:
                     amount = f"${amt_from:,.0f} - ${amt_to:,.0f}"
                 out.append({
                     "uid": "",
+                    "raw_type": row.get("transactionType") or "",
                     "chamber": row.get("position") or "Congress",
                     "party": "",
                     "person": (row.get("name") or "").strip(),
@@ -474,6 +480,49 @@ def fetch_finnhub(tickers: list[str]) -> list[dict]:
         except Exception as e:
             print(f"WARN: Finnhub failed for {sym}: {e}", file=sys.stderr)
     return out
+
+
+# ----------------------------------------------------------------------
+# Position ledger — reconstructed from disclosed trades
+# ----------------------------------------------------------------------
+
+def update_positions(state: dict, trades: list[dict]) -> None:
+    """Maintain an approximate who-holds-what ledger. A purchase opens a
+    position; a full sale closes it; a partial sale keeps it open.
+    Approximate by design: only trades the bot has observed count."""
+    pos = state.setdefault("positions", {})
+    for t in trades:
+        ticker = (t.get("ticker") or "").strip()
+        person = (t.get("person") or "").strip()
+        if not ticker or not person:
+            continue
+        rec = pos.setdefault(ticker, {"holders": {}, "name": ""})
+        if t.get("asset"):
+            rec["name"] = t["asset"]
+        raw = (t.get("raw_type") or "").lower()
+        if t["side"] == "buy":
+            rec["holders"][person] = 1
+        else:
+            if "partial" not in raw:
+                rec["holders"].pop(person, None)
+
+
+def top_holdings_section(state: dict, n: int = 3) -> str:
+    """Formatted top-N most-held stocks among senators, or '' if no data."""
+    rows = []
+    for ticker, rec in state.get("positions", {}).items():
+        count = len(rec.get("holders", {}))
+        if count > 0:
+            rows.append((count, ticker, rec.get("name", "")))
+    if not rows:
+        return ""
+    rows.sort(key=lambda r: (-r[0], r[1]))
+    lines = ["", "📊 **Top stocks held by senators** *(from disclosed trades)*:"]
+    for i, (count, ticker, name) in enumerate(rows[:n], 1):
+        label = f"{name} ({ticker})" if name else ticker
+        word = "senator" if count == 1 else "senators"
+        lines.append(f"{i}. {label} — {count} {word} ({count}%)")
+    return "\n".join(lines)
 
 
 # ----------------------------------------------------------------------
@@ -526,9 +575,17 @@ def maybe_heartbeat(cfg: dict, state: dict) -> None:
     if hb["trades_found"] == 0:
         # Quiet day: send the update. (On active days, the alerts
         # themselves were the day's update — send nothing extra.)
+        section = ""
+        daily = state.get("daily") or {}
+        if not daily.get("section_sent"):
+            section = top_holdings_section(state)
+            if section:
+                daily["section_sent"] = True
+                state["daily"] = daily
         send_simple(
             cfg, "Congressional Trading Update",
-            "No notable congressional stock trades were disclosed today.",
+            "No notable congressional stock trades were disclosed today."
+            + section,
             BLUE,
             mention_user=cfg["discord"].get("mention_on_heartbeat", False),
         )
@@ -563,7 +620,11 @@ def main() -> int:
             all_trades += fetch_senate_efd(
                 state,
                 days=int(cfg["filters"].get("lookback_days", 45)),
-                max_filings=int(cfg.get("max_filings_per_run", 25)),
+                max_filings=int(cfg.get(
+                    "seed_max_filings" if not effectively_initialized
+                    else "max_filings_per_run",
+                    100 if not effectively_initialized else 25,
+                )),
                 seed=not effectively_initialized,
             )
         except Exception as e:
@@ -603,6 +664,8 @@ def main() -> int:
         state["seen"].append(h)
         new_trades.append(t)
 
+    update_positions(state, new_trades)
+
     # First *successful* run: seed silently so you don't get flooded
     # with historical backfill. Only counts if we actually got data.
     if not effectively_initialized:
@@ -613,7 +676,8 @@ def main() -> int:
                 cfg, "🏛️ Congress Trade Bot initialized",
                 f"Connected to data source and indexed "
                 f"**{len(state['seen'])}** recent trades as already-seen. "
-                f"You'll be pinged for anything new from now on.",
+                f"You'll be pinged for anything new from now on."
+                + top_holdings_section(state),
                 BLUE, mention_user=True,
             )
             print(f"Initialized with {len(state['seen'])} trades.")
@@ -630,13 +694,16 @@ def main() -> int:
     )
 
     today = datetime.now(timezone.utc).strftime("%Y-%m-%d")
-    daily = state.get("daily") or {"date": None, "count": 0}
+    daily = state.get("daily") or {}
     if daily.get("date") != today:
-        daily = {"date": today, "count": 0}
+        daily = {"date": today, "count": 0, "section_sent": False}
     if alertable:
         featured = alertable[0]
         others_today = (len(alertable) - 1) + daily["count"]
-        send_trade_alert(cfg, featured, others_today)
+        extra = "" if daily.get("section_sent") else top_holdings_section(state)
+        send_trade_alert(cfg, featured, others_today, extra_section=extra)
+        if extra:
+            daily["section_sent"] = True
         daily["count"] += len(alertable)
     state["daily"] = daily
 
