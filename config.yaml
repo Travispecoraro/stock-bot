@@ -34,6 +34,8 @@ heartbeat_hour_utc: 14        # Daily heartbeat fires on the first run at/after
 
 max_filings_per_run: 25       # Max new Senate PTR filings parsed per run
                               # (each is one page fetch; parsed once, then cached)
+seed_max_filings: 100         # Filings parsed on the first run — deep seed so the
+                              # holdings ledger starts with the full window
 
 pages_per_run: 3              # CapitolTrades pages per check (dormant source)
 seed_pages: 10                # CapitolTrades pages on first seed (dormant source)
