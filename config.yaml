@@ -1,37 +1,38 @@
 # ============================================================
-#  CONGRESS TRADE BOT — CONTROL PANEL
+#  CONGRESS TRADE BOT — CONTROL PANEL  (v2)
 #  Edit this file + push to GitHub = settings applied next run.
 #  No redeploy needed. true = on, false = off.
 # ============================================================
 
 features:
-  ping_buys: true            # Ping you when a politician BUYS a stock
-  ping_sells: true           # Ping you when a politician SELLS a stock
-  heartbeat: true            # Once-daily "I'm alive" summary message
-  notify_on_error: true      # Message you if a data source is down/broken
-  senate_source: true        # Monitor Senate trade disclosures
-  house_source: true         # Monitor House trade disclosures
-  finnhub_enrichment: false  # Extra per-ticker check via Finnhub.
-                             # Only useful if watch_tickers is non-empty
-                             # (Finnhub's congressional endpoint is per-symbol).
+  ping_buys: true             # Ping you when a politician BUYS a stock
+  ping_sells: true            # Ping you when a politician SELLS a stock
+  heartbeat: true             # Once-daily "I'm alive" summary message
+  notify_on_error: true       # Message you if a data source is down/broken
+  capitoltrades_source: true  # Primary source: all members, both chambers
+  finnhub_enrichment: false   # Backup per-ticker check via Finnhub.
+                              # Only useful if watch_tickers is non-empty
+                              # (Finnhub's congressional endpoint is per-symbol).
 
 filters:
-  min_trade_value: 0         # USD. Uses the LOW end of the disclosed range.
-                             # e.g. 15001 skips all "$1,001 - $15,000" trades.
-  watch_tickers: []          # Empty = all tickers. Or e.g. [NVDA, MSFT, LMT]
-  watch_politicians: []      # Empty = everyone. Or partial names,
-                             # e.g. [Pelosi, Tuberville] (case-insensitive)
-  lookback_days: 45          # Ignore disclosures older than this many days
-                             # (prevents ancient filings from pinging you)
+  min_trade_value: 0          # USD. Uses the LOW end of the disclosed range.
+                              # e.g. 15001 skips all "$1,001 - $15,000" trades.
+  watch_tickers: []           # Empty = all tickers. Or e.g. [NVDA, MSFT, LMT]
+  watch_politicians: []       # Empty = everyone. Or partial names,
+                              # e.g. [Pelosi, Tuberville] (case-insensitive)
+  lookback_days: 45           # Ignore disclosures older than this many days
 
 discord:
   user_id: "PUT_YOUR_DISCORD_USER_ID_HERE"   # Right-click yourself -> Copy User ID
-                                             # (requires Developer Mode in Discord settings)
-  mention_on_trade: true     # @you on trade alerts
-  mention_on_heartbeat: false # @you on the daily heartbeat (usually annoying)
+  mention_on_trade: true      # @you on trade alerts
+  mention_on_heartbeat: false # @you on the daily heartbeat
 
-heartbeat_hour_utc: 14       # Daily heartbeat fires on the first run at/after
-                             # this UTC hour. 14 UTC ≈ 9-10am US Eastern.
+heartbeat_hour_utc: 14        # Daily heartbeat fires on the first run at/after
+                              # this UTC hour. 14 UTC ≈ 9-10am US Eastern.
 
-max_pings_per_run: 20        # Safety cap so a huge disclosure dump doesn't
-                             # flood your channel. Overflow is summarized.
+pages_per_run: 3              # CapitolTrades pages per check (~96 trades/page).
+                              # 3 pages ≈ newest ~290 trades — plenty for 30-min polling.
+seed_pages: 10                # Pages indexed on the very first successful run
+                              # (marked as already-seen, no pings).
+
+max_pings_per_run: 20         # Flood protection cap per run.
