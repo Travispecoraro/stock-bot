@@ -92,6 +92,7 @@ def load_state() -> dict:
         "seen_filings": [],
         "daily": {"date": None, "count": 0, "section_sent": False},
         "positions": {},
+        "recent_trades": [],
         "heartbeat": {
             "last_sent_date": None,
             "checks": 0,
@@ -672,6 +673,20 @@ def main() -> int:
         new_trades.append(t)
 
     update_positions(state, new_trades)
+
+    # Rolling tape for the control-panel dashboard: newest 50 trades.
+    if new_trades:
+        ordered = sorted(
+            new_trades,
+            key=lambda t: parse_date(t.get("disclosure_date") or "")
+            or datetime.min.replace(tzinfo=timezone.utc),
+            reverse=True,
+        )
+        slim = [{k: t.get(k, "") for k in (
+            "person", "ticker", "asset", "side", "amount",
+            "transaction_date", "disclosure_date", "link", "chamber",
+        )} for t in ordered]
+        state["recent_trades"] = (slim + state.get("recent_trades", []))[:50]
 
     # First successful run: seed silently — history never floods the channel.
     if not effectively_initialized:
