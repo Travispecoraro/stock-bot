@@ -1,43 +1,35 @@
 # ============================================================
-#  CONGRESS TRADE BOT — CONTROL PANEL  (v3)
-#  Edit this file + push to GitHub = settings applied next run.
-#  No redeploy needed. true = on, false = off.
+#  CONGRESS TRADE BOT — CONTROL PANEL  (managed file)
+#  Edited via control-panel.html on 2026-07-19.
+#  You can also edit by hand: true = on, false = off.
 # ============================================================
 
 features:
-  ping_buys: true             # Ping you when a politician BUYS a stock
-  ping_sells: true            # Ping you when a politician SELLS a stock
-  heartbeat: true             # Once-daily "I'm alive" summary message
-  notify_on_error: true       # Message you if a data source is down/broken
-  senate_efd_source: true     # PRIMARY: official Senate eFD site — all senators
-  capitoltrades_source: false # DORMANT: their API is broken (503) as of Jul 2026.
-                              # Flip to true if it recovers -> full House coverage.
-  finnhub_enrichment: false   # Backup per-ticker check via Finnhub. Covers BOTH
-                              # chambers for tickers in watch_tickers — the interim
-                              # way to catch House trades on stocks you care about.
+  ping_buys: true             # Alert on senator stock purchases
+  ping_sells: true            # Alert on senator stock sales
+  heartbeat: true             # Once-daily update on quiet days
+  notify_on_error: true       # Message if a data source breaks
+  senate_efd_source: true     # PRIMARY: official Senate eFD site
+  capitoltrades_source: false # DORMANT: enable if their API recovers
+  finnhub_enrichment: false   # Backup per-ticker checks (needs watchlist)
 
 filters:
-  min_trade_value: 0          # USD. Uses the LOW end of the disclosed range.
-                              # e.g. 15001 skips all "$1,001 - $15,000" trades.
-  watch_tickers: []           # Empty = all tickers. Or e.g. [NVDA, MSFT, LMT]
-  watch_politicians: []       # Empty = everyone. Or partial names,
-                              # e.g. [Tuberville, Wyden] (case-insensitive)
-  lookback_days: 45           # Filing search window + alert age cutoff
+  min_trade_value: 0          # USD floor (low end of disclosed range)
+  watch_tickers: []          # Empty = all tickers
+  watch_politicians: []      # Empty = everyone
+  lookback_days: 45           # Filing search window (days)
 
 discord:
-  user_id: "PUT_YOUR_DISCORD_USER_ID_HERE"   # Right-click yourself -> Copy User ID
+  user_id: "799000426623139850"
   mention_on_trade: true      # @you on trade alerts
-  mention_on_heartbeat: false # @you on the daily heartbeat
+  mention_on_heartbeat: false # @you on the daily update
 
-heartbeat_hour_utc: 14        # Daily heartbeat fires on the first run at/after
-                              # this UTC hour. 14 UTC ≈ 9-10am US Eastern.
+heartbeat_hour_utc: 14        # Daily update hour (UTC)
 
-max_filings_per_run: 25       # Max new Senate PTR filings parsed per run
-                              # (each is one page fetch; parsed once, then cached)
-seed_max_filings: 100         # Filings parsed on the first run — deep seed so the
-                              # holdings ledger starts with the full window
+max_filings_per_run: 25       # Senate filings parsed per check
+seed_max_filings: 100         # Deep-seed depth on first run
 
-pages_per_run: 3              # CapitolTrades pages per check (dormant source)
-seed_pages: 10                # CapitolTrades pages on first seed (dormant source)
+pages_per_run: 3              # CapitolTrades pages per check (dormant)
+seed_pages: 10                # CapitolTrades seed pages (dormant)
 
-max_pings_per_run: 20         # Flood protection cap per run.
+max_pings_per_run: 20         # Flood protection cap
