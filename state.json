@@ -153,7 +153,7 @@
  ],
  "heartbeat": {
   "last_sent_date": null,
-  "checks": 5,
+  "checks": 6,
   "trades_found": 0,
   "errors": 3
  },
