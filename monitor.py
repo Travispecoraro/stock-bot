@@ -304,9 +304,14 @@ def efd_parse_ptr(s: requests.Session, filing: dict) -> list[dict]:
     return trades
 
 
-def fetch_senate_efd(state: dict, days: int, max_filings: int) -> list[dict]:
+def fetch_senate_efd(state: dict, days: int, max_filings: int,
+                     seed: bool = False) -> list[dict]:
     """Pull new PTR filings and parse them. Already-parsed filings are
-    skipped via state['seen_filings'] so each PTR page is fetched once."""
+    skipped via state['seen_filings'] so each PTR page is fetched once.
+
+    When seed=True (the bot's first successful run), EVERY filing in the
+    window is marked as seen — including ones beyond the per-run parse
+    cap — so historical backlog never gets alerted later."""
     s = efd_session()
     filings = efd_search_ptrs(s, days)
     seen_filings = set(state.get("seen_filings", []))
@@ -320,10 +325,16 @@ def fetch_senate_efd(state: dict, days: int, max_filings: int) -> list[dict]:
         try:
             trades += efd_parse_ptr(s, f)
             state.setdefault("seen_filings", []).append(f["url"])
+            seen_filings.add(f["url"])
             parsed += 1
             time.sleep(1.0)  # be polite to the government
         except Exception as e:
             print(f"WARN: failed to parse {f['url']}: {e}", file=sys.stderr)
+    if seed:
+        for f in filings:
+            if f["url"] not in seen_filings:
+                state.setdefault("seen_filings", []).append(f["url"])
+                seen_filings.add(f["url"])
     return trades
 
 # ----------------------------------------------------------------------
@@ -544,6 +555,7 @@ def main() -> int:
                 state,
                 days=int(cfg["filters"].get("lookback_days", 45)),
                 max_filings=int(cfg.get("max_filings_per_run", 25)),
+                seed=not effectively_initialized,
             )
         except Exception as e:
             errors.append(f"Senate eFD source failed: {e}")
