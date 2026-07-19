@@ -3,8 +3,8 @@
  "seen": [],
  "heartbeat": {
   "last_sent_date": null,
-  "checks": 1,
+  "checks": 2,
   "trades_found": 0,
-  "errors": 2
+  "errors": 3
  }
 }
