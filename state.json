@@ -171,7 +171,7 @@
   "https://efdsearch.senate.gov/search/view/ptr/59c6f909-ad10-429d-8a8c-df81b00cf5fd/"
  ],
  "daily": {
-  "date": null,
+  "date": "2026-07-19",
   "count": 0,
   "section_sent": false
  },
@@ -439,7 +439,7 @@
  },
  "heartbeat": {
   "last_sent_date": null,
-  "checks": 1,
+  "checks": 2,
   "trades_found": 0,
   "errors": 0
  }
