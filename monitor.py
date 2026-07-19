@@ -1,17 +1,21 @@
 #!/usr/bin/env python3
 """
-Congress Trade Bot (v2 — CapitolTrades primary source)
-------------------------------------------------------
+Congress Trade Bot (v3 — official Senate eFD primary source)
+-------------------------------------------------------------
 Checks congressional stock-trade disclosures and pings a Discord webhook
 when new trades appear. Designed to run on a GitHub Actions cron schedule.
 
-v2 changes:
-  * Primary source is now CapitolTrades' public JSON API (the old
-    Senate/House Stock Watcher S3 buckets were shut down -> 403).
-  * Finnhub remains as an optional per-ticker backup (finnhub_enrichment).
-  * Initialization only "counts" if data was actually fetched, and an
-    initialized-but-empty state self-heals. This prevents a flood of
-    historical trades after a failed first run.
+v3 changes:
+  * Primary source is now the official Senate eFD site
+    (efdsearch.senate.gov) — electronic Periodic Transaction Reports
+    parsed directly from the government source. Covers all senators.
+  * CapitolTrades kept as an OFF-by-default toggle (their API broke
+    with CloudFront/Lambda 503s in Jul 2026; flip capitoltrades_source
+    back on if it recovers to regain House coverage).
+  * Finnhub remains an optional per-ticker backup (finnhub_enrichment) —
+    it covers BOTH chambers for tickers you watchlist, so it is the
+    interim way to see House trades on stocks you care about.
+  * Parsed filings are cached in state so PTR pages are fetched once.
 
 Env vars required:
   DISCORD_WEBHOOK_URL   (GitHub secret)
@@ -28,9 +32,15 @@ from datetime import datetime, timedelta, timezone
 
 import requests
 import yaml
+from bs4 import BeautifulSoup
 
 CONFIG_PATH = "config.yaml"
 STATE_PATH = "state.json"
+
+EFD_BASE = "https://efdsearch.senate.gov"
+EFD_HOME = EFD_BASE + "/search/home/"
+EFD_SEARCH_REFERER = EFD_BASE + "/search/"
+EFD_DATA = EFD_BASE + "/search/report/data/"
 
 CAPITOLTRADES_URL = "https://bff.capitoltrades.com/trades"
 FINNHUB_URL = "https://finnhub.io/api/v1/stock/congressional-trading"
@@ -65,6 +75,7 @@ def load_state() -> dict:
     return {
         "initialized": False,
         "seen": [],
+        "seen_filings": [],
         "heartbeat": {
             "last_sent_date": None,
             "checks": 0,
@@ -76,6 +87,7 @@ def load_state() -> dict:
 
 def save_state(state: dict) -> None:
     state["seen"] = state["seen"][-50000:]
+    state["seen_filings"] = state.get("seen_filings", [])[-5000:]
     with open(STATE_PATH, "w", encoding="utf-8") as f:
         json.dump(state, f, indent=1)
 
@@ -191,8 +203,131 @@ def trade_hash(t: dict) -> str:
     return hashlib.sha256(key.encode()).hexdigest()[:24]
 
 
+
 # ----------------------------------------------------------------------
-# Data source: CapitolTrades (primary — all members, both chambers)
+# Data source: Senate eFD (primary — official government site)
+# ----------------------------------------------------------------------
+
+def efd_session() -> requests.Session:
+    """Open a session and accept the eFD usage agreement (CSRF dance)."""
+    s = requests.Session()
+    s.headers.update(HEADERS)
+    r = s.get(EFD_HOME, timeout=30)
+    r.raise_for_status()
+    m = re.search(r'name="csrfmiddlewaretoken" value="([^"]+)"', r.text)
+    token = m.group(1) if m else s.cookies.get("csrftoken", "")
+    r = s.post(
+        EFD_HOME,
+        data={"prohibition_agreement": "1", "csrfmiddlewaretoken": token},
+        headers={"Referer": EFD_HOME},
+        timeout=30,
+    )
+    r.raise_for_status()
+    return s
+
+
+def efd_search_ptrs(s: requests.Session, days: int) -> list[dict]:
+    """List electronic PTR filings submitted in the last `days` days.
+    Returns [{url, name, date}] newest first. Paper (scanned) filings
+    are skipped — they're images, not parseable tables."""
+    start = (datetime.now(timezone.utc) - timedelta(days=days)).strftime("%m/%d/%Y")
+    payload = {
+        "draw": "1", "start": "0", "length": "100",
+        "report_types": "[11]",          # 11 = Periodic Transaction Report
+        "filer_types": "[]",
+        "submitted_start_date": f"{start} 00:00:00",
+        "submitted_end_date": "",
+        "candidate_state": "", "senator_state": "", "office_id": "",
+        "first_name": "", "last_name": "",
+        "order[0][column]": "4", "order[0][dir]": "desc",
+    }
+    r = s.post(
+        EFD_DATA, data=payload,
+        headers={
+            "Referer": EFD_SEARCH_REFERER,
+            "X-CSRFToken": s.cookies.get("csrftoken", ""),
+        },
+        timeout=30,
+    )
+    r.raise_for_status()
+    rows = r.json().get("data", [])
+    out = []
+    for row in rows:
+        joined = " ".join(str(c) for c in row)
+        m = re.search(r'href="(/search/view/[^"]+)"', joined)
+        if not m:
+            continue
+        href = m.group(1)
+        if "/paper/" in href:
+            continue  # scanned paper filing — no table to parse
+        cells = [re.sub(r"<[^>]+>", " ", str(c)).strip() for c in row]
+        name = " ".join(x for x in cells[:2] if x).strip() or "Unknown senator"
+        date = cells[-1].strip() if cells else ""
+        out.append({"url": EFD_BASE + href, "name": name, "date": date})
+    return out
+
+
+def efd_parse_ptr(s: requests.Session, filing: dict) -> list[dict]:
+    """Fetch one PTR page and parse its transactions table into trades."""
+    r = s.get(filing["url"], headers={"Referer": EFD_SEARCH_REFERER}, timeout=30)
+    r.raise_for_status()
+    soup = BeautifulSoup(r.text, "html.parser")
+    table = soup.find("table")
+    if not table:
+        return []
+    uuid_m = re.search(r"/view/\w+/([\w-]+)/?", filing["url"])
+    filing_uid = uuid_m.group(1) if uuid_m else filing["url"]
+    trades = []
+    for tr in table.find_all("tr"):
+        tds = [td.get_text(" ", strip=True) for td in tr.find_all("td")]
+        if len(tds) < 8:
+            continue  # header or malformed row
+        # Columns: # | Transaction Date | Owner | Ticker | Asset Name
+        #          | Asset Type | Type | Amount | Comment
+        side = classify_side(tds[6])
+        if not side:
+            continue  # Exchange / other
+        ticker = tds[3].replace("--", "").strip()
+        trades.append({
+            "uid": f"efd-{filing_uid}-{tds[0]}",
+            "chamber": "Senate",
+            "party": "",
+            "person": filing["name"],
+            "ticker": ticker,
+            "asset": tds[4].strip(),
+            "side": side,
+            "amount": tds[7].strip(),
+            "transaction_date": tds[1].strip(),
+            "disclosure_date": filing["date"],
+            "link": filing["url"],
+        })
+    return trades
+
+
+def fetch_senate_efd(state: dict, days: int, max_filings: int) -> list[dict]:
+    """Pull new PTR filings and parse them. Already-parsed filings are
+    skipped via state['seen_filings'] so each PTR page is fetched once."""
+    s = efd_session()
+    filings = efd_search_ptrs(s, days)
+    seen_filings = set(state.get("seen_filings", []))
+    trades = []
+    parsed = 0
+    for f in filings:
+        if f["url"] in seen_filings:
+            continue
+        if parsed >= max_filings:
+            break
+        try:
+            trades += efd_parse_ptr(s, f)
+            state.setdefault("seen_filings", []).append(f["url"])
+            parsed += 1
+            time.sleep(1.0)  # be polite to the government
+        except Exception as e:
+            print(f"WARN: failed to parse {f['url']}: {e}", file=sys.stderr)
+    return trades
+
+# ----------------------------------------------------------------------
+# Data source: CapitolTrades (dormant toggle — flip on if their API recovers)
 # ----------------------------------------------------------------------
 
 def fetch_capitoltrades(pages: int) -> list:
@@ -403,7 +538,17 @@ def main() -> int:
     all_trades: list[dict] = []
     errors: list[str] = []
 
-    if feats.get("capitoltrades_source", True):
+    if feats.get("senate_efd_source", True):
+        try:
+            all_trades += fetch_senate_efd(
+                state,
+                days=int(cfg["filters"].get("lookback_days", 45)),
+                max_filings=int(cfg.get("max_filings_per_run", 25)),
+            )
+        except Exception as e:
+            errors.append(f"Senate eFD source failed: {e}")
+
+    if feats.get("capitoltrades_source", False):
         try:
             pages = int(cfg.get(
                 "seed_pages" if not effectively_initialized else "pages_per_run",
