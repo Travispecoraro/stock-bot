@@ -173,7 +173,7 @@
  "daily": {
   "date": "2026-07-19",
   "count": 0,
-  "section_sent": false
+  "section_sent": true
  },
  "positions": {
   "WAB": {
@@ -438,8 +438,8 @@
   }
  },
  "heartbeat": {
-  "last_sent_date": null,
-  "checks": 2,
+  "last_sent_date": "2026-07-19",
+  "checks": 0,
   "trades_found": 0,
   "errors": 0
  }
