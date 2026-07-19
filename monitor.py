@@ -76,6 +76,7 @@ def load_state() -> dict:
         "initialized": False,
         "seen": [],
         "seen_filings": [],
+        "daily": {"date": None, "count": 0},
         "heartbeat": {
             "last_sent_date": None,
             "checks": 0,
@@ -116,25 +117,36 @@ def mention(cfg: dict) -> str:
     return ""
 
 
-def send_trade_alert(cfg: dict, t: dict) -> None:
+def send_trade_alert(cfg: dict, t: dict, others_today: int) -> None:
+    """One digest-style alert: featured trade + count of other trades today.
+
+    Congressional Trading Alert
+    [Person] disclosed a [purchase/sale] of [Company] ([Ticker]).
+    Amount: [Range]
+    Trade date: [Date]
+    Disclosed: [Date]
+    [N] other notable trade(s) were disclosed today.
+    """
     is_buy = t["side"] == "buy"
-    verb = "bought" if is_buy else "sold"
-    emoji = "🟢" if is_buy else "🔴"
+    action = "purchase" if is_buy else "sale"
+    company = t["asset"] or t["ticker"] or "an unlisted asset"
+    ticker_part = f" ({t['ticker']})" if t["ticker"] else ""
+    lines = [
+        f"**{t['person']}** disclosed a **{action}** of {company}{ticker_part}.",
+        f"Amount: {t['amount'] or 'n/a'}",
+        f"Trade date: {t['transaction_date'] or 'n/a'}",
+        f"Disclosed: {t['disclosure_date'] or 'n/a'}",
+    ]
+    if others_today > 0:
+        plural = "trade was" if others_today == 1 else "trades were"
+        lines.append(f"\n**{others_today}** other notable {plural} disclosed today.")
     content = mention(cfg) if cfg["discord"].get("mention_on_trade") else ""
     embed = {
-        "title": f"{emoji} {t['person']} {verb} {t['ticker'] or t['asset']}",
+        "title": "Congressional Trading Alert",
+        "description": "\n".join(lines),
         "color": GREEN if is_buy else RED,
-        "fields": [
-            {"name": "Chamber", "value": t["chamber"] or "n/a", "inline": True},
-            {"name": "Party", "value": t.get("party") or "n/a", "inline": True},
-            {"name": "Amount", "value": t["amount"] or "n/a", "inline": True},
-            {"name": "Trade date", "value": t["transaction_date"] or "n/a", "inline": True},
-            {"name": "Disclosed", "value": t["disclosure_date"] or "n/a", "inline": True},
-        ],
         "footer": {"text": "Congress Trade Bot"},
     }
-    if t.get("asset") and t.get("ticker"):
-        embed["description"] = t["asset"]
     if t.get("link"):
         embed["url"] = t["link"]
     discord_post({"content": content, "embeds": [embed]})
@@ -511,18 +523,15 @@ def maybe_heartbeat(cfg: dict, state: dict) -> None:
         return
     if now.hour < int(cfg.get("heartbeat_hour_utc", 14)):
         return
-    desc = (
-        f"✅ Bot is alive.\n"
-        f"Since last heartbeat: **{hb['checks']}** checks, "
-        f"**{hb['trades_found']}** new trades pinged, "
-        f"**{hb['errors']}** source errors."
-    )
     if hb["trades_found"] == 0:
-        desc += "\nNothing new found — Congress is behaving (or just quiet)."
-    send_simple(
-        cfg, "Daily heartbeat", desc, BLUE,
-        mention_user=cfg["discord"].get("mention_on_heartbeat", False),
-    )
+        # Quiet day: send the update. (On active days, the alerts
+        # themselves were the day's update — send nothing extra.)
+        send_simple(
+            cfg, "Congressional Trading Update",
+            "No notable congressional stock trades were disclosed today.",
+            BLUE,
+            mention_user=cfg["discord"].get("mention_on_heartbeat", False),
+        )
     hb["last_sent_date"] = today
     hb["checks"] = 0
     hb["trades_found"] = 0
@@ -620,16 +629,16 @@ def main() -> int:
         reverse=True,
     )
 
-    cap = int(cfg.get("max_pings_per_run", 20))
-    for t in alertable[:cap]:
-        send_trade_alert(cfg, t)
-    if len(alertable) > cap:
-        send_simple(
-            cfg, "…and more",
-            f"{len(alertable) - cap} additional new trades this run "
-            f"(capped by max_pings_per_run).",
-            BLUE,
-        )
+    today = datetime.now(timezone.utc).strftime("%Y-%m-%d")
+    daily = state.get("daily") or {"date": None, "count": 0}
+    if daily.get("date") != today:
+        daily = {"date": today, "count": 0}
+    if alertable:
+        featured = alertable[0]
+        others_today = (len(alertable) - 1) + daily["count"]
+        send_trade_alert(cfg, featured, others_today)
+        daily["count"] += len(alertable)
+    state["daily"] = daily
 
     state["heartbeat"]["trades_found"] += len(alertable)
     maybe_heartbeat(cfg, state)
