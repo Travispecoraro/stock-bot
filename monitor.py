@@ -1,25 +1,30 @@
 #!/usr/bin/env python3
 """
-Congress Trade Bot (v3 — official Senate eFD primary source)
--------------------------------------------------------------
-Checks congressional stock-trade disclosures and pings a Discord webhook
-when new trades appear. Designed to run on a GitHub Actions cron schedule.
+Congress Trade Bot (v4)
+-----------------------
+Checks congressional stock-trade disclosures and posts to a Discord
+webhook. Designed for a GitHub Actions cron schedule.
 
-v3 changes:
-  * Primary source is now the official Senate eFD site
-    (efdsearch.senate.gov) — electronic Periodic Transaction Reports
-    parsed directly from the government source. Covers all senators.
-  * CapitolTrades kept as an OFF-by-default toggle (their API broke
-    with CloudFront/Lambda 503s in Jul 2026; flip capitoltrades_source
-    back on if it recovers to regain House coverage).
-  * Finnhub remains an optional per-ticker backup (finnhub_enrichment) —
-    it covers BOTH chambers for tickers you watchlist, so it is the
-    interim way to see House trades on stocks you care about.
-  * Parsed filings are cached in state so PTR pages are fetched once.
+Sources:
+  * PRIMARY: official Senate eFD site (efdsearch.senate.gov) — electronic
+    Periodic Transaction Reports parsed directly. All senators.
+  * DORMANT: CapitolTrades JSON API (broken with 503s as of Jul 2026;
+    toggle capitoltrades_source back on if it recovers -> House coverage).
+  * BACKUP: Finnhub per-ticker congressional endpoint (finnhub_enrichment,
+    needs watch_tickers; covers both chambers for listed tickers).
+
+Behavior:
+  * First successful run seeds silently (no historical flood) and builds
+    the holdings ledger from the full lookback window.
+  * Alerts: one digest-style message per run featuring the newest trade,
+    plus a count of other trades disclosed today.
+  * Daily update: on quiet days only, at heartbeat_hour_utc.
+  * Top-holdings section: shown once per day (quiet update or first alert).
+  * Manual "Run workflow" trigger always produces a visible message.
 
 Env vars required:
   DISCORD_WEBHOOK_URL   (GitHub secret)
-  FINNHUB_API_KEY       (GitHub secret; only used if finnhub_enrichment: true)
+  FINNHUB_API_KEY       (GitHub secret; only if finnhub_enrichment: true)
 """
 
 import hashlib
@@ -53,10 +58,19 @@ HEADERS = {
     "Accept": "application/json",
 }
 
-GREEN = 0x2ECC71   # buys
-RED = 0xE74C3C     # sells
-BLUE = 0x3498DB    # heartbeat / info
-ORANGE = 0xE67E22  # warnings / errors
+# Muted, professional palette
+GREEN = 0x1E8449    # purchases
+RED = 0xB03A2E      # sales
+NAVY = 0x2C3E50     # daily updates / info
+AMBER = 0xB9770E    # warnings / errors
+
+FOOTER = "Congress Trade Bot  •  Data: U.S. Senate eFD"
+
+
+def is_manual_run() -> bool:
+    """True when this run was triggered by the Actions 'Run workflow'
+    button rather than the cron schedule."""
+    return os.environ.get("GITHUB_EVENT_NAME", "") == "workflow_dispatch"
 
 
 # ----------------------------------------------------------------------
@@ -94,6 +108,16 @@ def save_state(state: dict) -> None:
         json.dump(state, f, indent=1)
 
 
+def roll_daily(state: dict) -> dict:
+    """Return today's daily counters, resetting them on date change."""
+    today = datetime.now(timezone.utc).strftime("%Y-%m-%d")
+    daily = state.get("daily") or {}
+    if daily.get("date") != today:
+        daily = {"date": today, "count": 0, "section_sent": False}
+    state["daily"] = daily
+    return daily
+
+
 # ----------------------------------------------------------------------
 # Discord
 # ----------------------------------------------------------------------
@@ -113,62 +137,82 @@ def discord_post(payload: dict) -> None:
 
 def mention(cfg: dict) -> str:
     uid = str(cfg["discord"].get("user_id", "")).strip()
-    if uid and uid.isdigit():
-        return f"<@{uid}>"
-    return ""
+    return f"<@{uid}>" if uid.isdigit() else ""
+
+
+def base_embed(title: str, description: str, color: int) -> dict:
+    footer = FOOTER + ("  •  Manual check" if is_manual_run() else "")
+    return {
+        "title": title,
+        "description": description,
+        "color": color,
+        "fields": [],
+        "footer": {"text": footer},
+        "timestamp": datetime.now(timezone.utc).isoformat(),
+    }
+
+
+def send_embed(cfg: dict, title: str, description: str, color: int,
+               fields: list | None = None, url: str = "",
+               mention_user: bool = False) -> None:
+    embed = base_embed(title, description, color)
+    if fields:
+        embed["fields"] = fields
+    if url:
+        embed["url"] = url
+    content = mention(cfg) if mention_user else ""
+    discord_post({"content": content, "embeds": [embed]})
 
 
 def send_trade_alert(cfg: dict, t: dict, others_today: int,
-                     extra_section: str = "") -> None:
-    """One digest-style alert: featured trade + count of other trades today.
-
-    Congressional Trading Alert
-    [Person] disclosed a [purchase/sale] of [Company] ([Ticker]).
-    Amount: [Range]
-    Trade date: [Date]
-    Disclosed: [Date]
-    [N] other notable trade(s) were disclosed today.
-    """
+                     holdings_field: dict | None = None) -> None:
+    """Congressional Trading Alert — featured trade + detail columns."""
     is_buy = t["side"] == "buy"
     action = "purchase" if is_buy else "sale"
     company = t["asset"] or t["ticker"] or "an unlisted asset"
-    ticker_part = f" ({t['ticker']})" if t["ticker"] else ""
-    lines = [
-        f"**{t['person']}** disclosed a **{action}** of {company}{ticker_part}.",
-        f"Amount: {t['amount'] or 'n/a'}",
-        f"Trade date: {t['transaction_date'] or 'n/a'}",
-        f"Disclosed: {t['disclosure_date'] or 'n/a'}",
+    ticker_part = f" (`{t['ticker']}`)" if t["ticker"] else ""
+    headline = (
+        f"**{t['person']}** disclosed a **{action}** of "
+        f"**{company}**{ticker_part}."
+    )
+    fields = [
+        {"name": "Amount", "value": t["amount"] or "—", "inline": True},
+        {"name": "Trade Date", "value": t["transaction_date"] or "—", "inline": True},
+        {"name": "Disclosed", "value": t["disclosure_date"] or "—", "inline": True},
     ]
     if others_today > 0:
         plural = "trade was" if others_today == 1 else "trades were"
-        lines.append(f"\n**{others_today}** other notable {plural} disclosed today.")
-    if extra_section:
-        lines.append(extra_section)
-    content = mention(cfg) if cfg["discord"].get("mention_on_trade") else ""
-    embed = {
-        "title": "Congressional Trading Alert",
-        "description": "\n".join(lines),
-        "color": GREEN if is_buy else RED,
-        "footer": {"text": "Congress Trade Bot"},
-    }
-    if t.get("link"):
-        embed["url"] = t["link"]
-    discord_post({"content": content, "embeds": [embed]})
+        fields.append({
+            "name": "Today's Activity",
+            "value": f"**{others_today}** other notable {plural} disclosed today.",
+            "inline": False,
+        })
+    if holdings_field:
+        fields.append(holdings_field)
+    send_embed(
+        cfg, "Congressional Trading Alert", headline,
+        GREEN if is_buy else RED,
+        fields=fields, url=t.get("link", ""),
+        mention_user=cfg["discord"].get("mention_on_trade", True),
+    )
     time.sleep(1.2)
 
 
-def send_simple(cfg: dict, title: str, description: str, color: int,
-                mention_user: bool = False) -> None:
-    content = mention(cfg) if mention_user else ""
-    discord_post({
-        "content": content,
-        "embeds": [{
-            "title": title,
-            "description": description,
-            "color": color,
-            "footer": {"text": "Congress Trade Bot"},
-        }],
-    })
+def send_daily_update(cfg: dict, state: dict, body: str) -> None:
+    """Congressional Trading Update — quiet-day / manual status message.
+    Carries the holdings section if it hasn't been shown today."""
+    daily = roll_daily(state)
+    fields = []
+    if not daily.get("section_sent"):
+        hf = top_holdings_field(state)
+        if hf:
+            fields.append(hf)
+            daily["section_sent"] = True
+    send_embed(
+        cfg, "Congressional Trading Update", body, NAVY,
+        fields=fields,
+        mention_user=cfg["discord"].get("mention_on_heartbeat", False),
+    )
 
 
 # ----------------------------------------------------------------------
@@ -194,13 +238,13 @@ def classify_side(raw_type: str) -> str | None:
         return "buy"
     if "sale" in t or "sell" in t or "sold" in t:
         return "sell"
-    return None  # exchange / receive / unknown
+    return None  # Exchange / receive / unknown
 
 
 def parse_date(s: str) -> datetime | None:
     if not s:
         return None
-    s = s.strip()[:10]  # tolerate ISO timestamps like 2026-07-18T12:00:00Z
+    s = s.strip()[:10]
     for fmt in ("%Y-%m-%d", "%m/%d/%Y", "%m/%d/%y"):
         try:
             return datetime.strptime(s, fmt).replace(tzinfo=timezone.utc)
@@ -217,7 +261,6 @@ def trade_hash(t: dict) -> str:
         "transaction_date", "side", "amount",
     ))
     return hashlib.sha256(key.encode()).hexdigest()[:24]
-
 
 
 # ----------------------------------------------------------------------
@@ -243,9 +286,8 @@ def efd_session() -> requests.Session:
 
 
 def efd_search_ptrs(s: requests.Session, days: int) -> list[dict]:
-    """List electronic PTR filings submitted in the last `days` days.
-    Returns [{url, name, date}] newest first. Paper (scanned) filings
-    are skipped — they're images, not parseable tables."""
+    """List electronic PTR filings from the last `days` days, newest first.
+    Paper (scanned) filings are skipped — images, not tables."""
     start = (datetime.now(timezone.utc) - timedelta(days=days)).strftime("%m/%d/%Y")
     payload = {
         "draw": "1", "start": "0", "length": "100",
@@ -266,16 +308,15 @@ def efd_search_ptrs(s: requests.Session, days: int) -> list[dict]:
         timeout=30,
     )
     r.raise_for_status()
-    rows = r.json().get("data", [])
     out = []
-    for row in rows:
+    for row in r.json().get("data", []):
         joined = " ".join(str(c) for c in row)
         m = re.search(r'href="(/search/view/[^"]+)"', joined)
         if not m:
             continue
         href = m.group(1)
         if "/paper/" in href:
-            continue  # scanned paper filing — no table to parse
+            continue
         cells = [re.sub(r"<[^>]+>", " ", str(c)).strip() for c in row]
         name = " ".join(x for x in cells[:2] if x).strip() or "Unknown senator"
         date = cells[-1].strip() if cells else ""
@@ -297,20 +338,18 @@ def efd_parse_ptr(s: requests.Session, filing: dict) -> list[dict]:
     for tr in table.find_all("tr"):
         tds = [td.get_text(" ", strip=True) for td in tr.find_all("td")]
         if len(tds) < 8:
-            continue  # header or malformed row
+            continue
         # Columns: # | Transaction Date | Owner | Ticker | Asset Name
         #          | Asset Type | Type | Amount | Comment
         side = classify_side(tds[6])
         if not side:
-            continue  # Exchange / other
-        ticker = tds[3].replace("--", "").strip()
+            continue
         trades.append({
             "uid": f"efd-{filing_uid}-{tds[0]}",
             "raw_type": tds[6],
             "chamber": "Senate",
-            "party": "",
             "person": filing["name"],
-            "ticker": ticker,
+            "ticker": tds[3].replace("--", "").strip(),
             "asset": tds[4].strip(),
             "side": side,
             "amount": tds[7].strip(),
@@ -323,66 +362,53 @@ def efd_parse_ptr(s: requests.Session, filing: dict) -> list[dict]:
 
 def fetch_senate_efd(state: dict, days: int, max_filings: int,
                      seed: bool = False) -> list[dict]:
-    """Pull new PTR filings and parse them. Already-parsed filings are
-    skipped via state['seen_filings'] so each PTR page is fetched once.
-
-    When seed=True (the bot's first successful run), EVERY filing in the
-    window is marked as seen — including ones beyond the per-run parse
-    cap — so historical backlog never gets alerted later."""
+    """Pull and parse new PTR filings; each filing is parsed once (cached
+    in state['seen_filings']). When seed=True, EVERY filing in the window
+    is marked seen — including unparsed ones — so historical backlog can
+    never trigger alerts later."""
     s = efd_session()
     filings = efd_search_ptrs(s, days)
-    seen_filings = set(state.get("seen_filings", []))
+    seen = set(state.get("seen_filings", []))
     trades = []
     parsed = 0
     for f in filings:
-        if f["url"] in seen_filings:
+        if f["url"] in seen or parsed >= max_filings:
             continue
-        if parsed >= max_filings:
-            break
         try:
             trades += efd_parse_ptr(s, f)
             state.setdefault("seen_filings", []).append(f["url"])
-            seen_filings.add(f["url"])
+            seen.add(f["url"])
             parsed += 1
             time.sleep(1.0)  # be polite to the government
         except Exception as e:
             print(f"WARN: failed to parse {f['url']}: {e}", file=sys.stderr)
     if seed:
         for f in filings:
-            if f["url"] not in seen_filings:
+            if f["url"] not in seen:
                 state.setdefault("seen_filings", []).append(f["url"])
-                seen_filings.add(f["url"])
+                seen.add(f["url"])
     return trades
 
+
 # ----------------------------------------------------------------------
-# Data source: CapitolTrades (dormant toggle — flip on if their API recovers)
+# Data source: CapitolTrades (dormant — flip on if their API recovers)
 # ----------------------------------------------------------------------
 
 def fetch_capitoltrades(pages: int) -> list:
-    """Fetch recent trades from CapitolTrades' public JSON endpoint.
-    Newest trades come first; each page is up to ~96 rows."""
     rows = []
     for page in range(1, max(1, pages) + 1):
         r = requests.get(
             CAPITOLTRADES_URL,
             params={"page": page, "pageSize": 96},
-            headers=HEADERS,
-            timeout=30,
+            headers=HEADERS, timeout=30,
         )
         r.raise_for_status()
-        payload = r.json()
-        batch = payload.get("data") or []
+        batch = r.json().get("data") or []
         if not batch:
             break
         rows.extend(batch)
-        time.sleep(0.7)  # be polite
+        time.sleep(0.7)
     return rows
-
-
-def _fmt_party(p: str) -> str:
-    return {"democrat": "Democrat", "republican": "Republican"}.get(
-        (p or "").lower(), (p or "").title()
-    )
 
 
 def normalize_capitoltrades(rows: list) -> list[dict]:
@@ -392,19 +418,13 @@ def normalize_capitoltrades(rows: list) -> list[dict]:
             side = classify_side(r.get("txType"))
             if not side:
                 continue
-
             pol = r.get("politician") or {}
             person = " ".join(
                 x for x in [pol.get("firstName"), pol.get("lastName")] if x
             ).strip() or str(r.get("_politicianId") or "Unknown member")
-            chamber = (pol.get("chamber") or "").title() or "Congress"
-
             asset = r.get("asset") or {}
             issuer = r.get("issuer") or {}
             raw_ticker = asset.get("assetTicker") or issuer.get("issuerTicker") or ""
-            ticker = raw_ticker.split(":")[0].strip()  # "AAPL:US" -> "AAPL"
-            asset_name = (issuer.get("issuerName") or "").strip()
-
             low, high = r.get("sizeRangeLow"), r.get("sizeRangeHigh")
             value = r.get("value")
             if low and high:
@@ -413,19 +433,17 @@ def normalize_capitoltrades(rows: list) -> list[dict]:
                 amount = f"~${value:,.0f}"
             else:
                 amount = ""
-
             tx_id = r.get("_txId")
             link = (r.get("filingURL") or "").strip()
             if not link and tx_id:
                 link = f"https://www.capitoltrades.com/trades/{tx_id}"
-
             out.append({
                 "uid": f"ct-{tx_id}" if tx_id else "",
-                "chamber": chamber,
-                "party": _fmt_party(pol.get("party")),
+                "raw_type": r.get("txType") or "",
+                "chamber": (pol.get("chamber") or "").title() or "Congress",
                 "person": person,
-                "ticker": ticker,
-                "asset": asset_name,
+                "ticker": raw_ticker.split(":")[0].strip(),
+                "asset": (issuer.get("issuerName") or "").strip(),
                 "side": side,
                 "amount": amount,
                 "transaction_date": (r.get("txDate") or "")[:10],
@@ -449,9 +467,7 @@ def fetch_finnhub(tickers: list[str]) -> list[dict]:
     for sym in tickers[:25]:
         try:
             r = requests.get(
-                FINNHUB_URL,
-                params={"symbol": sym, "token": key},
-                timeout=30,
+                FINNHUB_URL, params={"symbol": sym, "token": key}, timeout=30,
             )
             r.raise_for_status()
             for row in r.json().get("data", []):
@@ -466,7 +482,6 @@ def fetch_finnhub(tickers: list[str]) -> list[dict]:
                     "uid": "",
                     "raw_type": row.get("transactionType") or "",
                     "chamber": row.get("position") or "Congress",
-                    "party": "",
                     "person": (row.get("name") or "").strip(),
                     "ticker": (row.get("symbol") or sym).strip(),
                     "asset": (row.get("assetName") or "").strip(),
@@ -487,9 +502,9 @@ def fetch_finnhub(tickers: list[str]) -> list[dict]:
 # ----------------------------------------------------------------------
 
 def update_positions(state: dict, trades: list[dict]) -> None:
-    """Maintain an approximate who-holds-what ledger. A purchase opens a
-    position; a full sale closes it; a partial sale keeps it open.
-    Approximate by design: only trades the bot has observed count."""
+    """Approximate who-holds-what ledger. Purchase opens a position;
+    a full sale closes it; a partial sale keeps it open. Only trades
+    the bot has observed count — approximate by design."""
     pos = state.setdefault("positions", {})
     for t in trades:
         ticker = (t.get("ticker") or "").strip()
@@ -499,30 +514,33 @@ def update_positions(state: dict, trades: list[dict]) -> None:
         rec = pos.setdefault(ticker, {"holders": {}, "name": ""})
         if t.get("asset"):
             rec["name"] = t["asset"]
-        raw = (t.get("raw_type") or "").lower()
         if t["side"] == "buy":
             rec["holders"][person] = 1
-        else:
-            if "partial" not in raw:
-                rec["holders"].pop(person, None)
+        elif "partial" not in (t.get("raw_type") or "").lower():
+            rec["holders"].pop(person, None)
 
 
-def top_holdings_section(state: dict, n: int = 3) -> str:
-    """Formatted top-N most-held stocks among senators, or '' if no data."""
+def top_holdings_field(state: dict, n: int = 3) -> dict | None:
+    """Top-N most-held stocks among senators as an embed field, or None."""
     rows = []
     for ticker, rec in state.get("positions", {}).items():
         count = len(rec.get("holders", {}))
         if count > 0:
             rows.append((count, ticker, rec.get("name", "")))
     if not rows:
-        return ""
+        return None
     rows.sort(key=lambda r: (-r[0], r[1]))
-    lines = ["", "📊 **Top stocks held by senators** *(from disclosed trades)*:"]
+    lines = []
     for i, (count, ticker, name) in enumerate(rows[:n], 1):
-        label = f"{name} ({ticker})" if name else ticker
+        label = f"{name} (`{ticker}`)" if name else f"`{ticker}`"
         word = "senator" if count == 1 else "senators"
-        lines.append(f"{i}. {label} — {count} {word} ({count}%)")
-    return "\n".join(lines)
+        lines.append(f"**{i}.**  {label}  —  **{count}** {word}  ·  {count}%")
+    lines.append("-# Reconstructed from disclosed trades")
+    return {
+        "name": "📊  Top Stocks Held by Senators",
+        "value": "\n".join(lines),
+        "inline": False,
+    }
 
 
 # ----------------------------------------------------------------------
@@ -532,37 +550,41 @@ def top_holdings_section(state: dict, n: int = 3) -> str:
 def passes_filters(cfg: dict, t: dict) -> bool:
     f = cfg["filters"]
     feats = cfg["features"]
-
     if t["side"] == "buy" and not feats.get("ping_buys", True):
         return False
     if t["side"] == "sell" and not feats.get("ping_sells", True):
         return False
-
     min_val = f.get("min_trade_value", 0)
     if min_val and t["amount"] and parse_amount_low(t["amount"]) < min_val:
         return False
-
     tickers = [s.upper() for s in (f.get("watch_tickers") or [])]
     if tickers and t["ticker"].upper() not in tickers:
         return False
-
     pols = [p.lower() for p in (f.get("watch_politicians") or [])]
     if pols and not any(p in t["person"].lower() for p in pols):
         return False
-
     lookback = f.get("lookback_days", 45)
     d = parse_date(t["disclosure_date"]) or parse_date(t["transaction_date"])
     if d and d < datetime.now(timezone.utc) - timedelta(days=lookback):
         return False
-
     return True
 
 
 # ----------------------------------------------------------------------
-# Heartbeat
+# Daily update scheduling
 # ----------------------------------------------------------------------
 
+def reset_heartbeat(state: dict, today: str) -> None:
+    hb = state["heartbeat"]
+    hb["last_sent_date"] = today
+    hb["checks"] = 0
+    hb["trades_found"] = 0
+    hb["errors"] = 0
+
+
 def maybe_heartbeat(cfg: dict, state: dict) -> None:
+    """On quiet days, send the daily update at heartbeat_hour_utc.
+    On active days the alerts were the update — send nothing extra."""
     if not cfg["features"].get("heartbeat", True):
         return
     hb = state["heartbeat"]
@@ -573,26 +595,11 @@ def maybe_heartbeat(cfg: dict, state: dict) -> None:
     if now.hour < int(cfg.get("heartbeat_hour_utc", 14)):
         return
     if hb["trades_found"] == 0:
-        # Quiet day: send the update. (On active days, the alerts
-        # themselves were the day's update — send nothing extra.)
-        section = ""
-        daily = state.get("daily") or {}
-        if not daily.get("section_sent"):
-            section = top_holdings_section(state)
-            if section:
-                daily["section_sent"] = True
-                state["daily"] = daily
-        send_simple(
-            cfg, "Congressional Trading Update",
-            "No notable congressional stock trades were disclosed today."
-            + section,
-            BLUE,
-            mention_user=cfg["discord"].get("mention_on_heartbeat", False),
+        send_daily_update(
+            cfg, state,
+            "No notable congressional stock trades were disclosed today.",
         )
-    hb["last_sent_date"] = today
-    hb["checks"] = 0
-    hb["trades_found"] = 0
-    hb["errors"] = 0
+    reset_heartbeat(state, today)
 
 
 # ----------------------------------------------------------------------
@@ -609,7 +616,7 @@ def main() -> int:
     feats = cfg["features"]
     state["heartbeat"]["checks"] += 1
 
-    # Self-heal: a previous "initialized" run that indexed nothing doesn't count.
+    # Self-heal: an "initialized" state with nothing indexed doesn't count.
     effectively_initialized = state["initialized"] and len(state["seen"]) > 0
 
     all_trades: list[dict] = []
@@ -652,7 +659,7 @@ def main() -> int:
         print(f"ERROR: {msg}", file=sys.stderr)
         state["heartbeat"]["errors"] += 1
         if feats.get("notify_on_error", True):
-            send_simple(cfg, "⚠️ Source error", msg, ORANGE)
+            send_embed(cfg, "⚠️ Source Error", msg, AMBER)
 
     seen = set(state["seen"])
     new_trades = []
@@ -666,19 +673,19 @@ def main() -> int:
 
     update_positions(state, new_trades)
 
-    # First *successful* run: seed silently so you don't get flooded
-    # with historical backfill. Only counts if we actually got data.
+    # First successful run: seed silently — history never floods the channel.
     if not effectively_initialized:
         if all_trades:
             state["initialized"] = True
             save_state(state)
-            send_simple(
-                cfg, "🏛️ Congress Trade Bot initialized",
-                f"Connected to data source and indexed "
+            send_embed(
+                cfg, "🏛️ Congress Trade Bot Initialized",
+                f"Connected to the U.S. Senate eFD data source and indexed "
                 f"**{len(state['seen'])}** recent trades as already-seen. "
-                f"You'll be pinged for anything new from now on."
-                + top_holdings_section(state),
-                BLUE, mention_user=True,
+                f"You'll be alerted to anything new from now on.",
+                NAVY,
+                fields=[f for f in [top_holdings_field(state)] if f],
+                mention_user=True,
             )
             print(f"Initialized with {len(state['seen'])} trades.")
         else:
@@ -693,19 +700,29 @@ def main() -> int:
         reverse=True,
     )
 
-    today = datetime.now(timezone.utc).strftime("%Y-%m-%d")
-    daily = state.get("daily") or {}
-    if daily.get("date") != today:
-        daily = {"date": today, "count": 0, "section_sent": False}
+    daily = roll_daily(state)
     if alertable:
         featured = alertable[0]
         others_today = (len(alertable) - 1) + daily["count"]
-        extra = "" if daily.get("section_sent") else top_holdings_section(state)
-        send_trade_alert(cfg, featured, others_today, extra_section=extra)
-        if extra:
+        hf = None if daily.get("section_sent") else top_holdings_field(state)
+        send_trade_alert(cfg, featured, others_today, holdings_field=hf)
+        if hf:
             daily["section_sent"] = True
         daily["count"] += len(alertable)
-    state["daily"] = daily
+
+    # Manual "Run workflow" trigger: always produce a visible message.
+    # If no alert just went out, send the daily update immediately —
+    # regardless of the scheduled hour — and mark today's update as
+    # sent so the schedule doesn't duplicate it later.
+    if is_manual_run() and not alertable:
+        n = daily["count"]
+        if n > 0:
+            plural = "trade has" if n == 1 else "trades have"
+            body = f"**{n}** notable {plural} been disclosed today."
+        else:
+            body = "No notable congressional stock trades were disclosed today."
+        send_daily_update(cfg, state, body)
+        reset_heartbeat(state, daily["date"])
 
     state["heartbeat"]["trades_found"] += len(alertable)
     maybe_heartbeat(cfg, state)
