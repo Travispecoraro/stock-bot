@@ -439,7 +439,7 @@
   },
   "heartbeat": {
     "last_sent_date": "2026-07-20",
-    "checks": 0,
+    "checks": 1,
     "trades_found": 0,
     "errors": 0
   },
