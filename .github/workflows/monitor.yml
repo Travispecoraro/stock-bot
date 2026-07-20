@@ -36,7 +36,14 @@ jobs:
           DISCORD_WEBHOOK_URL: ${{ secrets.DISCORD_WEBHOOK_URL }}
           FINNHUB_API_KEY: ${{ secrets.FINNHUB_API_KEY }}
         run: python monitor.py
-
+        
+      - name: Run insider monitor
+        env:
+          WEBHOOK_URL: ${{ secrets.DISCORD_WEBHOOK_URL }}
+          DISCORD_USER_ID: ${{ secrets.DISCORD_USER_ID }}
+          SEC_USER_AGENT: "stock-bot YourName your@email.com"
+        run: python insiders.py
+        
       - name: Commit state
         run: |
           git config user.name "congress-trade-bot"
