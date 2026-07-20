@@ -40,7 +40,13 @@ DEFAULTS = {
 }
 
 STATE_FILE = "state.json"
-CONFIG_FILE = "config.json"
+CONFIG_FILE = "config.json"          # legacy fallback
+CONFIG_YAML = "config.yaml"          # primary — managed by the control panel
+
+try:
+    import yaml as _yaml
+except ImportError:
+    _yaml = None
 
 WEBHOOK_URL = os.environ.get("WEBHOOK_URL", "")
 USER_ID = os.environ.get("DISCORD_USER_ID", "")
@@ -60,12 +66,28 @@ GREEN, RED, TEAL = 0x2ECC71, 0xE74C3C, 0x1ABC9C
 
 def load_config():
     cfg = dict(DEFAULTS)
-    try:
-        with open(CONFIG_FILE) as f:
-            user_cfg = json.load(f).get("insiders", {})
-        cfg.update({k: v for k, v in user_cfg.items() if k in cfg})
-    except (FileNotFoundError, json.JSONDecodeError):
-        pass
+    loaded = False
+    if _yaml is not None:
+        try:
+            with open(CONFIG_YAML) as f:
+                user = _yaml.safe_load(f) or {}
+            ins = user.get("insiders", {}) or {}
+            cfg.update({k: v for k, v in ins.items() if k in cfg})
+            groups = user.get("groups", {}) or {}
+            if "insiders" in groups:
+                cfg["enabled"] = bool(groups["insiders"])
+            loaded = True
+        except FileNotFoundError:
+            pass
+        except Exception as e:
+            print(f"insiders: config.yaml unreadable ({e})")
+    if not loaded:
+        try:
+            with open(CONFIG_FILE) as f:
+                user_cfg = json.load(f).get("insiders", {})
+            cfg.update({k: v for k, v in user_cfg.items() if k in cfg})
+        except (FileNotFoundError, json.JSONDecodeError):
+            pass
     return cfg
 
 
