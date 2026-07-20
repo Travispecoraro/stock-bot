@@ -1,6 +1,6 @@
 # ============================================================
 #  CONGRESS TRADE BOT — CONTROL PANEL  (managed file)
-#  Edited via control-panel.html on 2026-07-19.
+#  Edited via dashboard.html on 2026-07-20.
 #  You can also edit by hand: true = on, false = off.
 # ============================================================
 
@@ -33,3 +33,26 @@ pages_per_run: 3              # CapitolTrades pages per check (dormant)
 seed_pages: 10                # CapitolTrades seed pages (dormant)
 
 max_pings_per_run: 20         # Flood protection cap
+
+groups:                    # master switches for the follow scripts
+  insiders: true            # Form 4 (insiders.py)
+  activists: true           # SC 13D (edgar_watch.py)
+  funds: true               # 13F (edgar_watch.py)
+
+insiders:
+  alert_buys: true
+  alert_sells: true
+  big_buy_usd: 100000
+  big_sell_usd: 1000000
+  cluster_count: 2
+  cluster_window_days: 31
+
+activists:
+  include_13g: false         # passive 5% stakes too
+  alert_amendments: true
+
+funds:
+  min_aum_busd: 1            # follow funds >= this many $B
+  min_position_musd: 50       # track positions >= this many $M
+  alert_new: true
+  alert_exits: true
