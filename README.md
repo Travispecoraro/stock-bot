@@ -1,6 +1,8 @@
-# 🏛️ Congress Trade Bot
+# Stock Bot
 
-Pings you on Discord whenever a member of Congress discloses a stock buy or sell. Runs for free on GitHub Actions every 30 minutes, sends a once-daily heartbeat so you know it's alive, and every feature is toggleable from `config.yaml` — edit, push, done.
+Pings you on Discord whenever someone on your watchlist discloses a stock buy or sell. Runs for free on GitHub Actions every 30 minutes, sends a once-daily heartbeat so you know it's alive, and every feature is toggleable from `config.yaml` — edit, push, done.
+
+Includes a dashboard, ledger, portfolio, & customizable alerts.
 
 ## How it works
 
