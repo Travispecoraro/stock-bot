@@ -2,14 +2,16 @@ name: Congress Trade Monitor
 
 on:
   schedule:
-    # Every 30 minutes. GitHub may delay scheduled runs by a few minutes
-    # under load — fine for this use case, since disclosures are filed
-    # days after the trade anyway.
     - cron: "*/30 * * * *"
-  workflow_dispatch: {}   # lets you trigger a run manually from the Actions tab
+  workflow_dispatch:
+    inputs:
+      force_heartbeat:
+        description: "Send the portfolio heartbeat now (ignore the daily clock)"
+        type: boolean
+        default: false
 
 permissions:
-  contents: write         # needed to commit state.json back to the repo
+  contents: write
 
 concurrency:
   group: monitor
@@ -18,6 +20,10 @@ concurrency:
 jobs:
   monitor:
     runs-on: ubuntu-latest
+    env:
+      DISCORD_WEBHOOK_URL: ${{ secrets.DISCORD_WEBHOOK_URL }}
+      FINNHUB_API_KEY: ${{ secrets.FINNHUB_API_KEY }}
+      SEC_USER_AGENT: ${{ secrets.SEC_USER_AGENT }}
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -31,24 +37,28 @@ jobs:
       - name: Install dependencies
         run: pip install -r requirements.txt
 
-      - name: Run monitor
-        env:
-          DISCORD_WEBHOOK_URL: ${{ secrets.DISCORD_WEBHOOK_URL }}
-          FINNHUB_API_KEY: ${{ secrets.FINNHUB_API_KEY }}
+      - name: Congress trades + clusters
         run: python monitor.py
-        
-      - name: Run insider monitor
-        env:
-          WEBHOOK_URL: ${{ secrets.DISCORD_WEBHOOK_URL }}
-          DISCORD_USER_ID: ${{ secrets.DISCORD_USER_ID }}
-          SEC_USER_AGENT: "stock-bot YourName your@email.com"
+
+      - name: Insider Form 4s + clusters
         run: python insiders.py
-        
+
+      - name: Activist stakes + fund 13Fs
+        run: python edgar_watch.py
+
+      - name: Portfolio performance index
+        run: python prices.py
+
+      - name: Daily portfolio heartbeat
+        env:
+          HEARTBEAT_FORCE: ${{ inputs.force_heartbeat && '1' || '' }}
+        run: python heartbeat.py
+
       - name: Commit state
         run: |
           git config user.name "congress-trade-bot"
           git config user.email "bot@users.noreply.github.com"
           git pull --rebase --autostash || true
-          git add state.json
+          git add state.json state_13f.json roster_history.json roster_resolved.json perf.json
           git diff --cached --quiet || git commit -m "chore: update state [skip ci]"
           git push
