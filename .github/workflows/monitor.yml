@@ -22,6 +22,8 @@ jobs:
     runs-on: ubuntu-latest
     env:
       DISCORD_WEBHOOK_URL: ${{ secrets.DISCORD_WEBHOOK_URL }}
+      WEBHOOK_URL: ${{ secrets.DISCORD_WEBHOOK_URL }}
+      DISCORD_USER_ID: ${{ secrets.DISCORD_USER_ID }}
       FINNHUB_API_KEY: ${{ secrets.FINNHUB_API_KEY }}
       SEC_USER_AGENT: ${{ secrets.SEC_USER_AGENT }}
     steps:
