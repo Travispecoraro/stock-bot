@@ -299,6 +299,111 @@
    ],
    "latest_top": [],
    "latest_period": ""
+  },
+  "1387322": {
+   "name": "Whale Rock Capital Management",
+   "events": [
+    {
+     "action": "SNAPSHOT",
+     "issuer": "",
+     "ticker": "",
+     "value": 0.0,
+     "period": "",
+     "date": "2026-07-21"
+    }
+   ],
+   "latest_top": [],
+   "latest_period": ""
+  },
+  "1418814": {
+   "name": "ValueAct Holdings",
+   "events": [
+    {
+     "action": "SNAPSHOT",
+     "issuer": "",
+     "ticker": "",
+     "value": 0.0,
+     "period": "",
+     "date": "2026-07-21"
+    }
+   ],
+   "latest_top": [],
+   "latest_period": ""
+  },
+  "1519964": {
+   "name": "Marshall Wace",
+   "events": [
+    {
+     "action": "SNAPSHOT",
+     "issuer": "",
+     "ticker": "",
+     "value": 0.0,
+     "period": "",
+     "date": "2026-07-21"
+    }
+   ],
+   "latest_top": [],
+   "latest_period": ""
+  },
+  "1535472": {
+   "name": "Corvex Management",
+   "events": [
+    {
+     "action": "SNAPSHOT",
+     "issuer": "",
+     "ticker": "",
+     "value": 0.0,
+     "period": "",
+     "date": "2026-07-21"
+    }
+   ],
+   "latest_top": [],
+   "latest_period": ""
+  },
+  "1536411": {
+   "name": "Duquesne Family Office",
+   "events": [
+    {
+     "action": "SNAPSHOT",
+     "issuer": "",
+     "ticker": "",
+     "value": 0.0,
+     "period": "",
+     "date": "2026-07-21"
+    }
+   ],
+   "latest_top": [],
+   "latest_period": ""
+  },
+  "1541617": {
+   "name": "Altimeter Capital",
+   "events": [
+    {
+     "action": "SNAPSHOT",
+     "issuer": "",
+     "ticker": "",
+     "value": 0.0,
+     "period": "",
+     "date": "2026-07-21"
+    }
+   ],
+   "latest_top": [],
+   "latest_period": ""
+  },
+  "1603466": {
+   "name": "Point72 Asset Management",
+   "events": [
+    {
+     "action": "SNAPSHOT",
+     "issuer": "",
+     "ticker": "",
+     "value": 0.0,
+     "period": "",
+     "date": "2026-07-21"
+    }
+   ],
+   "latest_top": [],
+   "latest_period": ""
   }
  }
 }
