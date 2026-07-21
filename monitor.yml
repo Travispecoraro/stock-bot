@@ -1,0 +1,61 @@
+name: Congress Trade Monitor
+
+on:
+  schedule:
+    - cron: "*/30 * * * *"
+  workflow_dispatch:
+    inputs:
+      force_heartbeat:
+        description: "Send the portfolio heartbeat now (ignore the daily clock)"
+        type: boolean
+        default: false
+
+permissions:
+  contents: write
+
+concurrency:
+  group: monitor
+  cancel-in-progress: false
+
+jobs:
+  monitor:
+    runs-on: ubuntu-latest
+    env:
+      DISCORD_WEBHOOK_URL: ${{ secrets.DISCORD_WEBHOOK_URL }}
+      FINNHUB_API_KEY: ${{ secrets.FINNHUB_API_KEY }}
+      SEC_USER_AGENT: ${{ secrets.SEC_USER_AGENT }}
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+          cache: pip
+
+      - name: Install dependencies
+        run: pip install -r requirements.txt
+
+      - name: Congress trades + clusters
+        run: python monitor.py
+
+      - name: Insider Form 4s + clusters
+        run: python insiders.py
+
+      - name: Activist stakes + fund 13Fs
+        run: python edgar_watch.py
+
+      - name: Daily portfolio heartbeat
+        env:
+          HEARTBEAT_FORCE: ${{ inputs.force_heartbeat && '1' || '' }}
+        run: python heartbeat.py
+
+      - name: Commit state
+        run: |
+          git config user.name "congress-trade-bot"
+          git config user.email "bot@users.noreply.github.com"
+          git pull --rebase --autostash || true
+          git add state.json state_13f.json
+          git diff --cached --quiet || git commit -m "chore: update state [skip ci]"
+          git push
