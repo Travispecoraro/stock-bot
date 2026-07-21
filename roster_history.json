@@ -164,6 +164,141 @@
    ],
    "latest_top": [],
    "latest_period": ""
+  },
+  "1138995": {
+   "name": "Glenview Capital Management",
+   "events": [
+    {
+     "action": "SNAPSHOT",
+     "issuer": "",
+     "ticker": "",
+     "value": 0.0,
+     "period": "",
+     "date": "2026-07-21"
+    }
+   ],
+   "latest_top": [],
+   "latest_period": ""
+  },
+  "1167483": {
+   "name": "Tiger Global Management",
+   "events": [
+    {
+     "action": "SNAPSHOT",
+     "issuer": "",
+     "ticker": "",
+     "value": 0.0,
+     "period": "",
+     "date": "2026-07-21"
+    }
+   ],
+   "latest_top": [],
+   "latest_period": ""
+  },
+  "1179392": {
+   "name": "Two Sigma Investments",
+   "events": [
+    {
+     "action": "SNAPSHOT",
+     "issuer": "",
+     "ticker": "",
+     "value": 0.0,
+     "period": "",
+     "date": "2026-07-21"
+    }
+   ],
+   "latest_top": [],
+   "latest_period": ""
+  },
+  "1263508": {
+   "name": "Baker Bros Advisors",
+   "events": [
+    {
+     "action": "SNAPSHOT",
+     "issuer": "",
+     "ticker": "",
+     "value": 0.0,
+     "period": "",
+     "date": "2026-07-21"
+    }
+   ],
+   "latest_top": [],
+   "latest_period": ""
+  },
+  "1273087": {
+   "name": "Millennium Management",
+   "events": [
+    {
+     "action": "SNAPSHOT",
+     "issuer": "",
+     "ticker": "",
+     "value": 0.0,
+     "period": "",
+     "date": "2026-07-21"
+    }
+   ],
+   "latest_top": [],
+   "latest_period": ""
+  },
+  "1325447": {
+   "name": "First Eagle Investment Management",
+   "events": [
+    {
+     "action": "SNAPSHOT",
+     "issuer": "",
+     "ticker": "",
+     "value": 0.0,
+     "period": "",
+     "date": "2026-07-21"
+    }
+   ],
+   "latest_top": [],
+   "latest_period": ""
+  },
+  "1336528": {
+   "name": "Pershing Square Capital Management",
+   "events": [
+    {
+     "action": "SNAPSHOT",
+     "issuer": "",
+     "ticker": "",
+     "value": 0.0,
+     "period": "",
+     "date": "2026-07-21"
+    }
+   ],
+   "latest_top": [],
+   "latest_period": ""
+  },
+  "1350694": {
+   "name": "Bridgewater Associates",
+   "events": [
+    {
+     "action": "SNAPSHOT",
+     "issuer": "",
+     "ticker": "",
+     "value": 0.0,
+     "period": "",
+     "date": "2026-07-21"
+    }
+   ],
+   "latest_top": [],
+   "latest_period": ""
+  },
+  "1358706": {
+   "name": "Abrams Capital Management",
+   "events": [
+    {
+     "action": "SNAPSHOT",
+     "issuer": "",
+     "ticker": "",
+     "value": 0.0,
+     "period": "",
+     "date": "2026-07-21"
+    }
+   ],
+   "latest_top": [],
+   "latest_period": ""
   }
  }
 }
