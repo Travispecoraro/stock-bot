@@ -628,7 +628,7 @@
   },
   "heartbeat": {
     "last_sent_date": "2026-07-20",
-    "checks": 8,
+    "checks": 9,
     "trades_found": 0,
     "errors": 12,
     "errors_today": 6,
@@ -3227,7 +3227,7 @@
       "0000947871-26-000553"
     ],
     "recent_moves": [],
-    "cursor": 13
+    "cursor": 25
   },
   "congress_processed": {
     "senate": [
