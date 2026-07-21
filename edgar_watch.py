@@ -1,27 +1,17 @@
 """
 edgar_watch.py — Activist (SC 13D/13G) + Fund (13F-HR) monitor for stock-bot.
 
-Two followed groups, both from the free SEC EDGAR "current filings" feed:
+  ACTIVISTS: any investor crossing 5% files SC 13D (activist) or SC 13G
+    (passive). Alerts on new filings + amendments.
+  FUNDS: managers over the AUM floor file quarterly 13F holdings; the bot
+    diffs large positions against the prior filing and alerts NEW stakes /
+    EXITs above the position floor.
 
-  ACTIVISTS: any investor crossing 5% of a public company must file SC 13D
-    (activist intent) or SC 13G (passive). Alerts on new filings and
-    amendments. Event-driven, days-fresh.
+All Discord output goes through notify.py so activist/fund alerts match the
+rest of the bot. Runs after monitor.py / insiders.py.
 
-  FUNDS: managers over the configured AUM floor (default $1B) file quarterly
-    13F holdings. The bot diffs each fund's large positions (>= the configured
-    floor, default $50M) against its previous filing and alerts on NEW stakes
-    and EXITs. Note: 13Fs lag up to 45 days after quarter end by law, and
-    holdings below the position floor are intentionally ignored to keep
-    repo state small.
-
-State:
-  state.json        -> "activists" and "funds" keys (alerts, dedup, tape)
-  state_13f.json    -> per-fund large-position snapshots (diff baseline)
-
-Config: config.yaml sections "groups", "activists", "funds" (PyYAML).
-Falls back to built-in defaults if the file or library is missing.
-
-Run: python edgar_watch.py   (after monitor.py / insiders.py in the workflow)
+State: state.json ("activists","funds","heartbeat")  +  state_13f.json (diff base)
+Env:   DISCORD_WEBHOOK_URL, SEC_USER_AGENT
 """
 
 import json
@@ -34,45 +24,32 @@ from xml.etree import ElementTree as ET
 
 import requests
 
+import notify
+
 try:
     import yaml
     HAVE_YAML = True
 except ImportError:
     HAVE_YAML = False
 
-# ---------------------------------------------------------------- config ---
-
 DEFAULTS = {
     "groups": {"activists": True, "funds": True},
-    "activists": {
-        "include_13g": False,       # passive 5% stakes; noisier, off by default
-        "alert_amendments": True,   # 13D/A stake changes
-        "max_filings_per_run": 40,
-    },
-    "funds": {
-        "min_aum_busd": 1,          # follow funds with >= this many $B reported
-        "min_position_musd": 50,    # track/alert positions >= this many $M
-        "alert_new": True,
-        "alert_exits": True,
-        "max_filings_per_run": 30,
-        "max_alert_lines": 6,       # positions listed per fund embed
-    },
+    "activists": {"include_13g": False, "alert_amendments": True, "max_filings_per_run": 40},
+    "funds": {"min_aum_busd": 1, "min_position_musd": 50, "alert_new": True,
+              "alert_exits": True, "max_filings_per_run": 30, "max_alert_lines": 6},
 }
 
 STATE_FILE = "state.json"
 F13_FILE = "state_13f.json"
 CONFIG_FILE = "config.yaml"
 
-WEBHOOK_URL = os.environ.get("WEBHOOK_URL", "")
-USER_ID = os.environ.get("DISCORD_USER_ID", "")
+WEBHOOK_URL = os.environ.get("DISCORD_WEBHOOK_URL", "")   # fixed: was WEBHOOK_URL
 SEC_UA = os.environ.get("SEC_USER_AGENT", "stock-bot personal project contact@example.com")
 HEADERS = {"User-Agent": SEC_UA, "Accept-Encoding": "gzip, deflate"}
 
 FEED = ("https://www.sec.gov/cgi-bin/browse-edgar"
         "?action=getcurrent&type={t}&company=&dateb=&owner=include&count={n}&output=atom")
 TICKER_MAP_URL = "https://www.sec.gov/files/company_tickers.json"
-
-PURPLE, BLUE, RED = 0x9B59B6, 0x3498DB, 0xE74C3C
 
 
 def deep_merge(base, over):
@@ -87,20 +64,19 @@ def deep_merge(base, over):
 
 def load_config():
     cfg = {k: dict(v) for k, v in DEFAULTS.items()}
+    discord = {}
     if HAVE_YAML:
         try:
             with open(CONFIG_FILE) as f:
                 user = yaml.safe_load(f) or {}
             for section in cfg:
                 cfg = deep_merge(cfg, {section: user.get(section, {})})
+            discord = user.get("discord", {}) or {}
         except FileNotFoundError:
             pass
         except Exception as e:
             print(f"edgar_watch: config.yaml unreadable ({e}); using defaults")
-    else:
-        print("edgar_watch: pyyaml not installed; using defaults "
-              "(add 'pyyaml' to requirements.txt to enable config)")
-    return cfg
+    return cfg, discord
 
 
 def load_json(path, fallback):
@@ -109,6 +85,11 @@ def load_json(path, fallback):
             return json.load(f)
     except (FileNotFoundError, json.JSONDecodeError):
         return fallback
+
+
+def bump_pinged(state, n):
+    hb = state.setdefault("heartbeat", {})
+    hb["pinged_today"] = hb.get("pinged_today", 0) + n
 
 
 def sec_get(url, retries=3):
@@ -124,7 +105,6 @@ def sec_get(url, retries=3):
 
 
 def feed_entries(form_type, limit):
-    """[(accession, index_url, title)] newest first from the current-filings feed."""
     r = sec_get(FEED.format(t=form_type.replace(" ", "+"), n=limit))
     ns = {"a": "http://www.w3.org/2005/Atom"}
     out, seen = [], set()
@@ -133,7 +113,7 @@ def feed_entries(form_type, limit):
         title = (entry.findtext("a:title", "", ns) or "")
         href = link.get("href") if link is not None else ""
         m = re.search(r"(\d{10}-\d{2}-\d{6})", href)
-        if m and m.group(1) not in seen:      # feed lists filer+subject rows; dedupe
+        if m and m.group(1) not in seen:
             seen.add(m.group(1))
             out.append((m.group(1), href, title))
     return out
@@ -150,16 +130,6 @@ def findtext_any(root, name):
     return ""
 
 
-def post_discord(embeds, content=""):
-    if not WEBHOOK_URL:
-        print("no WEBHOOK_URL; would post:", content, json.dumps(embeds)[:400])
-        return
-    for i in range(0, len(embeds), 10):
-        requests.post(WEBHOOK_URL,
-                      json={"content": content if i == 0 else "",
-                            "embeds": embeds[i:i + 10]}, timeout=15)
-
-
 def fmt_usd(v):
     v = float(v or 0)
     if v >= 1e9:
@@ -169,14 +139,10 @@ def fmt_usd(v):
     return f"${v:,.0f}"
 
 
-# ------------------------------------------------------------- activists ---
-
+# ── activists ──────────────────────────────────────────────────────────
 def parse_index_parties(html):
-    """From a filing index page, pull (subject_company, subject_cik, filed_by)."""
     subject, subj_cik, filer = "", "", ""
-    # index pages list company blocks with a role in the surrounding text
-    blocks = re.split(r'class="companyName"', html)
-    for blk in blocks[1:]:
+    for blk in re.split(r'class="companyName"', html)[1:]:
         cik_m = re.search(r"CIK=(\d{4,10})", blk)
         clean = re.sub(r"<[^>]+>", " ", blk[:500])
         name_m = re.search(r"^\W*([^()]{2,120}?)\s*\(", clean)
@@ -190,13 +156,11 @@ def parse_index_parties(html):
 
 
 def parse_stake_pct(text):
-    m = re.search(r"percent\s+of\s+class.{0,300}?(\d{1,3}(?:\.\d+)?)\s*%",
-                  text, re.I | re.S)
+    m = re.search(r"percent\s+of\s+class.{0,300}?(\d{1,3}(?:\.\d+)?)\s*%", text, re.I | re.S)
     return m.group(1) if m else ""
 
 
 def load_ticker_map():
-    """CIK -> ticker from SEC's official mapping file."""
     try:
         data = sec_get(TICKER_MAP_URL).json()
         return {str(v["cik_str"]): v["ticker"] for v in data.values()}
@@ -234,32 +198,23 @@ def run_activists(cfg, state, ticker_map):
                 print(f"edgar_watch: activist skip {acc}: {e}")
                 continue
             ticker = ticker_map.get(subj_cik.lstrip("0") if subj_cik else "", "")
-            ftype = (form.replace("SC ", "") + ("/A" if is_amend else ""))
+            ftype = form.replace("SC ", "") + ("/A" if is_amend else "")
             event = {"filer": filer or "Unknown filer", "company": subject or "Unknown company",
                      "ticker": ticker, "pct": pct, "type": ftype,
-                     "date": datetime.now(timezone.utc).date().isoformat(),
-                     "link": url}
+                     "date": datetime.now(timezone.utc).date().isoformat(), "link": url}
             st["recent_events"].append(event)
             new_count += 1
-            head = ticker or event["company"]
-            embeds.append({
-                "title": f"⚡ Activist Stake — {head}" if not is_amend
-                         else f"⚡ Stake Update — {head}",
-                "color": PURPLE,
-                "description": (f"**{event['filer']}** filed **{ftype}** on "
-                                f"{event['company']}{' ('+ticker+')' if ticker else ''}\n"
-                                + (f"Reported **{pct}%** of class\n" if pct else "")
-                                + f"[Filing ↗]({url})"),
-            })
+            embeds.append(notify.activist_embed({
+                "filer": event["filer"], "company": event["company"],
+                "ticker": ticker, "pct": pct, "type": ftype, "url": url,
+            }))
     st["recent_events"] = st["recent_events"][-150:]
     st["seen"] = st["seen"][-2000:]
     return embeds, new_count
 
 
-# ----------------------------------------------------------------- funds ---
-
+# ── funds ──────────────────────────────────────────────────────────────
 def parse_13f_primary(xml_bytes):
-    """Return (fund_name, period, total_value_usd) from a 13F primary doc."""
     try:
         root = ET.fromstring(xml_bytes)
     except ET.ParseError:
@@ -274,7 +229,6 @@ def parse_13f_primary(xml_bytes):
 
 
 def parse_13f_infotable(xml_bytes, min_value):
-    """{cusip: {'issuer': name, 'value': usd}} for positions >= min_value."""
     try:
         root = ET.fromstring(xml_bytes)
     except ET.ParseError:
@@ -297,8 +251,8 @@ def parse_13f_infotable(xml_bytes, min_value):
                 except ValueError:
                     pass
         if cusip and value >= min_value:
-            out[cusip] = {"issuer": issuer, "value": round(value + out.get(cusip, {}).get("value", 0), 2)} \
-                if cusip in out else {"issuer": issuer, "value": round(value, 2)}
+            prev = out.get(cusip, {}).get("value", 0)
+            out[cusip] = {"issuer": issuer, "value": round(value + prev, 2)}
     return out
 
 
@@ -327,7 +281,7 @@ def run_funds(cfg, state, f13):
                 continue
             name, period, total = parse_13f_primary(sec_get("https://www.sec.gov" + primary).content)
             if total < min_aum:
-                continue                       # below the AUM floor — not followed
+                continue
             if info is None:
                 info = next((h for h in xml_hrefs if h != primary), None)
             holdings = parse_13f_infotable(sec_get("https://www.sec.gov" + info).content, min_pos) if info else {}
@@ -340,21 +294,18 @@ def run_funds(cfg, state, f13):
         cik = cik_m.group(1) if cik_m else acc
         prev = f13.get(cik, {}).get("h", {})
         cur_set, prev_set = set(holdings), set(prev)
-        news = sorted((holdings[c] for c in cur_set - prev_set),
-                      key=lambda p: -p["value"])
-        exits = sorted((prev[c] for c in prev_set - cur_set),
-                       key=lambda p: -p["value"])
-        f13[cik] = {"name": name, "q": period,
-                    "h": {c: holdings[c] for c in holdings}}
+        news = sorted((holdings[c] for c in cur_set - prev_set), key=lambda p: -p["value"])
+        exits = sorted((prev[c] for c in prev_set - cur_set), key=lambda p: -p["value"])
+        f13[cik] = {"name": name, "q": period, "h": dict(holdings)}
 
         first_snapshot = not prev
         lines = []
         if fd["alert_new"] and not first_snapshot:
             for p in news[:fd["max_alert_lines"]]:
-                lines.append(f"🟦 NEW · {p['issuer']} · ~{fmt_usd(p['value'])}")
+                lines.append(f"NEW · {p['issuer']} · ~{fmt_usd(p['value'])}")
         if fd["alert_exits"] and not first_snapshot:
             for p in exits[:fd["max_alert_lines"]]:
-                lines.append(f"⬛ EXIT · {p['issuer']} · was ~{fmt_usd(p['value'])}")
+                lines.append(f"EXIT · {p['issuer']} · was ~{fmt_usd(p['value'])}")
         for p in (news if not first_snapshot else [])[:3]:
             st["recent_moves"].append({"fund": name, "action": "NEW", "issuer": p["issuer"],
                                        "ticker": "", "value": p["value"], "period": period,
@@ -365,22 +316,17 @@ def run_funds(cfg, state, f13):
                                        "date": datetime.now(timezone.utc).date().isoformat()})
         if lines:
             new_count += 1
-            embeds.append({
-                "title": f"🐋 Fund Moves — {name}",
-                "color": BLUE,
-                "description": (f"13F for quarter ending {period or '—'} · "
-                                f"reported {fmt_usd(total)} AUM · positions ≥ {fmt_usd(min_pos)}\n"
-                                + "\n".join(lines) + f"\n[Filing ↗]({url})"),
-            })
+            embeds.append(notify.fund_embed({
+                "fund": name, "period": period, "aum": total, "lines": lines, "url": url,
+            }))
     st["recent_moves"] = st["recent_moves"][-150:]
     st["seen"] = st["seen"][-2000:]
     return embeds, new_count
 
 
-# ------------------------------------------------------------------ main ---
-
+# ── main ───────────────────────────────────────────────────────────────
 def run():
-    cfg = load_config()
+    cfg, discord = load_config()
     state = load_json(STATE_FILE, {})
     f13 = load_json(F13_FILE, {})
     embeds = []
@@ -400,12 +346,14 @@ def run():
     else:
         print("edgar_watch: funds disabled")
 
-    mention = f"<@{USER_ID}>" if USER_ID and embeds else ""
+    uid = str(discord.get("user_id", "")).strip()
+    mention = f"<@{uid}>" if uid.isdigit() and embeds else ""
     if embeds:
-        post_discord(embeds, content=mention)
+        notify.send(WEBHOOK_URL, embeds, content=mention)
+        bump_pinged(state, len(embeds))
 
     with open(STATE_FILE, "w") as f:
-        json.dump(state, f, indent=2)
+        json.dump(state, f, indent=1)
     with open(F13_FILE, "w") as f:
         json.dump(f13, f, separators=(",", ":"))
     print(f"edgar_watch: done — {len(embeds)} alerts")
@@ -415,6 +363,5 @@ if __name__ == "__main__":
     try:
         run()
     except Exception as e:
-        post_discord([{"title": "⚠️ EDGAR watcher error", "color": RED,
-                       "description": str(e)[:1000]}])
+        notify.send(WEBHOOK_URL, notify.notice_embed("EDGAR watcher error", str(e)[:1000], "error"))
         sys.exit(1)
