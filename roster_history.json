@@ -404,6 +404,156 @@
    ],
    "latest_top": [],
    "latest_period": ""
+  },
+  "1649339": {
+   "name": "Scion Asset Management",
+   "events": [
+    {
+     "action": "SNAPSHOT",
+     "issuer": "",
+     "ticker": "",
+     "value": 0.0,
+     "period": "",
+     "date": "2026-07-21"
+    }
+   ],
+   "latest_top": [],
+   "latest_period": ""
+  },
+  "1709323": {
+   "name": "Himalaya Capital Management",
+   "events": [
+    {
+     "action": "SNAPSHOT",
+     "issuer": "",
+     "ticker": "",
+     "value": 0.0,
+     "period": "",
+     "date": "2026-07-21"
+    }
+   ],
+   "latest_top": [],
+   "latest_period": ""
+  },
+  "1791786": {
+   "name": "Elliott Investment Management",
+   "events": [
+    {
+     "action": "SNAPSHOT",
+     "issuer": "",
+     "ticker": "",
+     "value": 0.0,
+     "period": "",
+     "date": "2026-07-21"
+    }
+   ],
+   "latest_top": [],
+   "latest_period": ""
+  },
+  "728014": {
+   "name": "Ruane Cunniff",
+   "events": [
+    {
+     "action": "SNAPSHOT",
+     "issuer": "",
+     "ticker": "",
+     "value": 0.0,
+     "period": "",
+     "date": "2026-07-21"
+    }
+   ],
+   "latest_top": [],
+   "latest_period": ""
+  },
+  "807985": {
+   "name": "Southeastern Asset Management",
+   "events": [
+    {
+     "action": "SNAPSHOT",
+     "issuer": "",
+     "ticker": "",
+     "value": 0.0,
+     "period": "",
+     "date": "2026-07-21"
+    }
+   ],
+   "latest_top": [],
+   "latest_period": ""
+  },
+  "813917": {
+   "name": "Harris Associates",
+   "events": [
+    {
+     "action": "SNAPSHOT",
+     "issuer": "",
+     "ticker": "",
+     "value": 0.0,
+     "period": "",
+     "date": "2026-07-21"
+    }
+   ],
+   "latest_top": [],
+   "latest_period": ""
+  },
+  "859804": {
+   "name": "Wedgewood Partners",
+   "events": [
+    {
+     "action": "SNAPSHOT",
+     "issuer": "",
+     "ticker": "",
+     "value": 0.0,
+     "period": "",
+     "date": "2026-07-21"
+    }
+   ],
+   "latest_top": [],
+   "latest_period": ""
+  },
+  "905567": {
+   "name": "Yacktman Asset Management",
+   "events": [
+    {
+     "action": "SNAPSHOT",
+     "issuer": "",
+     "ticker": "",
+     "value": 0.0,
+     "period": "",
+     "date": "2026-07-21"
+    }
+   ],
+   "latest_top": [],
+   "latest_period": ""
+  },
+  "909661": {
+   "name": "Farallon Capital Management",
+   "events": [
+    {
+     "action": "SNAPSHOT",
+     "issuer": "",
+     "ticker": "",
+     "value": 0.0,
+     "period": "",
+     "date": "2026-07-21"
+    }
+   ],
+   "latest_top": [],
+   "latest_period": ""
+  },
+  "934639": {
+   "name": "Maverick Capital",
+   "events": [
+    {
+     "action": "SNAPSHOT",
+     "issuer": "",
+     "ticker": "",
+     "value": 0.0,
+     "period": "",
+     "date": "2026-07-21"
+    }
+   ],
+   "latest_top": [],
+   "latest_period": ""
   }
  }
 }
