@@ -1,0 +1,169 @@
+{
+ "funds": {
+  "1006438": {
+   "name": "Appaloosa Management",
+   "events": [
+    {
+     "action": "SNAPSHOT",
+     "issuer": "",
+     "ticker": "",
+     "value": 0.0,
+     "period": "",
+     "date": "2026-07-21"
+    }
+   ],
+   "latest_top": [],
+   "latest_period": ""
+  },
+  "1029160": {
+   "name": "Soros Fund Management",
+   "events": [
+    {
+     "action": "SNAPSHOT",
+     "issuer": "",
+     "ticker": "",
+     "value": 0.0,
+     "period": "",
+     "date": "2026-07-21"
+    }
+   ],
+   "latest_top": [],
+   "latest_period": ""
+  },
+  "1037389": {
+   "name": "Renaissance Technologies",
+   "events": [
+    {
+     "action": "SNAPSHOT",
+     "issuer": "",
+     "ticker": "",
+     "value": 0.0,
+     "period": "",
+     "date": "2026-07-21"
+    }
+   ],
+   "latest_top": [],
+   "latest_period": ""
+  },
+  "1040273": {
+   "name": "Third Point",
+   "events": [
+    {
+     "action": "SNAPSHOT",
+     "issuer": "",
+     "ticker": "",
+     "value": 0.0,
+     "period": "",
+     "date": "2026-07-21"
+    }
+   ],
+   "latest_top": [],
+   "latest_period": ""
+  },
+  "1056831": {
+   "name": "Fairholme Capital Management",
+   "events": [
+    {
+     "action": "SNAPSHOT",
+     "issuer": "",
+     "ticker": "",
+     "value": 0.0,
+     "period": "",
+     "date": "2026-07-21"
+    }
+   ],
+   "latest_top": [],
+   "latest_period": ""
+  },
+  "1061165": {
+   "name": "Lone Pine Capital",
+   "events": [
+    {
+     "action": "SNAPSHOT",
+     "issuer": "",
+     "ticker": "",
+     "value": 0.0,
+     "period": "",
+     "date": "2026-07-21"
+    }
+   ],
+   "latest_top": [],
+   "latest_period": ""
+  },
+  "1067983": {
+   "name": "Berkshire Hathaway",
+   "events": [
+    {
+     "action": "SNAPSHOT",
+     "issuer": "",
+     "ticker": "",
+     "value": 0.0,
+     "period": "",
+     "date": "2026-07-21"
+    }
+   ],
+   "latest_top": [],
+   "latest_period": ""
+  },
+  "1096343": {
+   "name": "Markel Group",
+   "events": [
+    {
+     "action": "SNAPSHOT",
+     "issuer": "",
+     "ticker": "",
+     "value": 0.0,
+     "period": "",
+     "date": "2026-07-21"
+    }
+   ],
+   "latest_top": [],
+   "latest_period": ""
+  },
+  "1103804": {
+   "name": "Viking Global Investors",
+   "events": [
+    {
+     "action": "SNAPSHOT",
+     "issuer": "",
+     "ticker": "",
+     "value": 0.0,
+     "period": "",
+     "date": "2026-07-21"
+    }
+   ],
+   "latest_top": [],
+   "latest_period": ""
+  },
+  "1112520": {
+   "name": "Akre Capital Management",
+   "events": [
+    {
+     "action": "SNAPSHOT",
+     "issuer": "",
+     "ticker": "",
+     "value": 0.0,
+     "period": "",
+     "date": "2026-07-21"
+    }
+   ],
+   "latest_top": [],
+   "latest_period": ""
+  },
+  "1135730": {
+   "name": "Coatue Management",
+   "events": [
+    {
+     "action": "SNAPSHOT",
+     "issuer": "",
+     "ticker": "",
+     "value": 0.0,
+     "period": "",
+     "date": "2026-07-21"
+    }
+   ],
+   "latest_top": [],
+   "latest_period": ""
+  }
+ }
+}
