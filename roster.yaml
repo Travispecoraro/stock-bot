@@ -1,0 +1,93 @@
+# ============================================================
+#  CURATED ROSTER — the watchlist that gates the whole bot
+# ------------------------------------------------------------
+#  The bot now reports ONLY trades/holdings from entities listed
+#  here. Everything outside the roster is ignored at the source,
+#  which is what kills the noise. Edit + push to GitHub = applied
+#  next run. No redeploy.
+#
+#  groups:  master on/off per source type. Flip one to false to
+#           mute that whole category without deleting your entries.
+#
+#  cik:     the SEC filer ID. It's an EXACT match — no name-fuzzing,
+#           no wrong-fund mixups. If you leave it blank, the bot
+#           resolves it automatically on the next run and writes the
+#           result into roster_resolved.json. ALWAYS glance at the run
+#           log the first time — it prints e.g.
+#             roster: resolved 'Bridgewater Associates' -> CIK 1350694
+#           so you can confirm it matched the fund you meant.
+# ============================================================
+
+groups:
+  funds: true          # 13F quarterly holdings — the "smart money" core
+  activists: true      # SC 13D / 13G  (5%+ stakes)
+  politicians: true    # congressional disclosures
+  insiders: true       # corporate insider Form 4s
+
+# ── FUNDS & INVESTORS ──────────────────────────────────────────
+#  Managers who file quarterly 13Fs. This is the heart of the
+#  "top 10 holdings of people who know more than me" view.
+#  Starter list below — trim or extend freely.
+#  (The three with CIKs pre-filled are verified; the rest resolve
+#   themselves on first run — check the log.)
+funds:
+  - name: Berkshire Hathaway            # Warren Buffett
+    cik: "1067983"
+    tags: [buffett, value]
+  - name: Scion Asset Management        # Michael Burry
+    cik: "1649339"
+    tags: [burry, deep-value, contrarian]
+  - name: Pershing Square Capital Management   # Bill Ackman
+    cik: "1336528"
+    tags: [ackman, activist, concentrated]
+  - name: Bridgewater Associates        # Ray Dalio
+    cik:
+    tags: [dalio, macro]
+  - name: Duquesne Family Office        # Stanley Druckenmiller
+    cik:
+    tags: [druckenmiller, macro]
+  - name: Third Point                   # Dan Loeb
+    cik:
+    tags: [loeb, activist]
+  - name: Greenlight Capital            # David Einhorn
+    cik:
+    tags: [einhorn, value]
+  - name: Appaloosa Management          # David Tepper
+    cik:
+    tags: [tepper, distressed]
+  - name: Tiger Global Management
+    cik:
+    tags: [growth, tech]
+  - name: Coatue Management
+    cik:
+    tags: [growth, tech]
+
+# ── ACTIVISTS ──────────────────────────────────────────────────
+#  13D filers you want 5%+ stake alerts for. The 13D index doesn't
+#  expose a clean filer CIK, so these match on filer NAME (partial,
+#  case-insensitive). Overlap with `funds` above is fine.
+activists:
+  - Pershing Square
+  - Elliott
+  - Starboard Value
+  - Icahn
+
+# ── POLITICIANS ────────────────────────────────────────────────
+#  Congress names to keep. Partial, case-insensitive — "Pelosi"
+#  matches "Nancy Pelosi". Empty list + politicians:true = keep all
+#  of Congress (i.e. no whitelist); add names to narrow it down.
+politicians:
+  - Nancy Pelosi
+  - Tommy Tuberville
+  - Dan Crenshaw
+  - Ro Khanna
+
+# ── INSIDERS ───────────────────────────────────────────────────
+#  Corporate Form 4s are only kept for these tickers. Empty list
+#  means the insiders group tracks nothing (effectively off) even
+#  if the toggle above is true — insiders are far too noisy to
+#  follow market-wide, so you pick the names you care about.
+insiders_at:
+  - NVDA
+  - TSLA
+  - META

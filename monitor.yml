@@ -56,6 +56,6 @@ jobs:
           git config user.name "congress-trade-bot"
           git config user.email "bot@users.noreply.github.com"
           git pull --rebase --autostash || true
-          git add state.json state_13f.json
+          git add state.json state_13f.json roster_history.json roster_resolved.json
           git diff --cached --quiet || git commit -m "chore: update state [skip ci]"
           git push
