@@ -29,14 +29,11 @@ import requests
 import yaml
 
 import notify
+import congress_sources          # official eFD (Senate) + disclosures-clerk (House)
 
 CONFIG_PATH = "config.yaml"
 STATE_PATH = "state.json"
 
-SENATE_URL = ("https://senate-stock-watcher-data.s3-us-west-2.amazonaws.com"
-              "/aggregate/all_transactions.json")
-HOUSE_URL = ("https://house-stock-watcher-data.s3-us-west-2.amazonaws.com"
-             "/data/all_transactions.json")
 FINNHUB_URL = "https://finnhub.io/api/v1/stock/congressional-trading"
 
 LEDGER_RETAIN_DAYS = 45         # keep enough history for the 14d window + slack
@@ -117,41 +114,9 @@ def trade_hash(t):
 
 
 # ── data sources ───────────────────────────────────────────────────────
-def fetch_json(url):
-    r = requests.get(url, timeout=60)
-    r.raise_for_status()
-    return r.json()
-
-
-def _normalize(rows, chamber, name_key):
-    out = []
-    for r in rows:
-        side = classify_side(r.get("type"))
-        if not side:
-            continue
-        out.append({
-            "chamber": chamber,
-            "person": (r.get(name_key) or "").strip(),
-            "ticker": (r.get("ticker") or "").replace("--", "").strip(),
-            "asset": (r.get("asset_description") or "").strip(),
-            "side": side,
-            "amount": (r.get("amount") or "").strip(),
-            "owner": (r.get("owner") or "").strip(),
-            "transaction_date": (r.get("transaction_date") or "").strip(),
-            "disclosure_date": (r.get("disclosure_date") or "").strip(),
-            "link": (r.get("ptr_link") or "").strip(),
-        })
-    return out
-
-
-def normalize_senate(rows):
-    return _normalize(rows, "Senate", "senator")
-
-
-def normalize_house(rows):
-    return _normalize(rows, "House", "representative")
-
-
+# Congress trades now come from the official government sources via
+# congress_sources.py (Senate eFD + House disclosures-clerk). Finnhub stays
+# as optional per-ticker enrichment.
 def fetch_finnhub(tickers):
     key = os.environ.get("FINNHUB_API_KEY", "")
     if not key:
@@ -290,14 +255,22 @@ def main():
     feats = cfg["features"]
 
     all_trades, errors = [], []
+    lookback = cfg["filters"].get("lookback_days", 45)
+    cong = state["congress"]
+    cong.setdefault("seen_senate", [])
+    cong.setdefault("seen_house", [])
     if feats.get("senate_source", True):
         try:
-            all_trades += normalize_senate(fetch_json(SENATE_URL))
+            rows, done = congress_sources.fetch_senate(lookback, skip_reports=set(cong["seen_senate"]))
+            all_trades += rows
+            cong["seen_senate"] = (cong["seen_senate"] + done)[-8000:]
         except Exception as e:
             errors.append(f"Senate source failed: {e}")
     if feats.get("house_source", True):
         try:
-            all_trades += normalize_house(fetch_json(HOUSE_URL))
+            rows, done = congress_sources.fetch_house(lookback, skip_docs=set(cong["seen_house"]))
+            all_trades += rows
+            cong["seen_house"] = (cong["seen_house"] + done)[-8000:]
         except Exception as e:
             errors.append(f"House source failed: {e}")
     if feats.get("finnhub_enrichment", False):
