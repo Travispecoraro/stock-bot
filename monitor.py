@@ -26,6 +26,13 @@ import yaml
 
 import roster
 
+try:
+    import congress_sources
+    HAVE_OFFICIAL = True
+except Exception as _e:
+    HAVE_OFFICIAL = False
+    print(f"monitor: congress_sources unavailable ({_e}); using legacy URLs")
+
 CONFIG_PATH = "config.yaml"
 STATE_PATH = "state.json"
 
@@ -369,13 +376,29 @@ def main() -> int:
 
     if feats.get("senate_source", True):
         try:
-            all_trades += normalize_senate(fetch_json(SENATE_URL))
+            if HAVE_OFFICIAL:
+                cp = state.setdefault("congress_processed", {})
+                rows, done = congress_sources.fetch_senate(
+                    lookback_days=cfg["filters"].get("lookback_days", 45),
+                    skip_reports=cp.get("senate", []), max_reports=250)
+                all_trades += rows
+                cp["senate"] = (cp.get("senate", []) + done)[-5000:]
+            else:
+                all_trades += normalize_senate(fetch_json(SENATE_URL))
         except Exception as e:
             errors.append(f"Senate source failed: {e}")
 
     if feats.get("house_source", True):
         try:
-            all_trades += normalize_house(fetch_json(HOUSE_URL))
+            if HAVE_OFFICIAL:
+                cp = state.setdefault("congress_processed", {})
+                rows, done = congress_sources.fetch_house(
+                    lookback_days=cfg["filters"].get("lookback_days", 45),
+                    skip_docs=cp.get("house", []), max_filings=60)
+                all_trades += rows
+                cp["house"] = (cp.get("house", []) + done)[-8000:]
+            else:
+                all_trades += normalize_house(fetch_json(HOUSE_URL))
         except Exception as e:
             errors.append(f"House source failed: {e}")
 
