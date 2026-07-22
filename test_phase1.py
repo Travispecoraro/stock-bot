@@ -264,11 +264,9 @@ def test_downstream_contracts_read_the_ledger(bot):
     st = _state(tmp)
 
     import importlib, shutil
-    for f in ("heartbeat.py", "prices.py", "Notify.py"):
+    for f in ("heartbeat.py", "prices.py", "notify.py"):
         src = os.path.join(os.path.dirname(__file__), f)
         shutil.copy(src, tmp / f)
-    shutil.copy(os.path.join(os.path.dirname(__file__), "Notify.py"),
-                tmp / "notify.py")               # case-sensitive import fix
     sys.modules.pop("heartbeat", None); sys.modules.pop("prices", None)
     import heartbeat, prices
 
