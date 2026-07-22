@@ -102,9 +102,51 @@ def load_state():
     ins = state.setdefault("insiders", {})
     ins.setdefault("seen_accessions", [])
     ins.setdefault("recent_trades", [])   # rolling ledger for cluster detection
+    ins.setdefault("tape", [])            # durable position record (see below)
     ins.setdefault("alerted_clusters", [])
     ins.setdefault("seeded", False)
     return state
+
+
+TAPE_RETENTION_DAYS = 400   # matches monitor.py; prices.py needs full history
+TAPE_MAX = 8000
+
+
+def append_tape(ins, new_trades):
+    """Durable insider position record.
+
+    Separate from recent_trades on purpose. recent_trades is pruned to the
+    cluster window (14 days) because that is all cluster detection needs —
+    but prices.py nets a position from its ENTIRE buy/sell history, so a
+    14-day tape means every insider name silently falls out of the
+    performance index a fortnight after it was bought. This keeps the long
+    record; recent_trades stays short and does its own job.
+    """
+    tape = ins.setdefault("tape", [])
+
+    def key(t):
+        return (f"{t.get('owner','')}|{t.get('ticker','')}|"
+                f"{t.get('side','')}|{t.get('date','')}|{t.get('shares','')}")
+
+    have = {key(t) for t in tape}
+    added = 0
+    for t in new_trades:
+        if not t.get("ticker") or not t.get("date"):
+            continue
+        if key(t) in have:
+            continue
+        have.add(key(t))
+        tape.append({k: t.get(k) for k in
+                     ("ticker", "issuer", "owner", "role", "side",
+                      "shares", "price", "value", "date")})
+        added += 1
+
+    cutoff = (datetime.now(timezone.utc)
+              - timedelta(days=TAPE_RETENTION_DAYS)).date().isoformat()
+    tape = [t for t in tape if (t.get("date") or "") >= cutoff]
+    tape.sort(key=lambda t: t.get("date") or "")
+    ins["tape"] = tape[-TAPE_MAX:]
+    return added
 
 
 def save_state(state):
@@ -305,6 +347,7 @@ def run():
                 embeds.append(big_trade_embed(t))
 
     # cluster detection over rolling ledger
+    taped = append_tape(ins, new_trades)
     cutoff = (datetime.now(timezone.utc) - timedelta(days=cfg["cluster_window_days"] + 1)).date().isoformat()
     ins["recent_trades"] = [t for t in ins["recent_trades"] if t["date"] >= cutoff] + new_trades
     for (ticker, side), owners in find_clusters(ins["recent_trades"], cfg).items():
@@ -319,7 +362,8 @@ def run():
         post_discord(embeds[i:i + 10], content=mention)
 
     save_state(state)
-    print(f"insiders: {len(new)} new filings, {len(new_trades)} P/S trades, {len(embeds)} alerts")
+    print(f"insiders: {len(new)} new filings, {len(new_trades)} P/S trades, "
+          f"{taped} added to tape ({len(ins['tape'])} total), {len(embeds)} alerts")
 
 
 if __name__ == "__main__":
