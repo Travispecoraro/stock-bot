@@ -50,8 +50,26 @@ try:
 except ImportError:
     _yaml = None
 
-WEBHOOK_URL = os.environ.get("WEBHOOK_URL", "")
-USER_ID = os.environ.get("DISCORD_USER_ID", "")
+# The workflow exports DISCORD_WEBHOOK_URL (same secret monitor.py uses).
+# WEBHOOK_URL is kept as a legacy fallback for anyone who set it manually.
+WEBHOOK_URL = os.environ.get("DISCORD_WEBHOOK_URL") or os.environ.get("WEBHOOK_URL", "")
+
+
+def discord_user_id():
+    """Mention target: DISCORD_USER_ID env if set, else config.yaml discord.user_id."""
+    uid = os.environ.get("DISCORD_USER_ID", "").strip()
+    if uid.isdigit():
+        return uid
+    if _yaml is not None:
+        try:
+            with open(CONFIG_YAML) as f:
+                raw = _yaml.safe_load(f) or {}
+            uid = str((raw.get("discord") or {}).get("user_id", "")).strip()
+            if uid.isdigit():
+                return uid
+        except Exception:
+            pass
+    return ""
 
 # SEC requires a descriptive User-Agent with contact info, or it blocks you.
 # CHANGE THIS to your real name/email before running.
@@ -102,51 +120,9 @@ def load_state():
     ins = state.setdefault("insiders", {})
     ins.setdefault("seen_accessions", [])
     ins.setdefault("recent_trades", [])   # rolling ledger for cluster detection
-    ins.setdefault("tape", [])            # durable position record (see below)
     ins.setdefault("alerted_clusters", [])
     ins.setdefault("seeded", False)
     return state
-
-
-TAPE_RETENTION_DAYS = 400   # matches monitor.py; prices.py needs full history
-TAPE_MAX = 8000
-
-
-def append_tape(ins, new_trades):
-    """Durable insider position record.
-
-    Separate from recent_trades on purpose. recent_trades is pruned to the
-    cluster window (14 days) because that is all cluster detection needs —
-    but prices.py nets a position from its ENTIRE buy/sell history, so a
-    14-day tape means every insider name silently falls out of the
-    performance index a fortnight after it was bought. This keeps the long
-    record; recent_trades stays short and does its own job.
-    """
-    tape = ins.setdefault("tape", [])
-
-    def key(t):
-        return (f"{t.get('owner','')}|{t.get('ticker','')}|"
-                f"{t.get('side','')}|{t.get('date','')}|{t.get('shares','')}")
-
-    have = {key(t) for t in tape}
-    added = 0
-    for t in new_trades:
-        if not t.get("ticker") or not t.get("date"):
-            continue
-        if key(t) in have:
-            continue
-        have.add(key(t))
-        tape.append({k: t.get(k) for k in
-                     ("ticker", "issuer", "owner", "role", "side",
-                      "shares", "price", "value", "date")})
-        added += 1
-
-    cutoff = (datetime.now(timezone.utc)
-              - timedelta(days=TAPE_RETENTION_DAYS)).date().isoformat()
-    tape = [t for t in tape if (t.get("date") or "") >= cutoff]
-    tape.sort(key=lambda t: t.get("date") or "")
-    ins["tape"] = tape[-TAPE_MAX:]
-    return added
 
 
 def save_state(state):
@@ -347,7 +323,6 @@ def run():
                 embeds.append(big_trade_embed(t))
 
     # cluster detection over rolling ledger
-    taped = append_tape(ins, new_trades)
     cutoff = (datetime.now(timezone.utc) - timedelta(days=cfg["cluster_window_days"] + 1)).date().isoformat()
     ins["recent_trades"] = [t for t in ins["recent_trades"] if t["date"] >= cutoff] + new_trades
     for (ticker, side), owners in find_clusters(ins["recent_trades"], cfg).items():
@@ -357,13 +332,13 @@ def run():
             embeds.append(cluster_embed(ticker, side, owners, ins["recent_trades"], cfg))
     ins["alerted_clusters"] = ins["alerted_clusters"][-500:]
 
+    uid = discord_user_id()
     for i in range(0, len(embeds), 10):   # Discord caps 10 embeds/message
-        mention = f"<@{USER_ID}>" if USER_ID and i == 0 else ""
+        mention = f"<@{uid}>" if uid and i == 0 else ""
         post_discord(embeds[i:i + 10], content=mention)
 
     save_state(state)
-    print(f"insiders: {len(new)} new filings, {len(new_trades)} P/S trades, "
-          f"{taped} added to tape ({len(ins['tape'])} total), {len(embeds)} alerts")
+    print(f"insiders: {len(new)} new filings, {len(new_trades)} P/S trades, {len(embeds)} alerts")
 
 
 if __name__ == "__main__":
