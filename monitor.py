@@ -364,18 +364,25 @@ def tape_key(t: dict) -> str:
             f"{t.get('side','')}|{t.get('transaction_date','')}")
 
 
-def append_tape(state: dict, trades: list) -> int:
-    """Append roster-tracked trades to the durable tape. Returns count added.
+def append_tape(state: dict, trades: list) -> list:
+    """Append roster-tracked trades to the durable tape. Returns rows added.
 
     Deliberately independent of the ping_buys / ping_sells config flags. Those
     are notification preferences; the tape is a position record. Dropping sells
     here would mean positions could never net out, and every name would sit in
     the performance index forever.
+
+    Also deliberately independent of state["seen"]. That set exists to stop
+    duplicate Discord pings, and it is pre-loaded with tens of thousands of
+    hashes from the old S3-mirror era. Gating the tape on it made backfill
+    impossible: trades already hashed could never enter the tape, no matter
+    how many times they were fetched. Dedup here is by tape_key instead, which
+    makes re-appending the same trade every run harmless.
     """
     tape = state["recent_trades"]
     have = {tape_key(t) for t in tape}
     today = datetime.now(timezone.utc).date().isoformat()
-    added = 0
+    added = []
 
     for t in trades:
         ticker = (t.get("ticker") or "").strip().upper()
@@ -401,7 +408,7 @@ def append_tape(state: dict, trades: list) -> int:
             continue
         have.add(k)
         tape.append(row)
-        added += 1
+        added.append(row)
 
     cutoff = (datetime.now(timezone.utc)
               - timedelta(days=TAPE_RETENTION_DAYS)).date().isoformat()
@@ -527,17 +534,24 @@ def main() -> int:
         new_trades.append(t)
 
     # ── ROSTER GATE ──
+    # Applied to ALL fetched trades, not just alert-new ones. The tape must be
+    # able to backfill; alerting must not re-ping. Those are different jobs, so
+    # they get different inputs.
+    on_roster = [t for t in all_trades if roster.tracks_politician(rost, t["person"])]
     tracked = [t for t in new_trades if roster.tracks_politician(rost, t["person"])]
 
-    # ── TAPE: always, regardless of ping prefs or the first-run gate ──
-    added = append_tape(state, tracked)
+    # ── TAPE: everything on the roster, deduped by tape_key ──
+    added = append_tape(state, on_roster)
 
-    for t in tracked:
+    # History only for rows genuinely new to the tape — append_history rewrites
+    # roster_history.json on every call, so feeding it all 900+ rows each run
+    # would rewrite the file 900 times for no gain.
+    for t in added:
         roster.append_history(
             "politicians", t["person"].lower(), t["person"],
             {"action": t["side"].upper(), "issuer": t.get("asset") or "",
              "ticker": t.get("ticker") or "", "value": t.get("amount") or "",
-             "period": "", "date": iso(t.get("disclosure_date"))})
+             "period": "", "date": t.get("disclosure_date") or ""})
 
     # First ever run: record everything, ping nothing.
     if not state["initialized"]:
@@ -545,10 +559,10 @@ def main() -> int:
         save_state(state)
         send_simple(cfg, "🏛️ Congress Trade Bot initialized",
                     f"Indexed **{len(state['seen'])}** historical trades as seen "
-                    f"and seeded the tape with **{added}**. "
+                    f"and seeded the tape with **{len(added)}**. "
                     f"You'll be pinged for anything new from now on.",
                     BLUE, mention_user=True)
-        print(f"Initialized: {len(state['seen'])} seen, {added} on tape.")
+        print(f"Initialized: {len(state['seen'])} seen, {len(added)} on tape.")
         return 0
 
     # ── ALERT ──
@@ -568,8 +582,8 @@ def main() -> int:
     maybe_heartbeat(cfg, state)
     save_state(state)
 
-    print(f"Run complete: {len(all_trades)} fetched, {len(new_trades)} new, "
-          f"{len(tracked)} on roster, {added} added to tape "
+    print(f"Run complete: {len(all_trades)} fetched, {len(new_trades)} alert-new, "
+          f"{len(on_roster)} on roster, {len(added)} added to tape "
           f"({len(state['recent_trades'])} total), {len(alertable)} alerted, "
           f"{len(errors)} errors.")
     return 0
