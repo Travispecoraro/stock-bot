@@ -21,8 +21,12 @@ jobs:
   monitor:
     runs-on: ubuntu-latest
     env:
+      # monitor.py and heartbeat.py read DISCORD_WEBHOOK_URL.
+      # insiders.py and edgar_watch.py read WEBHOOK_URL.
+      # Both names point at the same secret so every script can post.
       DISCORD_WEBHOOK_URL: ${{ secrets.DISCORD_WEBHOOK_URL }}
       WEBHOOK_URL: ${{ secrets.DISCORD_WEBHOOK_URL }}
+      # Optional. If unset, insider/activist alerts post without an @mention.
       DISCORD_USER_ID: ${{ secrets.DISCORD_USER_ID }}
       FINNHUB_API_KEY: ${{ secrets.FINNHUB_API_KEY }}
       SEC_USER_AGENT: ${{ secrets.SEC_USER_AGENT }}
@@ -61,6 +65,11 @@ jobs:
           git config user.name "congress-trade-bot"
           git config user.email "bot@users.noreply.github.com"
           git pull --rebase --autostash || true
-          git add state.json state_13f.json roster_history.json roster_resolved.json perf.json
+          # Stage only files that exist. A bare `git add missing.json` aborts
+          # the whole step, which would silently strand every other artifact.
+          for f in state.json state_13f.json roster_history.json \
+                   roster_resolved.json perf.json; do
+            [ -f "$f" ] && git add "$f"
+          done
           git diff --cached --quiet || git commit -m "chore: update state [skip ci]"
           git push
