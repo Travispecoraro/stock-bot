@@ -1,20 +1,20 @@
 # ============================================================
 #  CURATED ROSTER — the watchlist that gates the whole bot
 # ------------------------------------------------------------
-#  The bot reports ONLY trades/holdings from entities listed here.
-#  Everything outside the roster is ignored at the source. Edit +
-#  push to GitHub = applied next run. No redeploy.
+#  The bot reports ONLY trades/holdings from entities listed
+#  here. Everything outside the roster is ignored at the source.
+#  Edit + push to GitHub = applied next run. No redeploy.
 #
-#  groups:  master on/off per source type.
-#  cik:     SEC filer ID — an EXACT match, no name-fuzzing. Leave it
-#           blank and the bot resolves it against EDGAR on the next
-#           run, caching to roster_resolved.json. IMPORTANT: the first
-#           run prints each resolution, e.g.
-#             roster: resolved 'Citadel Advisors' -> CIK 1423053 (CITADEL ADVISORS LLC)
-#           Skim that log once and confirm each fund matched the
-#           manager you meant — a couple of common names can resolve
-#           to the wrong filer, and a wrong CIK silently tracks the
-#           wrong fund. Pre-fill the cik for any you want to pin.
+#  groups:  master on/off per source type. Flip one to false to
+#           mute that whole category without deleting your entries.
+#
+#  cik:     the SEC filer ID. It's an EXACT match — no name-fuzzing,
+#           no wrong-fund mixups. If you leave it blank, the bot
+#           resolves it automatically on the next run and writes the
+#           result into roster_resolved.json. ALWAYS glance at the run
+#           log the first time — it prints e.g.
+#             roster: resolved 'Bridgewater Associates' -> CIK 1350694
+#           so you can confirm it matched the fund you meant.
 # ============================================================
 
 groups:
@@ -24,143 +24,77 @@ groups:
   insiders: true       # corporate insider Form 4s
 
 # ── FUNDS & INVESTORS ──────────────────────────────────────────
-#  Managers who file quarterly 13Fs. Comment after each is the
-#  person most associated with the fund. The three with CIKs are
-#  verified; the rest auto-resolve on first run (check the log).
+#  Managers who file quarterly 13Fs. This is the heart of the
+#  "top 10 holdings of people who know more than me" view.
+#  (The three with CIKs pre-filled are verified; the rest resolve
+#   themselves on first run — check the log.)
 funds:
-  - name: Berkshire Hathaway                  # Warren Buffett
+  - name: Berkshire Hathaway            # Warren Buffett
     cik: "1067983"
     tags: [buffett, value]
-  - name: Scion Asset Management              # Michael Burry
+  - name: Scion Asset Management        # Michael Burry
     cik: "1649339"
     tags: [burry, deep-value, contrarian]
-  - name: Pershing Square Capital Management  # Bill Ackman
+  - name: Pershing Square Capital Management   # Bill Ackman
     cik: "1336528"
     tags: [ackman, activist, concentrated]
-
-  # — macro & multi-strategy —
-  - name: Bridgewater Associates              # Ray Dalio
-  - name: Duquesne Family Office              # Stanley Druckenmiller
-  - name: Soros Fund Management               # George Soros
-  - name: Millennium Management               # Izzy Englander
-  - name: Citadel Advisors                    # Ken Griffin
-  - name: Point72 Asset Management            # Steve Cohen
-  - name: Renaissance Technologies            # Jim Simons
-  - name: Two Sigma Investments               # Overdeck / Siegel
-  - name: AQR Capital Management              # Cliff Asness
-  - name: Marshall Wace
-
-  # — value & long-term compounders —
-  - name: Baupost Group                       # Seth Klarman
-  - name: Fairholme Capital Management        # Bruce Berkowitz
-  - name: Gotham Asset Management             # Joel Greenblatt
-  - name: Himalaya Capital Management         # Li Lu
-  - name: Ruane Cunniff                       # Sequoia Fund
-  - name: Akre Capital Management             # Chuck Akre
-  - name: Southeastern Asset Management       # Mason Hawkins (Longleaf)
-  - name: Harris Associates                   # Bill Nygren (Oakmark)
-  - name: Dodge & Cox
-  - name: First Eagle Investment Management
-  - name: Abrams Capital Management           # David Abrams
-  - name: Yacktman Asset Management           # Don Yacktman
-  - name: Wedgewood Partners
-  - name: Giverny Capital
-  - name: Pabrai Investments                  # Mohnish Pabrai
-  - name: Markel Group                        # Tom Gayner
-
-  # — growth / tech / tiger cubs —
-  - name: Tiger Global Management             # Chase Coleman
-  - name: Coatue Management                   # Philippe Laffont
-  - name: Lone Pine Capital                   # Stephen Mandel
-  - name: Viking Global Investors             # Andreas Halvorsen
-  - name: Maverick Capital                    # Lee Ainslie
-  - name: Altimeter Capital                   # Brad Gerstner
-  - name: Whale Rock Capital Management
-  - name: Hound Partners
-  - name: Baker Bros Advisors                 # biotech
-
-  # — activists & event-driven —
-  - name: Third Point                         # Dan Loeb
-  - name: Greenlight Capital                  # David Einhorn
-  - name: Appaloosa Management                # David Tepper
-  - name: Icahn Capital                       # Carl Icahn
-  - name: Elliott Investment Management       # Paul Singer
-  - name: Starboard Value                     # Jeff Smith
-  - name: ValueAct Holdings                   # Mason Morfit
-  - name: Trian Fund Management               # Nelson Peltz
-  - name: Glenview Capital Management         # Larry Robbins
-  - name: Corvex Management                   # Keith Meister
-  - name: Farallon Capital Management
-  - name: Paulson & Co                        # John Paulson
+  - name: Bridgewater Associates        # Ray Dalio
+    cik:
+    tags: [dalio, macro]
+  - name: Duquesne Family Office        # Stanley Druckenmiller
+    cik:
+    tags: [druckenmiller, macro]
+  - name: Third Point                   # Dan Loeb
+    cik:
+    tags: [loeb, activist]
+  - name: Greenlight Capital            # David Einhorn
+    cik:
+    tags: [einhorn, value]
+  - name: Appaloosa Management          # David Tepper
+    cik:
+    tags: [tepper, distressed]
+  - name: Tiger Global Management
+    cik:
+    tags: [growth, tech]
+  - name: Coatue Management
+    cik:
+    tags: [growth, tech]
 
 # ── ACTIVISTS ──────────────────────────────────────────────────
-#  13D filers you want 5%+ stake alerts for. Matched by filer NAME
-#  (partial, case-insensitive). Overlap with `funds` is fine.
+#  13D filers you want 5%+ stake alerts for. The 13D index doesn't
+#  expose a clean filer CIK, so these match on filer NAME (partial,
+#  case-insensitive). Overlap with `funds` above is fine.
 activists:
   - Pershing Square
   - Elliott
   - Starboard Value
   - Icahn
-  - Trian
-  - ValueAct
-  - Third Point
-  - Engine No. 1
-  - Jana Partners
-  - Sachem Head
-  - Corvex
-  - Legion Partners
-  - Ancora
-  - Politan Capital
-  - Mantle Ridge
-  - Land & Buildings
 
 # ── POLITICIANS ────────────────────────────────────────────────
-#  Congress names to keep. Partial, case-insensitive — "Pelosi"
-#  matches "Nancy Pelosi". Empty list + politicians:true = keep ALL
-#  of Congress; the list below narrows it to frequent traders.
-politicians:
-  - Nancy Pelosi
-  - Tommy Tuberville
-  - Dan Crenshaw
-  - Ro Khanna
-  - Marjorie Taylor Greene
-  - Josh Gottheimer
-  - Michael McCaul
-  - Mark Green
-  - Virginia Foxx
-  - Debbie Wasserman Schultz
-  - Kathy Manning
-  - John Curtis
-  - Nancy Mace
-  - Dan Meuser
-  - Garret Graves
-  - Bill Hagerty
-  - Rick Scott
-  - Markwayne Mullin
-  - Susie Lee
-  - Earl Blumenauer
-  - David Rouzer
-  - Kevin Hern
-  - Thomas Kean
-  - Byron Donalds
-  - Dan Newhouse
-  - Nicole Malliotakis
-  - Jonathan Jackson
-  - Rick Allen
-  - Cleo Fields
-  - Laurel Lee
-  - William Timmons
-  - Hal Rogers
+#  OPEN ROSTER. An empty list means NO whitelist — every member of
+#  Congress who files a disclosure gets tracked. This is what feeds
+#  breadth into the Performance index: more filers -> more distinct
+#  holders per ticker -> a meaningful breadth ranking.
+#
+#  To narrow it again, just add names back. Matching is partial and
+#  case-insensitive, so "Pelosi" catches "Nancy Pelosi".
+#
+#  Previous curated list, kept here so you can restore it in one paste:
+#    - Nancy Pelosi
+#    - Tommy Tuberville
+#    - Dan Crenshaw
+#    - Ro Khanna
+politicians: []
 
 # ── INSIDERS ───────────────────────────────────────────────────
-#  Corporate Form 4s kept only for these tickers. Empty list = the
-#  insiders group tracks nothing even if the toggle is true.
+#  Corporate Form 4s are only kept for these tickers. Unlike the
+#  politicians list above, an EMPTY list here means the insiders
+#  group tracks NOTHING — insiders are far too noisy to follow
+#  market-wide, so you pick the companies you care about.
+#
+#  Note this is the one gate still narrowing your coverage. Add
+#  tickers to widen it; there is no "all" setting by design.
 insiders_at:
   - NVDA
   - TSLA
   - META
-  - AAPL
-  - MSFT
-  - AMZN
-  - GOOGL
-  - PLTR
