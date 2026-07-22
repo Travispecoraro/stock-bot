@@ -48,13 +48,18 @@ def _iter_buys(state):
     """Yield (ticker, buyer_id, group, logged_date) for every buy in-window."""
     cutoff = (datetime.now(timezone.utc) - timedelta(days=WINDOW_DAYS)).date().isoformat()
 
-    for t in state.get("congress", {}).get("recent_trades", []):
+    # monitor.py writes the congress tape at the TOP level of state.json
+    # (matching what the dashboard reads); the nested key is legacy.
+    congress_rows = list(state.get("congress", {}).get("recent_trades") or [])
+    congress_rows += list(state.get("recent_trades") or [])
+    for t in congress_rows:
         if (t.get("side") or "").lower().startswith("b") and t.get("ticker"):
-            when = t.get("logged") or t.get("date") or ""
+            when = t.get("logged") or t.get("transaction_date") or t.get("date") or ""
             if when >= cutoff:
                 yield t["ticker"].upper(), (t.get("person") or "?"), "congress", when
 
-    for t in state.get("insiders", {}).get("recent_trades", []):
+    ins = state.get("insiders", {}) or {}
+    for t in (ins.get("tape") or ins.get("recent_trades") or []):
         if (t.get("side") or "").upper() == "BUY" and t.get("ticker"):
             when = t.get("logged") or t.get("date") or ""
             if when >= cutoff:
