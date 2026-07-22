@@ -61,8 +61,28 @@ try:
 except ImportError:
     HAVE_YAML = False
 
-WEBHOOK_URL = os.environ.get("WEBHOOK_URL", "")
-USER_ID = os.environ.get("DISCORD_USER_ID", "")
+# The workflow exports DISCORD_WEBHOOK_URL (same secret monitor.py uses).
+# WEBHOOK_URL is kept as a legacy fallback for anyone who set it manually.
+WEBHOOK_URL = os.environ.get("DISCORD_WEBHOOK_URL") or os.environ.get("WEBHOOK_URL", "")
+
+
+def discord_user_id():
+    """Mention target: DISCORD_USER_ID env if set, else config.yaml discord.user_id."""
+    uid = os.environ.get("DISCORD_USER_ID", "").strip()
+    if uid.isdigit():
+        return uid
+    if HAVE_YAML:
+        try:
+            with open(CONFIG_FILE) as f:
+                raw = yaml.safe_load(f) or {}
+            uid = str((raw.get("discord") or {}).get("user_id", "")).strip()
+            if uid.isdigit():
+                return uid
+        except Exception:
+            pass
+    return ""
+
+
 SEC_UA = os.environ.get("SEC_USER_AGENT", "stock-bot personal project contact@example.com")
 HEADERS = {"User-Agent": SEC_UA, "Accept-Encoding": "gzip, deflate"}
 
@@ -454,7 +474,8 @@ def run():
     else:
         print("edgar_watch: funds group off")
 
-    mention = f"<@{USER_ID}>" if USER_ID and embeds else ""
+    uid = discord_user_id()
+    mention = f"<@{uid}>" if uid and embeds else ""
     if embeds:
         post_discord(embeds, content=mention)
 
