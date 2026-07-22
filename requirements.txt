@@ -1,4 +1,4 @@
 requests>=2.31
 PyYAML>=6.0
-beautifulsoup4>=4.12
-pdfplumber>=0.11
+beautifulsoup4>=4.12   # Senate PTR table parsing (congress_sources.py)
+pdfplumber>=0.11       # House PTR PDF extraction (congress_sources.py)
