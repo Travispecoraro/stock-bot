@@ -44,7 +44,7 @@ import requests
 STATE_FILE = "state.json"
 OUT_FILE = "perf.json"
 LOOKBACK_DAYS = 220           # price history window (~10 months of sessions)
-MAX_TICKERS = 250             # safety cap per run (~75s of polite Stooq calls)
+MAX_TICKERS = 60              # safety cap per run
 
 STOOQ = "https://stooq.com/q/d/l/?s={sym}&d1={d1}&d2={d2}&i=d"
 UA = {"User-Agent": "stock-bot personal project"}
@@ -94,12 +94,8 @@ def pdate(s):
 def gather_trades(state):
     """Normalize congress + insider trades -> [(date, person, ticker, +/-usd)]."""
     out = []
-    # Congress tape lives at the top level (that is the key dashboard_14.html
-    # reads). The nested congress.recent_trades is legacy; merge both so a
-    # half-migrated state.json doesn't silently lose half its history.
-    congress_rows = list((state.get("congress", {}) or {}).get("recent_trades") or [])
-    congress_rows += list(state.get("recent_trades") or [])
-    for t in congress_rows:
+    for t in (state.get("congress", {}) or {}).get("recent_trades", []) \
+             or state.get("recent_trades", []) or []:
         d = pdate(t.get("transaction_date") or t.get("date"))
         tk = (t.get("ticker") or "").strip().upper()
         side = (t.get("side") or "").lower()
@@ -108,10 +104,7 @@ def gather_trades(state):
         amt = sane(amt_mid(t.get("amount")))
         out.append((d, "c|" + (t.get("person") or "?"), tk,
                     amt if side == "buy" else -amt))
-    # Prefer the durable tape; recent_trades is pruned to the 14-day cluster
-    # window and would drop positions out of the index after a fortnight.
-    ins = state.get("insiders", {}) or {}
-    for t in (ins.get("tape") or ins.get("recent_trades") or []):
+    for t in (state.get("insiders", {}) or {}).get("recent_trades", []):
         d = pdate(t.get("date"))
         tk = (t.get("ticker") or "").strip().upper()
         side = (t.get("side") or "").upper()
@@ -160,23 +153,6 @@ def membership_windows(trades):
 
 
 # ── prices ─────────────────────────────────────────────────────────────
-def rank_by_breadth(trades, windows):
-    """Order held tickers by how many distinct people ever held them.
-
-    Matters once the roster is open to all of Congress: held names run into
-    the hundreds and MAX_TICKERS has to cut somewhere. Cutting alphabetically
-    (the old `sorted(windows)[:N]`) silently threw away NVDA, TSLA and MSFT
-    while keeping every obscure ticker starting with A. Breadth-ranking keeps
-    the widest-held names — the same signal the dashboard's Portfolio ranks on
-    — so the cut lands on one-off positions instead.
-    """
-    holders = {}
-    for _d, person, tk, _amt in trades:
-        if tk in windows:
-            holders.setdefault(tk, set()).add(person)
-    return sorted(windows, key=lambda tk: (-len(holders.get(tk, ())), tk))
-
-
 def fetch_prices(ticker, d1, d2, fetch=None):
     """Daily closes from Stooq -> {date: close}. Empty dict on any failure."""
     sym = ticker.lower() + ".us"
@@ -247,6 +223,24 @@ def build_index(windows, prices):
     return series, per
 
 
+BENCH_TICKER = "SPY"          # benchmark for the performance chart
+
+
+def build_benchmark(prices_by_date, index_series):
+    """Rebase benchmark closes to 100 at the index's first date.
+
+    Returns [[iso_date, value], ...] covering only dates the index has, so the
+    two lines are directly comparable. Empty list if there's no overlap."""
+    if not index_series or not prices_by_date:
+        return []
+    idx_dates = [pdate(d) for d, _ in index_series]
+    base = next((prices_by_date[d] for d in idx_dates if d in prices_by_date), None)
+    if not base or base <= 0:
+        return []
+    return [[d.isoformat(), round(prices_by_date[d] / base * 100.0, 3)]
+            for d in idx_dates if d in prices_by_date]
+
+
 # ── main ───────────────────────────────────────────────────────────────
 def run(fetch=None, state=None, out_file=OUT_FILE):
     if state is None:
@@ -268,12 +262,7 @@ def run(fetch=None, state=None, out_file=OUT_FILE):
 
     today = datetime.now(timezone.utc).date()
     d1 = today - timedelta(days=LOOKBACK_DAYS)
-    ranked = rank_by_breadth(trades, windows)
-    tickers = ranked[:MAX_TICKERS]
-    if len(ranked) > MAX_TICKERS:
-        print(f"prices: {len(ranked)} held names, capped at {MAX_TICKERS} "
-              f"(dropped {len(ranked) - MAX_TICKERS} least-held; raise "
-              f"MAX_TICKERS if you want them)")
+    tickers = sorted(windows)[:MAX_TICKERS]
 
     prices = {}
     for tk in tickers:
@@ -284,6 +273,14 @@ def run(fetch=None, state=None, out_file=OUT_FILE):
     print(f"prices: {len(prices)}/{len(tickers)} tickers priced")
 
     series, per = build_index({k: windows[k] for k in prices}, prices)
+
+    # Benchmark: same source, same window. Fetch failure -> omitted and
+    # labeled, never silently faked.
+    bench_prices = fetch_prices(BENCH_TICKER, d1, today, fetch=fetch)
+    bench = build_benchmark(bench_prices, series)
+    if not bench:
+        print(f"prices: {BENCH_TICKER} benchmark unavailable this run "
+              f"(chart will say so)")
 
     members = []
     for tk in tickers:
@@ -299,6 +296,7 @@ def run(fetch=None, state=None, out_file=OUT_FILE):
             "updated": today.isoformat(),
             "start": series[0][0] if series else None,
             "index": series,
+            "benchmark": {"symbol": BENCH_TICKER, "series": bench} if bench else None,
             "members": members,
             "active": active,
             "exited": len(members) - active,
