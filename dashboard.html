@@ -1,0 +1,1226 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Stock Bot — Congress &amp; Insider Trades</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Instrument+Sans:wght@400;500;600&family=Spline+Sans+Mono:wght@400;500&display=swap" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/js-yaml/4.1.0/js-yaml.min.js"></script>
+<style>
+:root{
+  --bg:#121316;--surface:#1A1C21;--ink:#E9E9E4;--mut:#8F9298;--faint:#5F6268;
+  --line:#26282E;--line-strong:#363943;
+  --buy:#3FBE7C;--buy-soft:rgba(63,190,124,.12);
+  --sell:#E06A57;--sell-soft:rgba(224,106,87,.12);
+  --hold:#C79A3C;
+  --sans:'Instrument Sans',system-ui,sans-serif;
+  --mono:'Spline Sans Mono',ui-monospace,monospace;
+  --r:10px;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{background:var(--bg)}
+body{font-family:var(--sans);color:var(--ink);min-height:100vh;font-size:15px;line-height:1.5;
+  -webkit-font-smoothing:antialiased}
+a{color:inherit}
+button{font:inherit;background:none;border:none;cursor:pointer;color:inherit}
+input{font:inherit;color:inherit}
+:focus-visible{outline:2px solid var(--ink);outline-offset:2px;border-radius:4px}
+.mono{font-family:var(--mono)}
+.wrap{max-width:820px;margin:0 auto;padding:0 22px}
+
+/* ---------- top bar ---------- */
+header{position:sticky;top:0;z-index:40;background:rgba(18,19,22,.9);backdrop-filter:blur(8px);
+  border-bottom:1px solid var(--line)}
+.bar{display:flex;align-items:center;gap:14px;height:54px}
+.mark{font-family:var(--mono);font-size:12px;letter-spacing:.32em;font-weight:500}
+.dot{width:7px;height:7px;border-radius:50%;background:var(--faint);flex:none}
+.dot.on{background:var(--buy)}
+.dot.busy{background:var(--hold)}
+.dot.off{background:var(--sell)}
+.barnote{font-family:var(--mono);font-size:11px;color:var(--mut);letter-spacing:.04em;
+  white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.bar .sp{flex:1}
+.iconbtn{font-family:var(--mono);font-size:11px;letter-spacing:.12em;color:var(--mut);
+  padding:6px 10px;border-radius:6px}
+.iconbtn:hover{color:var(--ink);background:var(--line)}
+.pagenav{display:flex;gap:2px;margin-left:6px}
+.pagetab{font-size:13.5px;color:var(--mut);padding:6px 12px;border-radius:7px;font-weight:500}
+.pagetab:hover{color:var(--ink)}
+.pagetab.on{color:var(--ink);background:var(--line)}
+
+/* ---------- roster page ---------- */
+.perfchart{border:1px solid var(--line);border-radius:var(--r);background:var(--surface);
+  padding:16px 14px 8px;margin-top:4px}
+.perfchart svg{display:block;width:100%;height:auto}
+.perfaxis{font-family:var(--mono);font-size:10px;fill:var(--faint)}
+.perfgrid{stroke:var(--line);stroke-width:1}
+.perfline{fill:none;stroke:var(--buy);stroke-width:2;stroke-linejoin:round;stroke-linecap:round}
+.perfline.down{stroke:var(--sell)}
+.perffill{opacity:.10}
+.perfmembers{display:flex;flex-wrap:wrap;gap:7px;margin:10px 0 60px}
+.perfmem{display:inline-flex;align-items:center;gap:7px;font-family:var(--mono);font-size:11.5px;
+  padding:5px 10px;border:1px solid var(--line);border-radius:7px;background:var(--surface);color:var(--mut)}
+.perfmem b{color:var(--ink);font-weight:500}
+.perfmem .r{font-size:10.5px}
+.perfmem .r.up{color:var(--buy)}.perfmem .r.dn{color:var(--sell)}
+.perfmem.exited{opacity:.55}
+.perfmem.exited b{text-decoration:line-through;text-decoration-thickness:1px}
+.pfmetric{display:flex;gap:6px;margin:2px 0 14px}
+.rslist{margin:6px 0 60px;display:flex;flex-direction:column;gap:8px}
+.rscard{border:1px solid var(--line);border-radius:var(--r);background:var(--surface);overflow:hidden}
+.rscard.open{border-color:var(--line-strong)}
+.rshead{display:grid;grid-template-columns:1fr auto;gap:12px;align-items:center;
+  padding:13px 15px;cursor:pointer;user-select:none}
+.rshead:hover{background:var(--line)}
+.rsname{font-weight:600;font-size:14.5px;display:flex;align-items:center;gap:9px;flex-wrap:wrap}
+.rsgroup{font-family:var(--mono);font-size:9.5px;letter-spacing:.14em;padding:2px 6px;border-radius:5px;
+  background:var(--line);color:var(--mut)}
+.rsgroup.funds{color:#5AA9E6;background:rgba(90,169,230,.12)}
+.rsgroup.politicians{color:var(--hold);background:rgba(199,154,60,.12)}
+.rsgroup.activists{color:#C77DFF;background:rgba(199,125,255,.12)}
+.rsgroup.insiders{color:var(--buy);background:var(--buy-soft)}
+.rstags{font-family:var(--mono);font-size:10.5px;color:var(--faint)}
+.rsmeta{font-family:var(--mono);font-size:11px;color:var(--mut);text-align:right;white-space:nowrap}
+.rschev{color:var(--faint);font-size:11px;transition:transform .15s;margin-left:2px}
+.rscard.open .rschev{transform:rotate(90deg)}
+.rsbody{display:none;padding:2px 15px 15px;border-top:1px solid var(--line)}
+.rscard.open .rsbody{display:block}
+.rssub{font-family:var(--mono);font-size:10px;letter-spacing:.14em;color:var(--faint);
+  text-transform:uppercase;margin:14px 0 8px}
+.rshold{display:grid;grid-template-columns:20px 1fr 84px;gap:10px;align-items:center;padding:5px 0}
+.rshrank{font-family:var(--mono);font-size:11px;color:var(--faint);text-align:right}
+.rshname{font-size:13px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.rshbar{grid-column:2/3;height:3px;border-radius:2px;background:var(--line);margin-top:4px;overflow:hidden}
+.rshbar>span{display:block;height:100%;background:var(--buy);border-radius:2px}
+.rshval{font-family:var(--mono);font-size:11.5px;color:var(--mut);text-align:right}
+.rsev{display:grid;grid-template-columns:76px 54px 1fr auto;gap:10px;align-items:baseline;
+  padding:6px 0;border-bottom:1px solid var(--line);font-size:12.5px}
+.rsev:last-child{border-bottom:none}
+.rsevd{font-family:var(--mono);font-size:11px;color:var(--faint)}
+.rsact{font-family:var(--mono);font-size:10px;letter-spacing:.08em;padding:1px 6px;border-radius:4px;
+  justify-self:start;background:var(--line);color:var(--mut)}
+.rsact.buy,.rsact.new{color:var(--buy);background:var(--buy-soft)}
+.rsact.sell,.rsact.exit{color:var(--sell);background:var(--sell-soft)}
+.rsevn{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.rsevv{font-family:var(--mono);font-size:11px;color:var(--mut);text-align:right;white-space:nowrap}
+.rsmore{font-family:var(--mono);font-size:11px;color:var(--faint);padding:8px 0 0}
+
+/* ---------- portfolio page ---------- */
+.pfnote{color:var(--mut);font-size:13px;line-height:1.6;max-width:640px;margin:2px 0 4px}
+.pfnote b{color:var(--ink);font-weight:500}
+.pfstats{font-family:var(--mono);font-size:11.5px;color:var(--mut);letter-spacing:.04em;
+  margin:8px 0 6px;display:flex;flex-wrap:wrap;gap:6px 18px}
+.pfstats b{color:var(--ink);font-weight:500}
+.pflist{margin:6px 0 50px}
+.pfrow{display:grid;grid-template-columns:34px 1fr auto;gap:14px;align-items:center;
+  padding:12px 4px;border-bottom:1px solid var(--line)}
+.pfrank{font-family:var(--mono);font-size:12px;color:var(--faint);text-align:right}
+.pfmid{min-width:0}
+.pftop{display:flex;align-items:baseline;gap:9px}
+.pftk{font-family:var(--mono);font-size:15px;font-weight:500;letter-spacing:.03em;cursor:pointer}
+.pftk:hover{text-decoration:underline}
+.pflean{font-family:var(--mono);font-size:9.5px;letter-spacing:.14em;padding:2px 6px;border-radius:4px}
+.pflean.buy{color:var(--buy);background:var(--buy-soft)}
+.pflean.sell{color:var(--sell);background:var(--sell-soft)}
+.pflean.mixed{color:var(--hold);background:rgba(199,154,60,.12)}
+.pfco{font-size:12.5px;color:var(--mut);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.pfbar{height:6px;background:var(--line);border-radius:4px;margin-top:8px;overflow:hidden}
+.pfbar > span{display:block;height:100%;border-radius:4px;background:var(--ink)}
+.pfbar.buy > span{background:var(--buy)}
+.pfbar.sell > span{background:var(--sell)}
+.pfbar.mixed > span{background:var(--hold)}
+.pfright{text-align:right;white-space:nowrap}
+.pfpct{font-family:var(--mono);font-size:16px;font-weight:500}
+.pfppl{font-family:var(--mono);font-size:10.5px;color:var(--faint);margin-top:2px}
+.pfwho{font-size:11.5px;color:var(--faint);margin-top:5px;line-height:1.5}
+
+/* donut chart */
+.pfchart{display:flex;gap:26px;align-items:center;flex-wrap:wrap;
+  background:var(--surface);border:1px solid var(--line);border-radius:var(--r);
+  padding:20px 22px;margin:12px 0 20px}
+.pfdonut{flex:none;position:relative;width:210px;height:210px}
+.pfdonut svg{width:210px;height:210px;display:block}
+.pfslice{cursor:pointer;transition:opacity .12s}
+.pfchart.hoving .pfslice{opacity:.32}
+.pfchart.hoving .pfslice.hi{opacity:1}
+.pfcenter{position:absolute;inset:0;display:flex;flex-direction:column;
+  align-items:center;justify-content:center;text-align:center;pointer-events:none}
+.pfc-tk{font-family:var(--mono);font-size:20px;font-weight:600;letter-spacing:.02em}
+.pfc-sub{font-family:var(--mono);font-size:10.5px;color:var(--mut);letter-spacing:.06em;margin-top:3px}
+.pfc-hint{font-size:11px;color:var(--faint);margin-top:2px}
+.pflegend{flex:1;min-width:220px;display:flex;flex-direction:column;gap:1px}
+.pfleg{display:flex;align-items:center;gap:10px;padding:5px 7px;border-radius:6px;cursor:pointer}
+.pfleg:hover,.pfleg.hi{background:var(--line)}
+.pfsw{width:10px;height:10px;border-radius:3px;flex:none}
+.pfleg .lt{font-family:var(--mono);font-size:12.5px;font-weight:500;flex:none;width:52px}
+.pfleg .lc{font-size:12px;color:var(--mut);flex:1;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.pfleg .lp{font-family:var(--mono);font-size:12.5px;color:var(--ink)}
+.pfleg .lm{font-family:var(--mono);font-size:10.5px;color:var(--faint);width:52px;text-align:right}
+@media (max-width:560px){.pfchart{justify-content:center}}
+
+/* ---------- connect card (first run) ---------- */
+.connectwrap{display:flex;justify-content:center;padding:70px 0 40px}
+.connect{width:100%;max-width:420px;background:var(--surface);border:1px solid var(--line);
+  border-radius:var(--r);padding:28px}
+.connect h1{font-size:19px;font-weight:600;letter-spacing:-.01em;margin-bottom:6px}
+.connect p{color:var(--mut);font-size:13.5px;margin-bottom:20px}
+.field{margin-bottom:14px}
+.field label{display:block;font-family:var(--mono);font-size:10.5px;letter-spacing:.14em;
+  text-transform:uppercase;color:var(--mut);margin-bottom:5px}
+.field input{width:100%;border:1px solid var(--line-strong);border-radius:7px;padding:9px 11px;
+  font-size:14px;background:var(--bg)}
+.field input:focus{border-color:var(--ink);outline:none}
+.rememberrow{display:flex;align-items:center;justify-content:space-between;margin:16px 0 18px;
+  font-size:13.5px;color:var(--mut)}
+.primary{width:100%;background:var(--ink);color:var(--bg);border-radius:7px;padding:11px;
+  font-weight:500;font-size:14px}
+.primary:hover{opacity:.88}
+.primary:disabled{opacity:.4;cursor:default}
+.statusline{margin-top:14px;font-size:13px;color:var(--mut);min-height:19px}
+.statusline.err{color:var(--sell)}
+.statusline.ok{color:var(--buy)}
+
+/* ---------- switch ---------- */
+.switch{position:relative;display:inline-block;width:36px;height:21px;flex:none}
+.switch input{opacity:0;width:0;height:0}
+.track{position:absolute;inset:0;background:var(--line-strong);border-radius:21px;transition:.15s}
+.thumb{position:absolute;left:2.5px;top:2.5px;width:16px;height:16px;background:#fff;border-radius:50%;
+  transition:.15s;box-shadow:0 1px 2px rgba(0,0,0,.2)}
+.switch input:checked + .track{background:var(--ink)}
+.switch input:checked + .track .thumb{transform:translateX(15px);background:var(--bg)}
+.switch input:disabled + .track{opacity:.4}
+
+/* ---------- signals ---------- */
+.section-eyebrow{font-family:var(--mono);font-size:10.5px;letter-spacing:.22em;color:var(--mut);
+  text-transform:uppercase;margin:30px 0 12px;display:flex;align-items:baseline;gap:10px}
+.section-eyebrow .n{color:var(--faint);letter-spacing:.05em}
+.signals{display:flex;gap:10px;overflow-x:auto;padding-bottom:6px;scrollbar-width:thin}
+.sig{flex:none;min-width:190px;background:var(--surface);border:1px solid var(--line);
+  border-radius:var(--r);padding:13px 15px;text-align:left;transition:border-color .15s}
+.sig:hover{border-color:var(--ink)}
+.sig .tk{font-family:var(--mono);font-size:15px;font-weight:500;letter-spacing:.03em}
+.sig .side{font-family:var(--mono);font-size:10px;letter-spacing:.16em;padding:2px 7px;
+  border-radius:4px;margin-left:8px;vertical-align:2px}
+.sig .side.buy{color:var(--buy);background:var(--buy-soft)}
+.sig .side.sell{color:var(--sell);background:var(--sell-soft)}
+.sig .who{font-size:13px;color:var(--mut);margin-top:6px;line-height:1.45}
+.sig .meta{font-family:var(--mono);font-size:11px;color:var(--faint);margin-top:7px;letter-spacing:.03em}
+.nosig{font-size:13.5px;color:var(--faint);padding:4px 0 2px}
+
+/* ---------- stats line ---------- */
+.stats{font-family:var(--mono);font-size:11.5px;color:var(--mut);letter-spacing:.04em;
+  margin:26px 0 0;display:flex;flex-wrap:wrap;gap:6px 18px}
+.stats b{color:var(--ink);font-weight:500}
+
+/* ---------- filter bar ---------- */
+.filters{display:flex;flex-wrap:wrap;gap:8px;align-items:center;margin:14px 0 4px;
+  position:sticky;top:54px;z-index:30;background:var(--bg);padding:10px 0}
+.search{flex:1;min-width:200px;border:1px solid var(--line-strong);border-radius:8px;
+  padding:8px 12px;font-size:14px;background:var(--surface)}
+.search:focus{border-color:var(--ink);outline:none}
+.gchip{font-family:var(--mono);font-size:10.5px;letter-spacing:.1em;color:var(--mut);
+  border:1px solid var(--line);border-radius:20px;padding:6px 12px;background:var(--surface)}
+.gchip b{font-weight:500;color:var(--faint)}
+.gchip.on{color:var(--ink);border-color:var(--ink)}
+.gchip.on b{color:var(--ink)}
+
+/* ---------- the ledger feed ---------- */
+.feed{position:relative;margin:8px 0 40px;padding-left:18px}
+.feed::before{content:"";position:absolute;left:3px;top:0;bottom:0;width:1px;background:var(--line-strong)}
+.trow{position:relative;display:flex;gap:14px;align-items:baseline;padding:13px 4px 13px 8px;
+  border-bottom:1px solid var(--line)}
+.trow::before{content:"";position:absolute;left:-18px;top:20px;width:7px;height:7px;border-radius:50%;
+  background:var(--faint)}
+.trow.buy::before{background:var(--buy)}
+.trow.sell::before{background:var(--sell)}
+.trow.other::before{background:var(--hold)}
+.tbadge{font-family:var(--mono);font-size:10px;letter-spacing:.14em;flex:none;width:44px}
+.trow.buy .tbadge{color:var(--buy)}
+.trow.sell .tbadge{color:var(--sell)}
+.trow.other .tbadge{color:var(--hold)}
+.tmain{min-width:0;flex:1}
+.tname{font-size:14.5px;font-weight:500;letter-spacing:-.005em}
+.tname .tk{font-family:var(--mono);font-size:12.5px;font-weight:400;color:var(--mut);
+  cursor:pointer;border-bottom:1px dotted var(--faint)}
+.tname .tk:hover{color:var(--ink);border-color:var(--ink)}
+.tsub{font-size:12.5px;color:var(--mut);margin-top:3px}
+.tsub .gsrc{font-family:var(--mono);font-size:10px;letter-spacing:.1em;color:var(--faint)}
+.tright{flex:none;text-align:right}
+.tamt{font-family:var(--mono);font-size:12.5px;letter-spacing:.01em;white-space:nowrap}
+.tdate{font-family:var(--mono);font-size:10.5px;color:var(--faint);margin-top:3px;white-space:nowrap}
+.tlink{font-family:var(--mono);font-size:10px;letter-spacing:.1em;color:var(--faint);text-decoration:none}
+.tlink:hover{color:var(--ink)}
+.emptyrow{padding:36px 0;color:var(--faint);font-size:14px;text-align:center}
+.morewrap{text-align:center;padding:10px 0 50px}
+.morebtn{font-family:var(--mono);font-size:11px;letter-spacing:.14em;color:var(--mut);
+  border:1px solid var(--line-strong);border-radius:20px;padding:9px 20px;background:var(--surface)}
+.morebtn:hover{border-color:var(--ink);color:var(--ink)}
+
+/* ---------- settings drawer ---------- */
+.scrim{position:fixed;inset:0;background:rgba(0,0,0,.55);z-index:50;opacity:0;
+  pointer-events:none;transition:opacity .18s}
+.scrim.open{opacity:1;pointer-events:auto}
+.drawer{position:fixed;top:0;right:0;bottom:0;width:min(430px,94vw);background:var(--surface);
+  z-index:51;transform:translateX(102%);transition:transform .22s ease;display:flex;flex-direction:column;
+  border-left:1px solid var(--line)}
+.drawer.open{transform:none}
+.dhead{display:flex;align-items:center;justify-content:space-between;padding:18px 22px;
+  border-bottom:1px solid var(--line);flex:none}
+.dhead h2{font-size:16px;font-weight:600}
+.dbody{overflow-y:auto;padding:6px 22px 20px;flex:1}
+.dsec{padding:18px 0;border-bottom:1px solid var(--line)}
+.dsec:last-child{border:none}
+.dsec h3{font-family:var(--mono);font-size:10.5px;letter-spacing:.2em;text-transform:uppercase;
+  color:var(--mut);font-weight:500;margin-bottom:12px}
+.drow{display:flex;align-items:center;justify-content:space-between;gap:14px;padding:7px 0}
+.drow .dl{font-size:14px}
+.drow .dd{font-size:12px;color:var(--mut);margin-top:1px}
+.drow input[type=number],.drow input[type=text]{width:130px;border:1px solid var(--line-strong);
+  border-radius:6px;padding:6px 9px;font-size:13px;background:var(--bg);text-align:right}
+.drow input.wide{width:100%;text-align:left}
+.drow.stack{flex-direction:column;align-items:stretch;gap:6px}
+.presets{display:flex;flex-wrap:wrap;gap:7px;margin-top:8px}
+.preset{font-family:var(--mono);font-size:10.5px;letter-spacing:.08em;color:var(--mut);
+  border:1px solid var(--line);border-radius:6px;padding:5px 10px}
+.preset.on{color:var(--ink);border-color:var(--ink)}
+.dfoot{flex:none;padding:14px 22px;border-top:1px solid var(--line);display:flex;gap:10px;align-items:center}
+.dfoot .msg{font-family:var(--mono);font-size:10.5px;letter-spacing:.1em;color:var(--mut);flex:1}
+.ghost{font-size:13.5px;color:var(--mut);padding:9px 14px;border-radius:7px}
+.ghost:hover{color:var(--sell)}
+.savebtn{background:var(--ink);color:var(--bg);border-radius:7px;padding:9px 18px;font-size:13.5px;font-weight:500}
+.savebtn:disabled{opacity:.35;cursor:default}
+.hidden{display:none}
+@media (max-width:560px){
+  .tright{display:none}
+  .trow{flex-wrap:wrap}
+}
+@media (prefers-reduced-motion: reduce){
+  *{transition:none !important;animation:none !important}
+}
+</style>
+</head>
+<body>
+
+<header><div class="wrap bar">
+  <span class="mark">STOCK BOT</span>
+  <nav class="pagenav" id="pageNav">
+    <button class="pagetab on" data-page="ledger">Ledger</button>
+    <button class="pagetab" data-page="portfolio">Portfolio</button>
+    <button class="pagetab" data-page="perf">Performance</button>
+    <button class="pagetab" data-page="roster">Roster</button>
+  </nav>
+  <span class="dot" id="connDot"></span>
+  <span class="barnote" id="barNote">Not connected</span>
+  <span class="sp"></span>
+  <button class="iconbtn" id="btnRefresh" title="Reload data">REFRESH</button>
+  <button class="iconbtn" id="btnSettings" title="Alerts &amp; settings">SETTINGS</button>
+</div></header>
+
+<!-- first-run connect -->
+<div class="wrap connectwrap" id="connectView">
+  <div class="connect">
+    <h1>Connect your repository</h1>
+    <p>The ledger reads trade history straight from your bot&rsquo;s <span class="mono">state.json</span>. Use a fine-grained token with <b>Contents: Read and write</b> on the repo.</p>
+    <div class="field"><label for="owner">GitHub owner</label><input type="text" id="owner" value="Travispecoraro" autocomplete="off"></div>
+    <div class="field"><label for="repo">Repository</label><input type="text" id="repo" value="stock-bot" autocomplete="off"></div>
+    <div class="field"><label for="branch">Branch</label><input type="text" id="branch" value="main" autocomplete="off"></div>
+    <div class="field"><label for="token">Access token</label><input type="password" id="token" placeholder="github_pat_…" autocomplete="off"></div>
+    <div class="rememberrow"><span>Remember token on this device</span>
+      <label class="switch"><input type="checkbox" id="rememberTok"><span class="track"><span class="thumb"></span></span></label></div>
+    <button class="primary" id="btnLoad">Open the ledger</button>
+    <div class="statusline" id="status"></div>
+  </div>
+</div>
+
+<!-- main -->
+<main class="wrap hidden" id="mainView">
+
+  <div class="page" id="page-ledger">
+    <div class="section-eyebrow">Signals <span class="n" id="sigNote"></span></div>
+    <div class="signals" id="signals"><div class="nosig">No active clusters.</div></div>
+
+    <div class="stats" id="stats"></div>
+
+    <div class="section-eyebrow" style="margin-top:34px">Trade history <span class="n">newest first</span></div>
+    <div class="filters">
+      <input type="text" class="search" id="q" placeholder="Search name, company, or ticker…">
+      <span id="gchips"></span>
+    </div>
+    <div class="feed" id="feed"><div class="emptyrow">Loading the tape…</div></div>
+    <div class="morewrap hidden" id="morewrap"><button class="morebtn" id="btnMore"></button></div>
+  </div>
+
+  <div class="page hidden" id="page-portfolio">
+    <div class="filters" style="top:54px;margin-top:30px">
+      <input type="text" class="search" id="pfq" placeholder="Search ticker or company…">
+      <span id="pfchips"></span>
+    </div>
+    <div class="pfstats" id="pfstats"></div>
+    <div class="pfmetric" id="pfmetric"></div>
+    <div class="pfchart" id="pfchart"></div>
+    <div class="pflist" id="pflist"></div>
+  </div>
+
+  <div class="page hidden" id="page-perf">
+    <div class="section-eyebrow" style="margin-top:30px">Performance <span class="n">tracked portfolio as an index</span></div>
+    <p class="pfnote">Equal-weight index of every name the tracked people currently hold, base <b>100</b>. A stock joins at its first disclosed buy and stops counting the day its holders are net-out (index-style: history stays, tracking stops). Congressional filings disclose dollar <b>ranges</b>, not exact sizes — net-long status is computed from range <b>midpoints</b>, so membership is an estimate where ranges are wide.</p>
+    <div class="pfstats" id="perfstats"></div>
+    <div class="pfmetric" id="perfrange"></div>
+    <div class="perfchart" id="perfchart"><div class="emptyrow">Loading performance…</div></div>
+    <div class="rssub" style="margin-top:22px">Members</div>
+    <div class="perfmembers" id="perfmembers"></div>
+  </div>
+
+  <div class="page hidden" id="page-roster">
+    <div class="section-eyebrow" style="margin-top:30px">Roster <span class="n">who the bot follows</span></div>
+    <p class="pfnote">Your curated watchlist &mdash; the funds, politicians, activists and insiders the bot tracks. Funds show their latest <b>top&nbsp;10 holdings</b> from the most recent 13F; tap any member to open its full tracked history.</p>
+    <div class="filters" style="top:54px">
+      <input type="text" class="search" id="rsq" placeholder="Search a fund, person, or ticker…">
+      <span id="rschips"></span>
+    </div>
+    <div class="rslist" id="rslist"><div class="emptyrow">Loading the roster…</div></div>
+  </div>
+
+</main>
+
+<!-- settings drawer -->
+<div class="scrim" id="scrim"></div>
+<aside class="drawer" id="drawer" aria-label="Alerts and settings">
+  <div class="dhead"><h2>Alerts &amp; settings</h2><button class="iconbtn" id="btnClose">CLOSE</button></div>
+  <div class="dbody">
+
+    <div class="dsec"><h3>Discord alerts</h3>
+      <div class="drow"><div><div class="dl">Purchase alerts</div><div class="dd">When a senator discloses a buy.</div></div>
+        <label class="switch"><input type="checkbox" data-k="features.ping_buys"><span class="track"><span class="thumb"></span></span></label></div>
+      <div class="drow"><div><div class="dl">Sale alerts</div><div class="dd">When a senator discloses a sale.</div></div>
+        <label class="switch"><input type="checkbox" data-k="features.ping_sells"><span class="track"><span class="thumb"></span></span></label></div>
+      <div class="drow"><div><div class="dl">Daily summary</div><div class="dd">Once a day on quiet days.</div></div>
+        <label class="switch"><input type="checkbox" data-k="features.heartbeat"><span class="track"><span class="thumb"></span></span></label></div>
+      <div class="drow"><div><div class="dl">Source error alerts</div><div class="dd">Message you if a data source breaks.</div></div>
+        <label class="switch"><input type="checkbox" data-k="features.notify_on_error"><span class="track"><span class="thumb"></span></span></label></div>
+      <div class="drow"><div class="dl">Discord user ID</div><input type="text" data-k="discord.user_id" inputmode="numeric" placeholder="numbers only"></div>
+      <div class="drow"><div class="dl">@mention on trades</div>
+        <label class="switch"><input type="checkbox" data-k="discord.mention_on_trade"><span class="track"><span class="thumb"></span></span></label></div>
+      <div class="drow"><div class="dl">Daily update hour (UTC)</div><input type="number" min="0" max="23" data-k="heartbeat_hour_utc"></div>
+    </div>
+
+    <div class="dsec"><h3>Trade filters</h3>
+      <div class="drow stack"><div><div class="dl">Minimum transaction size</div><div class="dd">Low end of the disclosed range, USD.</div></div>
+        <input type="number" data-k="filters.min_trade_value" min="0" step="1000">
+        <div class="presets" id="presets">
+          <button class="preset" data-min="0">ANY</button><button class="preset" data-min="15000">$15K+</button>
+          <button class="preset" data-min="50000">$50K+</button><button class="preset" data-min="100000">$100K+</button>
+          <button class="preset" data-min="250000">$250K+</button>
+        </div></div>
+      <div class="drow stack"><div><div class="dl">Ticker watchlist</div><div class="dd">Comma-separated. Empty = all stocks. Tip: click any ticker in the feed to add it.</div></div>
+        <input type="text" class="wide" data-k="filters.watch_tickers" placeholder="NVDA, MSFT"></div>
+      <div class="drow stack"><div><div class="dl">Politician watchlist</div><div class="dd">Empty = all 100 senators.</div></div>
+        <input type="text" class="wide" data-k="filters.watch_politicians" placeholder="Last names, comma-separated"></div>
+    </div>
+
+    <div class="dsec"><h3>Followed groups</h3>
+      <div class="drow"><div class="dl">Corporate insiders (Form 4)</div>
+        <label class="switch"><input type="checkbox" data-k="groups.insiders"><span class="track"><span class="thumb"></span></span></label></div>
+      <div class="drow"><div class="dl">Activists (13D)</div>
+        <label class="switch"><input type="checkbox" data-k="groups.activists"><span class="track"><span class="thumb"></span></span></label></div>
+      <div class="drow"><div class="dl">Funds (13F)</div>
+        <label class="switch"><input type="checkbox" data-k="groups.funds"><span class="track"><span class="thumb"></span></span></label></div>
+    </div>
+
+    <div class="dsec"><h3>Insider thresholds</h3>
+      <div class="drow"><div class="dl">Alert on insider buys</div>
+        <label class="switch"><input type="checkbox" data-k="insiders.alert_buys"><span class="track"><span class="thumb"></span></span></label></div>
+      <div class="drow"><div class="dl">Alert on insider sells</div>
+        <label class="switch"><input type="checkbox" data-k="insiders.alert_sells"><span class="track"><span class="thumb"></span></span></label></div>
+      <div class="drow"><div class="dl">Big buy floor (USD)</div><input type="number" data-k="insiders.big_buy_usd" min="0" step="10000"></div>
+      <div class="drow"><div class="dl">Big sell floor (USD)</div><input type="number" data-k="insiders.big_sell_usd" min="0" step="10000"></div>
+      <div class="drow"><div class="dl">Cluster: insiders needed</div><input type="number" data-k="insiders.cluster_count" min="2" max="10"></div>
+      <div class="drow"><div class="dl">Cluster window (days)</div><input type="number" data-k="insiders.cluster_window_days" min="1" max="90"></div>
+    </div>
+
+    <div class="dsec"><h3>Connection</h3>
+      <div class="drow"><div><div class="dl">Repository</div><div class="dd mono" id="connRepoNote">—</div></div>
+        <button class="ghost" id="btnForget">Disconnect</button></div>
+    </div>
+
+  </div>
+  <div class="dfoot">
+    <span class="msg" id="saveMsg">SYNCED WITH CONFIG.YAML</span>
+    <button class="ghost hidden" id="btnRevert">Revert</button>
+    <button class="savebtn" id="btnSave" disabled>Save to GitHub</button>
+  </div>
+</aside>
+
+<script>
+'use strict';
+const $=s=>document.querySelector(s), $$=s=>[...document.querySelectorAll(s)];
+const API='https://api.github.com';
+let cfg=null, baseline=null, fileSha=null, dash=null, lastCommit=null;
+let feedLimit=60, groupsOn={congress:true,insiders:true,activists:true,funds:true};
+let rosterHist=null, rsGroup='all';
+let perfData=null, perfRange='ALL';
+const GLABEL={congress:'CONGRESS',insiders:'INSIDER',activists:'ACTIVIST',funds:'FUND'};
+function esc(s){return String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]))}
+function usd(v){return '$'+Math.round(v||0).toLocaleString('en-US')}
+/* reject corrupt magnitudes: non-finite, negative, the INT_MAX overflow
+   sentinel (2^31-1), or anything above a sane ceiling no single disclosed
+   trade could reach ($1T). Such values are treated as unknown (0) so one
+   bad row can't dominate the portfolio. */
+function sane(v){v=+v; return (isFinite(v)&&v>=0&&v!==2147483647&&v<1e12)?v:0;}
+/* estimate a dollar figure from a value or a disclosed range like "$1K–15K".
+   number -> itself; single value -> that; a range -> its midpoint. */
+function amtMid(s){
+  if(typeof s==='number')return isFinite(s)?s:0;
+  if(!s)return 0;
+  const nums=[];
+  (String(s).match(/[\d,.]+\s*[KMB]?/gi)||[]).forEach(tok=>{
+    const m=tok.match(/([\d,.]+)\s*([KMB]?)/i);
+    if(!m)return;
+    let n=parseFloat(m[1].replace(/,/g,''));
+    if(!isFinite(n))return;
+    const suf=(m[2]||'').toUpperCase();
+    n*= suf==='K'?1e3 : suf==='M'?1e6 : suf==='B'?1e9 : 1;
+    nums.push(n);
+  });
+  if(!nums.length)return 0;
+  return nums.length===1?nums[0]:(Math.min(...nums)+Math.max(...nums))/2;
+}
+function pdate(s){if(!s)return null;s=String(s).slice(0,10);
+  let m=s.match(/^(\d{4})-(\d{2})-(\d{2})/);if(m)return new Date(+m[1],+m[2]-1,+m[3]);
+  m=s.match(/^(\d{2})\/(\d{2})\/(\d{4})/);if(m)return new Date(+m[3],+m[1]-1,+m[2]);return null}
+function fdate(s){const d=pdate(s);if(!d)return s||'—';
+  return d.toLocaleDateString('en-US',{month:'short',day:'numeric'})}
+function delayDays(a,b){const x=pdate(a),y=pdate(b);
+  if(!x||!y)return null;return Math.max(0,Math.round((y-x)/86400000))}
+
+/* ---------- github plumbing ---------- */
+function ghHeaders(){return{'Authorization':'Bearer '+$('#token').value.trim(),
+  'Accept':'application/vnd.github+json','X-GitHub-Api-Version':'2022-11-28'}}
+function repoBase(){return `${API}/repos/${$('#owner').value.trim()}/${$('#repo').value.trim()}`}
+function cfgPath(){return `${repoBase()}/contents/config.yaml?ref=${$('#branch').value.trim()}`}
+function status(msg,cls){const el=$('#status');el.textContent=msg;el.className='statusline '+(cls||'')}
+function setConn(state,label){$('#connDot').className='dot '+state;$('#barNote').textContent=label}
+
+const DEFAULTS={features:{ping_buys:true,ping_sells:true,heartbeat:true,notify_on_error:true,
+  senate_efd_source:true,capitoltrades_source:false,finnhub_enrichment:false},
+ filters:{min_trade_value:0,watch_tickers:[],watch_politicians:[],lookback_days:45},
+ discord:{user_id:'',mention_on_trade:true,mention_on_heartbeat:false},
+ heartbeat_hour_utc:14,max_filings_per_run:25,seed_max_filings:100,
+ pages_per_run:3,seed_pages:10,max_pings_per_run:20,
+ groups:{insiders:true,activists:true,funds:true},
+ insiders:{alert_buys:true,alert_sells:true,big_buy_usd:100000,big_sell_usd:1000000,cluster_count:2,cluster_window_days:14},
+ activists:{include_13g:false,alert_amendments:true},
+ funds:{min_aum_busd:1,min_position_musd:50,alert_new:true,alert_exits:true}};
+function deepGet(o,p){return p.split('.').reduce((a,k)=>a&&a[k],o)}
+function deepSet(o,p,v){const ks=p.split('.');let t=o;
+  for(let i=0;i<ks.length-1;i++){t[ks[i]]=t[ks[i]]||{};t=t[ks[i]]}t[ks[ks.length-1]]=v}
+function mergeDefaults(c){const out=JSON.parse(JSON.stringify(DEFAULTS));
+  (function m(a,b){for(const k in b){if(b[k]&&typeof b[k]==='object'&&!Array.isArray(b[k])){a[k]=a[k]||{};m(a[k],b[k])}else a[k]=b[k]}})(out,c||{});return out}
+
+async function connect(){
+  if(!$('#token').value.trim()){status('Paste an access token first.','err');return}
+  status('Connecting…');setConn('busy','Connecting…');
+  try{
+    const r=await fetch(cfgPath(),{headers:ghHeaders()});
+    if(r.status===401){status('Token rejected (401). Check it was copied fully and has Contents: Read and write.','err');setConn('off','Auth failed');return}
+    if(r.status===404){status('config.yaml not found (404). Grant the token access to this repository and check the names.','err');setConn('off','Not found');return}
+    if(!r.ok){status(`GitHub error ${r.status}. Try again in a moment.`,'err');setConn('off','Error');return}
+    const j=await r.json();fileSha=j.sha;
+    cfg=mergeDefaults(jsyaml.load(decodeURIComponent(escape(atob(j.content.replace(/\n/g,''))))));
+    populateControls();saveConn();
+    $('#connectView').classList.add('hidden');$('#mainView').classList.remove('hidden');
+    $('#connRepoNote').textContent=`${$('#owner').value.trim()}/${$('#repo').value.trim()} · ${$('#branch').value.trim()}`;
+    await loadState();
+  }catch(e){status('Could not reach GitHub: '+e.message,'err');setConn('off','Offline')}
+}
+
+async function loadState(){
+  setConn('busy','Reading the tape…');
+  try{
+    const res=await fetch(`${repoBase()}/contents/state.json?ref=${$('#branch').value.trim()}`,
+      {headers:{...ghHeaders(),'Accept':'application/vnd.github.raw+json'}});
+    if(!res.ok){dash=null;renderAll();
+      $('#feed').innerHTML='<div class="emptyrow">No state.json yet — run the bot once, then refresh.</div>';
+      setConn('on','Connected · no data yet');return}
+    dash=await res.json();
+    const c=await fetch(`${repoBase()}/commits?path=state.json&per_page=1&sha=${$('#branch').value.trim()}`,{headers:ghHeaders()});
+    lastCommit=null;
+    if(c.ok){const arr=await c.json();if(arr[0])lastCommit=new Date(arr[0].commit.committer.date)}
+    try{
+      const rr=await fetch(`${repoBase()}/contents/roster_history.json?ref=${$('#branch').value.trim()}`,
+        {headers:{...ghHeaders(),'Accept':'application/vnd.github.raw+json'}});
+      rosterHist = rr.ok ? await rr.json() : null;
+    }catch(e){rosterHist=null;}
+    try{
+      const pf=await fetch(`${repoBase()}/contents/perf.json?ref=${$('#branch').value.trim()}`,
+        {headers:{...ghHeaders(),'Accept':'application/vnd.github.raw+json'}});
+      perfData = pf.ok ? await pf.json() : null;
+    }catch(e){perfData=null;}
+    feedLimit=60;renderAll();
+    const mins=lastCommit?Math.round((Date.now()-lastCommit)/60000):null;
+    setConn(mins===null||mins<=40?'on':'off',
+      mins!==null?`Updated ${mins<1?'just now':mins+'m ago'}${mins>40?' · stale':''}`:'Connected');
+  }catch(e){setConn('off','Load failed');
+    $('#feed').innerHTML='<div class="emptyrow">Could not load data: '+esc(e.message)+'</div>'}
+}
+
+/* ---------- normalize state.json ----------
+   The bot (Phase 1+) writes the congress tape to state.congress.recent_trades;
+   older state files had it at the top level, so both are read. NOTHING is
+   merged in from anywhere else: this page renders only what the bot collected
+   from official sources, and says so when a list is empty. */
+function merged(){
+  const d=dash||{};
+  return {
+    recent_trades:((d.congress||{}).recent_trades)||d.recent_trades||[],
+    insiders:{recent_trades:((d.insiders||{}).recent_trades)||[]},
+    activists:d.activists||{},funds:d.funds||{},
+    run_log:d.run_log||[],positions:d.positions||{}
+  };
+}
+
+/* ---------- unified feed ---------- */
+function unified(){
+  const out=[];const dash=merged();
+  ((dash&&dash.recent_trades)||[]).forEach(t=>{
+    const d=delayDays(t.transaction_date,t.disclosure_date);
+    const sd=t.side==='buy'?'buy':(t.side==='sell'?'sell':'other');
+    const src=t.chamber==='House'?'House Clerk PTR':(t.chamber==='Senate'?'Senate eFD PTR':'PTR');
+    out.push({g:'congress',side:sd,badge:t.side==='buy'?'BUY':(t.side==='sell'?'SELL':'EXCH'),
+      name:t.person,what:t.asset||t.ticker||'Unlisted asset',ticker:t.ticker||'',
+      amt:t.amount||'—',amtN:sane(amtMid(t.amount)),date:t.transaction_date,link:t.link||'',
+      sub:`traded ${fdate(t.transaction_date)} · disclosed ${fdate(t.disclosure_date)}${d!==null?' · '+d+'d delay':''} · ${src}`,
+      d:pdate(t.transaction_date)||pdate(t.disclosure_date)||0,
+      q:`${t.person} ${t.ticker} ${t.asset}`})});
+  (((dash||{}).insiders||{}).recent_trades||[]).forEach(t=>out.push({
+    g:'insiders',side:t.side==='BUY'?'buy':'sell',badge:t.side,
+    name:t.owner,what:t.issuer||'',ticker:t.ticker||'',
+    amt:usd(sane(t.value)),amtN:sane(t.value),date:t.date,link:'',
+    sub:`${t.role||'insider'} · ${Number(t.shares||0).toLocaleString('en-US')} sh @ $${Number(t.price||0).toLocaleString('en-US',{minimumFractionDigits:2})} · ${fdate(t.date)} · SEC Form 4`,
+    d:pdate(t.date)||0,q:`${t.owner} ${t.issuer} ${t.ticker}`}));
+  (((dash||{}).activists||{}).recent_events||[]).forEach(e=>out.push({
+    g:'activists',side:'other',badge:'STAKE',
+    name:e.filer,what:e.company||'',ticker:e.ticker||'',
+    amt:e.pct?e.pct+'%':'—',date:e.date,link:e.link||'',
+    sub:`${e.type||'13D'} · filed ${fdate(e.date)}`,
+    d:pdate(e.date)||0,q:`${e.filer} ${e.company} ${e.ticker}`}));
+  (((dash||{}).funds||{}).recent_moves||[]).forEach(m=>out.push({
+    g:'funds',side:m.action==='NEW'?'buy':'sell',badge:m.action==='NEW'?'NEW':'EXIT',
+    name:m.fund,what:m.issuer||'',ticker:m.ticker||'',
+    amt:'~'+usd(m.value),date:m.date,link:'',
+    sub:`${m.action==='NEW'?'new position':'exited position'} · Q ending ${m.period||'—'} · filed ${fdate(m.date)} · SEC 13F`,
+    d:pdate(m.date)||0,q:`${m.fund} ${m.issuer} ${m.ticker}`}));
+  out.sort((a,b)=>(b.d||0)-(a.d||0));
+  return out;
+}
+
+/* ---------- clusters ---------- */
+function findClusters(){
+  const out=[];const dash=merged();
+  // Congress: 2+ politicians, same ticker & side, 30 days
+  const cWin=30, cCut=Date.now()-cWin*864e5, cg={};
+  ((dash&&dash.recent_trades)||[]).forEach(t=>{
+    const d=pdate(t.transaction_date);
+    if(t.ticker&&d&&d>=cCut){const k=t.ticker+'|'+t.side;(cg[k]=cg[k]||[]).push(t)}});
+  Object.entries(cg).forEach(([k,ts])=>{
+    const people=[...new Set(ts.map(t=>t.person))];
+    if(people.length>=2){const [tk,side]=k.split('|');
+      out.push({src:'congress',tk,side,n:people.length,win:cWin,
+        who:people.slice(0,3).join(', ')+(people.length>3?' +'+(people.length-3):''),
+        detail:people.length+' politician'+(people.length===1?'':'s')})}});
+  // Insiders: per config, same ticker & side
+  const need=(cfg&&cfg.insiders&&cfg.insiders.cluster_count)||2;
+  const iWin=(cfg&&cfg.insiders&&cfg.insiders.cluster_window_days)||14;
+  const iCut=new Date(Date.now()-iWin*864e5).toISOString().slice(0,10), ig={};
+  (((dash||{}).insiders||{}).recent_trades||[]).forEach(t=>{
+    if(t.ticker&&String(t.date||'')>=iCut){const k=t.ticker+'|'+t.side;(ig[k]=ig[k]||[]).push(t)}});
+  Object.entries(ig).forEach(([k,ts])=>{
+    const owners=[...new Set(ts.map(t=>t.owner))];
+    if(owners.length>=need){const [tk,side]=k.split('|');
+      const total=ts.reduce((s,t)=>s+(t.value||0),0);
+      out.push({src:'insiders',tk,side:side==='BUY'?'buy':'sell',n:owners.length,win:iWin,
+        who:owners.slice(0,3).join(', ')+(owners.length>3?' +'+(owners.length-3):''),
+        detail:owners.length+' insiders · '+usd(total)})}});
+  out.sort((a,b)=>b.n-a.n);
+  return out;
+}
+
+/* ---------- render ---------- */
+function renderAll(){renderSignals();renderStats();renderChips();renderFeed();renderPortfolio();renderRoster()}
+
+/* ---------- model portfolio (breadth-weighted) ---------- */
+let pfGroup='all', pfMetric='holders';   // 'holders' = # of buyers, 'value' = $ bought
+function memberOf(t){return t.g==='congress'?t.name:t.name;} // name field already set per group
+function buildPortfolio(){
+  // both sides now: a sell nets against the same member's buys in that name
+  const all=unified().filter(t=>t.ticker&&(t.side==='buy'||t.side==='sell'));
+  const rows=pfGroup==='all'?all:all.filter(t=>t.g===pfGroup);
+  const byTk={};
+  rows.forEach(t=>{
+    const T=byTk[t.ticker]||(byTk[t.ticker]={tk:t.ticker,co:t.what,pos:{}});
+    if(!T.co&&t.what)T.co=t.what;
+    const key=t.g+'|'+t.name;
+    const P=T.pos[key]||(T.pos[key]={name:t.name,buyVal:0,sellVal:0,buys:0,sells:0});
+    if(t.side==='buy'){P.buyVal+=t.amtN||0;P.buys++;}
+    else{P.sellVal+=t.amtN||0;P.sells++;}
+  });
+  const heldSet=new Set();                 // members still net-long in ≥1 name
+  const list=[];
+  Object.values(byTk).forEach(T=>{
+    const holders=Object.values(T.pos).filter(P=>
+      P.buys>0 && (P.buyVal-P.sellVal)>0);  // bought, and not sold back out
+    if(!holders.length)return;             // everyone exited -> drop the name
+    holders.forEach(P=>heldSet.add(P.name));
+    const val=holders.reduce((s,P)=>s+(P.buyVal-P.sellVal),0);
+    const buys=holders.reduce((s,P)=>s+P.buys,0);
+    list.push({tk:T.tk,co:T.co||'',m:holders.length,val,
+      buys,trades:buys,lean:'buy',who:holders.map(P=>P.name)});
+  });
+  const totalMembers=heldSet.size;
+  const totalVal=list.reduce((s,o)=>s+o.val,0);
+  list.forEach(o=>{o.pct=totalMembers?o.m/totalMembers*100:0;
+    o.valPct=totalVal?o.val/totalVal*100:0;});
+  list.sort((a,b)=>b.m-a.m||b.trades-a.trades||a.tk.localeCompare(b.tk));
+  return {list,totalMembers,totalVal};
+}
+function renderPfChips(){
+  const defs=[['all','ALL'],['congress','CONGRESS'],['insiders','INSIDERS']];
+  $('#pfchips').innerHTML=defs.map(([g,l])=>
+    `<button class="gchip ${pfGroup===g?'on':''}" data-pfg="${g}">${l}</button>`).join('');
+}
+function renderPfMetric(){
+  const defs=[['holders','BY HOLDERS'],['value','BY $ VALUE (EST.)']];
+  $('#pfmetric').innerHTML=defs.map(([m,l])=>
+    `<button class="gchip ${pfMetric===m?'on':''}" data-pfm="${m}">${l}</button>`).join('');
+}
+function renderPortfolio(){
+  renderPfChips();
+  renderPfMetric();
+  const {list,totalMembers,totalVal}=buildPortfolio();
+  const q=($('#pfq').value||'').toLowerCase();
+  const shown=list.filter(o=>!q||o.tk.toLowerCase().includes(q)||(o.co||'').toLowerCase().includes(q));
+  const maxPct=list.length?list[0].pct:1;
+  $('#pfstats').innerHTML=[
+    `<span><b>${totalMembers}</b> buyer${totalMembers===1?'':'s'} pooled</span>`,
+    `<span><b>${list.length}</b> name${list.length===1?'':'s'} being bought</span>`,
+    `<span>${pfMetric==='value'?'chart weight ≈ buy value est. from disclosed-range midpoints ('+usd(totalVal)+')':'chart weight = share of buyers in a name'}</span>`].join('');
+  renderPfChart(list,totalMembers,pfMetric);
+  if(!shown.length){$('#pflist').innerHTML='<div class="emptyrow">'+(q?'No holdings match “'+esc($('#pfq').value)+'”.':'No holdings yet.')+'</div>';return}
+  $('#pflist').innerHTML=shown.map((o,i)=>{
+    const w=Math.max(3,o.pct/maxPct*100); // bar relative to top holding
+    const dir=`${o.buys} buy${o.buys===1?'':'s'}`;
+    const who=o.who.slice(0,4).join(', ')+(o.who.length>4?` +${o.who.length-4} more`:'');
+    return `<div class="pfrow">
+      <div class="pfrank">${i+1}</div>
+      <div class="pfmid">
+        <div class="pftop"><span class="pftk" data-tk="${esc(o.tk)}">${esc(o.tk)}</span>
+          <span class="pflean buy">BUYING</span>
+          <span class="pfco">${esc(o.co)}</span></div>
+        <div class="pfbar buy"><span style="width:${w}%"></span></div>
+        <div class="pfwho">${esc(who)} · ${dir}</div>
+      </div>
+      <div class="pfright"><div class="pfpct">${o.pct.toFixed(0)}%</div>
+        <div class="pfppl">${o.m} of ${totalMembers}</div></div>
+    </div>`}).join('');
+}
+
+/* ---------- donut chart ---------- */
+const PF_PALETTE=['#3FBE7C','#5AA9E6','#E0A23C','#C77DFF','#4EC8C0','#EB6F9E',
+  '#E5C07B','#8F88F0','#6FCF97','#E06A57'];
+function polar(cx,cy,r,deg){const a=(deg-90)*Math.PI/180;return[cx+r*Math.cos(a),cy+r*Math.sin(a)]}
+function donutArc(cx,cy,rO,rI,a0,a1){
+  const large=(a1-a0)>180?1:0;
+  const[x0,y0]=polar(cx,cy,rO,a0),[x1,y1]=polar(cx,cy,rO,a1);
+  const[x2,y2]=polar(cx,cy,rI,a1),[x3,y3]=polar(cx,cy,rI,a0);
+  return `M${x0} ${y0} A${rO} ${rO} 0 ${large} 1 ${x1} ${y1} L${x2} ${y2} A${rI} ${rI} 0 ${large} 0 ${x3} ${y3} Z`;
+}
+function renderPfChart(list,totalMembers,metric){
+  const box=$('#pfchart');
+  metric=metric||'holders';
+  const byVal=metric==='value';
+  const wOf=o=>byVal?(o.val||0):(o.m||0);
+  const ranked=list.slice().sort((a,b)=>wOf(b)-wOf(a)||b.trades-a.trades||a.tk.localeCompare(b.tk))
+                    .filter(o=>wOf(o)>0);
+  if(!ranked.length){box.innerHTML='<div class="emptyrow" style="padding:10px 0">No '+(byVal?'valued ':'')+'holdings to chart yet.</div>';return}
+  const TOP=10;
+  const top=ranked.slice(0,TOP);
+  const slices=top.map((o,i)=>({tk:o.tk,co:o.co,m:o.m,val:o.val,lean:o.lean,
+    w:wOf(o),color:PF_PALETTE[i%PF_PALETTE.length],rest:false}));
+  const totalW=slices.reduce((s,o)=>s+o.w,0)||1;
+  const cx=105,cy=105,rO=98,rI=60;
+  let acc=0, paths='';
+  slices.forEach((s,i)=>{
+    const frac=s.w/totalW, a0=acc*360, a1=(acc+frac)*360; acc+=frac;
+    const d=frac>=0.9999
+      ? `M${cx-rO} ${cy} A${rO} ${rO} 0 1 1 ${cx+rO} ${cy} A${rO} ${rO} 0 1 1 ${cx-rO} ${cy} M${cx-rI} ${cy} A${rI} ${rI} 0 1 0 ${cx+rI} ${cy} A${rI} ${rI} 0 1 0 ${cx-rI} ${cy} Z`
+      : donutArc(cx,cy,rO,rI,a0,a1);
+    s.pct=frac*100;
+    paths+=`<path class="pfslice" data-i="${i}" data-tk="${esc(s.tk)}" d="${d}" fill="${s.color}"${frac>=0.9999?' fill-rule="evenodd"':''}></path>`;
+  });
+  const detail=s=>byVal?usd(s.val):(s.m+' / '+totalMembers);
+  const legend=slices.map((s,i)=>
+    `<div class="pfleg" data-i="${i}" data-tk="${esc(s.tk)}">
+      <span class="pfsw" style="background:${s.color}"></span>
+      <span class="lt">${esc(s.tk)}</span>
+      <span class="lc">${esc(s.co||'')}</span>
+      <span class="lp">${s.pct.toFixed(0)}%</span>
+      <span class="lm">${detail(s)}</span>
+    </div>`).join('');
+  const sub=byVal?'BY VALUE':'HOLDINGS';
+  box.innerHTML=`
+    <div class="pfdonut">
+      <svg viewBox="0 0 210 210" aria-label="Portfolio composition donut chart">${paths}</svg>
+      <div class="pfcenter" id="pfCenter">
+        <div class="pfc-tk">${slices.length}</div>
+        <div class="pfc-sub">${sub}</div>
+        <div class="pfc-hint">top ${top.length} shown</div>
+      </div>
+    </div>
+    <div class="pflegend">${legend}</div>`;
+  const center=$('#pfCenter');
+  const setHi=i=>{
+    box.classList.toggle('hoving',i!==null);
+    box.querySelectorAll('.pfslice').forEach(p=>p.classList.toggle('hi',+p.dataset.i===i));
+    box.querySelectorAll('.pfleg').forEach(l=>l.classList.toggle('hi',+l.dataset.i===i));
+    if(i===null){center.innerHTML=`<div class="pfc-tk">${slices.length}</div><div class="pfc-sub">${sub}</div><div class="pfc-hint">top ${top.length} shown</div>`;}
+    else{const s=slices[i];
+      center.innerHTML=`<div class="pfc-tk" style="color:${s.color}">${esc(s.tk)}</div>
+        <div class="pfc-sub">${s.pct.toFixed(0)}% · ${detail(s)}</div>
+        <div class="pfc-hint">${byVal?usd(s.val)+' bought':s.m+(s.m===1?' buyer':' buyers')}</div>`;}
+  };
+  box.querySelectorAll('.pfslice,.pfleg').forEach(el=>{
+    el.addEventListener('mouseenter',()=>setHi(+el.dataset.i));
+    el.addEventListener('mouseleave',()=>setHi(null));
+    el.addEventListener('click',()=>{const tk=el.dataset.tk;
+      if(tk&&tk!=='Other'){$('#q').value=tk;feedLimit=60;showPage('ledger');renderFeed();
+        $('#feed').scrollIntoView({behavior:'smooth',block:'start'})}});
+  });
+}
+
+function renderSignals(){
+  const cl=findClusters();
+  $('#sigNote').textContent=cl.length?cl.length+' active':'';
+  if(!cl.length){$('#signals').innerHTML='<div class="nosig">No active clusters — the feed below is the full record.</div>';return}
+  $('#signals').innerHTML=cl.map(c=>
+    `<button class="sig" data-tk="${esc(c.tk)}" title="Filter the feed to ${esc(c.tk)}">
+      <span class="tk">${esc(c.tk)}</span><span class="side ${c.side}">${c.side==='buy'?'BUYING':'SELLING'}</span>
+      <div class="who">${esc(c.who)}</div>
+      <div class="meta">${esc(c.detail)} · ${c.win}d · ${c.src==='congress'?'CONGRESS':'INSIDERS'}</div>
+    </button>`).join('');
+}
+
+function renderStats(){
+  const all=unified();
+  const buys=all.filter(t=>t.side==='buy').length;
+  const pct=all.length?Math.round(buys/all.length*100):0;
+  const log=(dash&&dash.run_log)||[];
+  const today=new Date().toISOString().slice(0,10);
+  const todays=log.filter(r=>String(r.ts||'').slice(0,10)===today);
+  const alerts=todays.reduce((a,r)=>a+(r.alerted||0),0);
+  const parts=[`<span><b>${all.length}</b> trades on record</span>`,
+    `<span><b>${pct}%</b> buy-side</span>`];
+  if(todays.length)parts.push(`<span><b>${alerts}</b> alert${alerts===1?'':'s'} sent today</span>`);
+  if(lastCommit)parts.push(`<span>last check <b>${lastCommit.toLocaleTimeString([],{hour:'2-digit',minute:'2-digit'})}</b></span>`);
+  $('#stats').innerHTML=parts.join('');
+}
+
+function renderChips(){
+  const all=unified(), counts={congress:0,insiders:0,activists:0,funds:0};
+  all.forEach(t=>counts[t.g]++);
+  $('#gchips').innerHTML=Object.keys(GLABEL)
+    .filter(g=>counts[g]>0||groupsOn[g]===false)
+    .map(g=>`<button class="gchip ${groupsOn[g]?'on':''}" data-g="${g}">${GLABEL[g]} <b>${counts[g]}</b></button>`).join('');
+}
+
+function renderFeed(){
+  const q=($('#q').value||'').toLowerCase();
+  const rows=unified().filter(t=>groupsOn[t.g]).filter(t=>!q||t.q.toLowerCase().includes(q));
+  if(!rows.length){
+    let msg;
+    if(q){msg='Nothing matches “'+esc($('#q').value)+'”. Clear the search to see the full tape.'}
+    else{
+      const found=[
+        ['congress trades',merged().recent_trades.length],
+        ['insider trades',(((dash||{}).insiders||{}).recent_trades||[]).length],
+        ['activist events',(((dash||{}).activists||{}).recent_events||[]).length],
+        ['fund moves',(((dash||{}).funds||{}).recent_moves||[]).length]];
+      const total=found.reduce((a,[,n])=>a+n,0);
+      if(total===0){
+        const keys=dash?Object.keys(dash).join(', '):'none';
+        msg=`state.json loaded, but every trade list is empty.<br>
+          <span class="mono" style="font-size:11px">${found.map(([k,n])=>k+': '+n).join(' · ')}</span><br>
+          <span class="mono" style="font-size:11px;color:var(--faint)">keys found: ${esc(keys)}</span><br><br>
+          If the bot has run, it may only have seeded quietly so far — trades appear on its first live check.<br>
+          If those key names look wrong, the bot is writing a different schema than this page reads.`;
+      }else{msg='The tape is empty for the selected groups — turn a group back on above.'}
+    }
+    $('#feed').innerHTML='<div class="emptyrow" style="line-height:1.7">'+msg+'</div>';
+    $('#morewrap').classList.add('hidden');return}
+  $('#feed').innerHTML=rows.slice(0,feedLimit).map(t=>{
+    const tk=t.ticker?` <span class="tk" data-tk="${esc(t.ticker)}" title="Add ${esc(t.ticker)} to watchlist">${esc(t.ticker)}</span>`:'';
+    return `<div class="trow ${t.side}">
+      <span class="tbadge">${esc(t.badge)}</span>
+      <div class="tmain">
+        <div class="tname">${esc(t.name)} · ${esc(t.what)}${tk}</div>
+        <div class="tsub"><span class="gsrc">${GLABEL[t.g]}</span> · ${t.sub}${t.link?` · <a class="tlink" href="${esc(t.link)}" target="_blank" rel="noopener">FILING ↗</a>`:''}</div>
+      </div>
+      <div class="tright"><div class="tamt">${esc(t.amt)}</div><div class="tdate">${esc(fdate(t.date))}</div></div>
+    </div>`}).join('');
+  const rest=rows.length-feedLimit;
+  $('#morewrap').classList.toggle('hidden',rest<=0);
+  if(rest>0)$('#btnMore').textContent=`SHOW MORE — ${rest} REMAINING`;
+}
+
+/* ---------- settings: config plumbing (YAML schema unchanged, bot-compatible) ---------- */
+function populateControls(){
+  baseline=JSON.stringify(cfg);
+  $$('[data-k]').forEach(el=>{const v=deepGet(cfg,el.dataset.k);
+    if(el.type==='checkbox')el.checked=!!v;
+    else if(Array.isArray(v))el.value=v.join(', ');
+    else el.value=(v===undefined||v===null)?'':v});
+  markDirty();
+}
+function collect(){
+  $$('[data-k]').forEach(el=>{const k=el.dataset.k;
+    if(el.type==='checkbox'){deepSet(cfg,k,el.checked);return}
+    if(k==='filters.watch_tickers'){deepSet(cfg,k,el.value.split(',').map(s=>s.trim().toUpperCase()).filter(Boolean));return}
+    if(k==='filters.watch_politicians'){deepSet(cfg,k,el.value.split(',').map(s=>s.trim()).filter(Boolean));return}
+    if(el.type==='number'){const n=parseInt(el.value,10);deepSet(cfg,k,isNaN(n)?0:n);return}
+    deepSet(cfg,k,el.value.trim())});
+}
+function validate(){const uid=deepGet(cfg,'discord.user_id');
+  if(uid&&!/^\d{5,25}$/.test(uid))return 'Discord user ID must be numbers only.';
+  const h=deepGet(cfg,'heartbeat_hour_utc');if(h<0||h>23)return 'Daily update hour must be 0–23.';return null}
+function markDirty(){if(!cfg)return;collect();
+  const dirty=JSON.stringify(cfg)!==baseline;
+  $('#btnSave').disabled=!dirty;
+  $('#btnRevert').classList.toggle('hidden',!dirty);
+  $('#saveMsg').textContent=dirty?'UNSAVED CHANGES':'SYNCED WITH CONFIG.YAML';
+  updatePresets();renderSignals();
+}
+function updatePresets(){if(!cfg)return;const v=cfg.filters.min_trade_value;
+  $$('#presets .preset').forEach(b=>b.classList.toggle('on',parseInt(b.dataset.min,10)===v))}
+function buildYaml(c){const list=a=>a.length?'['+a.join(', ')+']':'[]';
+  return `# ============================================================
+#  CONGRESS TRADE BOT — CONTROL PANEL  (managed file)
+#  Edited via dashboard.html on ${new Date().toISOString().slice(0,10)}.
+#  You can also edit by hand: true = on, false = off.
+# ============================================================
+
+features:
+  ping_buys: ${c.features.ping_buys}             # Alert on senator stock purchases
+  ping_sells: ${c.features.ping_sells}            # Alert on senator stock sales
+  heartbeat: ${c.features.heartbeat}             # Once-daily update on quiet days
+  notify_on_error: ${c.features.notify_on_error}       # Message if a data source breaks
+  senate_efd_source: ${c.features.senate_efd_source}     # PRIMARY: official Senate eFD site
+  capitoltrades_source: ${c.features.capitoltrades_source} # DORMANT: enable if their API recovers
+  finnhub_enrichment: ${c.features.finnhub_enrichment}   # Backup per-ticker checks (needs watchlist)
+
+filters:
+  min_trade_value: ${c.filters.min_trade_value}          # USD floor (low end of disclosed range)
+  watch_tickers: ${list(c.filters.watch_tickers)}          # Empty = all tickers
+  watch_politicians: ${list(c.filters.watch_politicians)}      # Empty = everyone
+  lookback_days: ${c.filters.lookback_days}           # Filing search window (days)
+
+discord:
+  user_id: "${c.discord.user_id||'PUT_YOUR_DISCORD_USER_ID_HERE'}"
+  mention_on_trade: ${c.discord.mention_on_trade}      # @you on trade alerts
+  mention_on_heartbeat: ${c.discord.mention_on_heartbeat} # @you on the daily update
+
+heartbeat_hour_utc: ${c.heartbeat_hour_utc}        # Daily update hour (UTC)
+
+max_filings_per_run: ${c.max_filings_per_run}       # Senate filings parsed per check
+seed_max_filings: ${c.seed_max_filings}         # Deep-seed depth on first run
+
+pages_per_run: ${c.pages_per_run}              # CapitolTrades pages per check (dormant)
+seed_pages: ${c.seed_pages}                # CapitolTrades seed pages (dormant)
+
+max_pings_per_run: ${c.max_pings_per_run}         # Flood protection cap
+
+groups:                    # master switches for the follow scripts
+  insiders: ${c.groups.insiders}            # Form 4 (insiders.py)
+  activists: ${c.groups.activists}           # SC 13D (edgar_watch.py)
+  funds: ${c.groups.funds}               # 13F (edgar_watch.py)
+
+insiders:
+  alert_buys: ${c.insiders.alert_buys}
+  alert_sells: ${c.insiders.alert_sells}
+  big_buy_usd: ${c.insiders.big_buy_usd}
+  big_sell_usd: ${c.insiders.big_sell_usd}
+  cluster_count: ${c.insiders.cluster_count}
+  cluster_window_days: ${c.insiders.cluster_window_days}
+
+activists:
+  include_13g: ${c.activists.include_13g}         # passive 5% stakes too
+  alert_amendments: ${c.activists.alert_amendments}
+
+funds:
+  min_aum_busd: ${c.funds.min_aum_busd}            # follow funds >= this many $B
+  min_position_musd: ${c.funds.min_position_musd}       # track positions >= this many $M
+  alert_new: ${c.funds.alert_new}
+  alert_exits: ${c.funds.alert_exits}
+`}
+async function saveToGitHub(){
+  collect();const err=validate();if(err){$('#saveMsg').textContent=err.toUpperCase();return}
+  $('#saveMsg').textContent='SAVING…';$('#btnSave').disabled=true;
+  try{
+    const cur=await fetch(cfgPath(),{headers:ghHeaders()});if(cur.ok){fileSha=(await cur.json()).sha}
+    const body={message:'Update config via dashboard',
+      content:btoa(unescape(encodeURIComponent(buildYaml(cfg)))),sha:fileSha,branch:$('#branch').value.trim()};
+    const r=await fetch(cfgPath().split('?')[0],{method:'PUT',headers:ghHeaders(),body:JSON.stringify(body)});
+    if(!r.ok){const j=await r.json().catch(()=>({}));
+      $('#saveMsg').textContent=`SAVE FAILED (${r.status}): ${(j.message||'unknown').toUpperCase()}`;
+      $('#btnSave').disabled=false;return}
+    fileSha=(await r.json()).content.sha;baseline=JSON.stringify(cfg);markDirty();
+    $('#saveMsg').textContent='SAVED — LIVE ON THE BOT\u2019S NEXT CHECK';
+  }catch(e){$('#saveMsg').textContent='COULD NOT REACH GITHUB';$('#btnSave').disabled=false}
+}
+
+/* ---------- wiring ---------- */
+$('#btnLoad').addEventListener('click',connect);
+$('#btnRefresh').addEventListener('click',()=>{if(cfg)loadState()});
+$('#btnSettings').addEventListener('click',()=>{if(!cfg)return;
+  $('#drawer').classList.add('open');$('#scrim').classList.add('open')});
+function closeDrawer(){$('#drawer').classList.remove('open');$('#scrim').classList.remove('open')}
+$('#btnClose').addEventListener('click',closeDrawer);
+$('#scrim').addEventListener('click',closeDrawer);
+document.addEventListener('keydown',e=>{if(e.key==='Escape')closeDrawer()});
+$('#btnSave').addEventListener('click',saveToGitHub);
+$('#btnRevert').addEventListener('click',()=>{cfg=JSON.parse(baseline);populateControls()});
+document.addEventListener('input',e=>{if(e.target.dataset&&e.target.dataset.k)markDirty()});
+$('#presets').addEventListener('click',e=>{const b=e.target.closest('[data-min]');if(!b||!cfg)return;
+  document.querySelector('[data-k="filters.min_trade_value"]').value=b.dataset.min;markDirty()});
+$('#q').addEventListener('input',()=>{feedLimit=60;renderFeed()});
+$('#gchips').addEventListener('click',e=>{const b=e.target.closest('[data-g]');
+  if(b){groupsOn[b.dataset.g]=!groupsOn[b.dataset.g];feedLimit=60;renderChips();renderFeed()}});
+$('#btnMore').addEventListener('click',()=>{feedLimit+=60;renderFeed()});
+
+/* ---------- roster page ---------- */
+function rsUsd(v){
+  if(v===''||v==null)return '';
+  if(typeof v==='string')return v;              // congress amount ranges, etc.
+  v=+v; if(!isFinite(v)||v===0)return '';
+  const a=Math.abs(v);
+  if(a>=1e9)return '$'+(v/1e9).toFixed(1)+'B';
+  if(a>=1e6)return '$'+(v/1e6).toFixed(0)+'M';
+  if(a>=1e3)return '$'+(v/1e3).toFixed(0)+'K';
+  return '$'+v.toFixed(0);
+}
+function rosterMembers(){
+  const H=rosterHist||{};
+  const out=[];
+  ['funds','politicians','activists','insiders'].forEach(g=>{
+    const bucket=H[g]||{};
+    Object.keys(bucket).forEach(id=>{const m=bucket[id]||{};
+      out.push({group:g,id,name:m.name||id,events:m.events||[],
+        top:m.latest_top||[],period:m.latest_period||''})});
+  });
+  return out;
+}
+function renderRsChips(){
+  const H=rosterHist||{};
+  const present=['funds','politicians','activists','insiders']
+    .filter(g=>H[g]&&Object.keys(H[g]).length);
+  const defs=[['all','ALL'],...present.map(g=>[g,g.toUpperCase()])];
+  $('#rschips').innerHTML=defs.map(([g,l])=>
+    `<button class="gchip ${rsGroup===g?'on':''}" data-rsg="${g}">${l}</button>`).join('');
+}
+function rsEvent(e){
+  const act=String(e.action||'').toUpperCase();
+  const cls=/BUY|NEW|PURCHASE/.test(act)?'buy':/SELL|EXIT|SALE/.test(act)?'sell':'';
+  return `<div class="rsev"><span class="rsevd">${esc(e.date||e.period||'')}</span>`
+    +`<span class="rsact ${cls}">${esc(act||'—')}</span>`
+    +`<span class="rsevn">${esc(e.ticker||e.issuer||'—')}</span>`
+    +`<span class="rsevv">${esc(rsUsd(e.value))}</span></div>`;
+}
+function rsCard(m){
+  const meta = m.group==='funds'
+    ? (m.period?('13F · '+m.period):(m.top.length+' holdings'))
+    : (m.events.length+' event'+(m.events.length===1?'':'s'));
+  let body='';
+  if(m.group==='funds' && m.top.length){
+    const max=Math.max(...m.top.map(t=>+t.value||0))||1;
+    body+='<div class="rssub">Top '+Math.min(10,m.top.length)+' holdings'
+      +(m.period?' · as of '+esc(m.period):'')+'</div>';
+    body+=m.top.slice(0,10).map((t,i)=>{
+      const w=Math.max(4,(+t.value||0)/max*100);
+      return `<div class="rshold"><div class="rshrank">${i+1}</div>`
+        +`<div><div class="rshname">${esc(t.ticker||t.issuer||'—')}</div>`
+        +`<div class="rshbar"><span style="width:${w}%"></span></div></div>`
+        +`<div class="rshval">${esc(rsUsd(t.value))}</div></div>`;
+    }).join('');
+  }
+  const evs=m.events.filter(e=>String(e.action||'').toUpperCase()!=='SNAPSHOT').slice().reverse();
+  if(evs.length){
+    body+='<div class="rssub">Recent activity</div>';
+    body+=evs.slice(0,12).map(rsEvent).join('');
+    if(evs.length>12)body+='<div class="rsmore">+'+(evs.length-12)+' more in history</div>';
+  }else if(m.group!=='funds'){
+    body+='<div class="rssub">Recent activity</div><div class="rsmore">No tracked trades yet.</div>';
+  }
+  return `<div class="rscard" data-rid="${esc(m.group+':'+m.id)}">
+      <div class="rshead">
+        <div class="rsname">${esc(m.name)} <span class="rsgroup ${m.group}">${m.group.toUpperCase()}</span></div>
+        <div class="rsmeta">${esc(meta)} <span class="rschev">▶</span></div>
+      </div>
+      <div class="rsbody">${body||'<div class="rsmore">Nothing recorded yet.</div>'}</div>
+    </div>`;
+}
+function renderRoster(){
+  if(!rosterHist){
+    $('#rschips').innerHTML='';
+    $('#rslist').innerHTML='<div class="emptyrow">No roster history yet — run the bot once '
+      +'(funds seed their holdings on the first run), then hit refresh.</div>';
+    return;
+  }
+  renderRsChips();
+  const q=($('#rsq').value||'').toLowerCase();
+  let mem=rosterMembers();
+  if(rsGroup!=='all')mem=mem.filter(m=>m.group===rsGroup);
+  mem=mem.filter(m=>!q||m.name.toLowerCase().includes(q)
+    ||(m.top||[]).some(t=>((t.ticker||'')+(t.issuer||'')).toLowerCase().includes(q))
+    ||(m.events||[]).some(e=>((e.ticker||'')+(e.issuer||'')).toLowerCase().includes(q)));
+  const order={funds:0,activists:1,politicians:2,insiders:3};
+  mem.sort((a,b)=>(order[a.group]-order[b.group])||a.name.localeCompare(b.name));
+  if(!mem.length){
+    $('#rslist').innerHTML='<div class="emptyrow">'
+      +(q?'No roster members match “'+esc($('#rsq').value)+'”.':'No members in this group yet.')+'</div>';
+    return;
+  }
+  $('#rslist').innerHTML=mem.map(rsCard).join('');
+}
+
+/* ---------- performance page ---------- */
+const PERF_RANGES={'1M':31,'3M':92,'6M':184,'ALL':0};
+function renderPerfRange(){
+  $('#perfrange').innerHTML=Object.keys(PERF_RANGES).map(r=>
+    `<button class="gchip ${perfRange===r?'on':''}" data-pr="${r}">${r}</button>`).join('');
+}
+function perfSlice(){
+  const s=(perfData&&perfData.index)||[];
+  const days=PERF_RANGES[perfRange];
+  if(!days||s.length<2)return s;
+  const last=new Date(s[s.length-1][0]);
+  const cut=new Date(last); cut.setDate(cut.getDate()-days);
+  const sl=s.filter(p=>new Date(p[0])>=cut);
+  return sl.length>=2?sl:s;
+}
+function renderPerf(){
+  renderPerfRange();
+  const box=$('#perfchart'), memBox=$('#perfmembers'), stats=$('#perfstats');
+  if(!perfData||!(perfData.index||[]).length){
+    stats.innerHTML='';memBox.innerHTML='';
+    box.innerHTML='<div class="emptyrow">No performance data yet — the bot writes <span class="mono">perf.json</span> on its next run.</div>';
+    return;
+  }
+  const s=perfSlice();
+  const base=s[0][1], last=s[s.length-1][1];
+  const ret=base?((last/base-1)*100):0, up=ret>=0;
+
+  stats.innerHTML=[
+    `<span><b class="${up?'':''}" style="color:var(--${up?'buy':'sell'})">${(up?'+':'')+ret.toFixed(2)}%</b> ${perfRange==='ALL'?'since '+(perfData.start||s[0][0]):'over '+perfRange.toLowerCase()}</span>`,
+    `<span><b>${perfData.active||0}</b> active name${perfData.active===1?'':'s'}</span>`,
+    `<span><b>${perfData.exited||0}</b> exited</span>`,
+    `<span>updated ${esc(perfData.updated||'—')}</span>`].join('');
+
+  // svg line chart
+  const W=760,H=260,PL=44,PR=8,PT=10,PB=24;
+  const xs=s.map((_,i)=>i), n=s.length;
+  const vals=s.map(p=>p[1]);
+  let lo=Math.min(...vals), hi=Math.max(...vals);
+  if(hi-lo<1e-9){lo-=1;hi+=1}
+  const pad=(hi-lo)*0.06; lo-=pad; hi+=pad;
+  const X=i=>PL+(W-PL-PR)*(n===1?0:i/(n-1));
+  const Y=v=>PT+(H-PT-PB)*(1-(v-lo)/(hi-lo));
+  const pts=s.map((p,i)=>`${X(i).toFixed(1)},${Y(p[1]).toFixed(1)}`).join(' ');
+  const fill=`${X(0).toFixed(1)},${(H-PB).toFixed(1)} ${pts} ${X(n-1).toFixed(1)},${(H-PB).toFixed(1)}`;
+  // y gridlines: 4 ticks
+  let grid='',labels='';
+  for(let k=0;k<4;k++){
+    const v=lo+(hi-lo)*k/3, y=Y(v);
+    grid+=`<line class="perfgrid" x1="${PL}" x2="${W-PR}" y1="${y.toFixed(1)}" y2="${y.toFixed(1)}"></line>`;
+    labels+=`<text class="perfaxis" x="${PL-6}" y="${(y+3).toFixed(1)}" text-anchor="end">${v.toFixed(0)}</text>`;
+  }
+  // x labels: first / mid / last dates
+  const dl=i=>`<text class="perfaxis" x="${X(i).toFixed(1)}" y="${H-6}" text-anchor="${i===0?'start':i===n-1?'end':'middle'}">${esc(s[i][0].slice(5))}</text>`;
+  labels+=dl(0)+(n>4?dl(Math.floor(n/2)):'')+dl(n-1);
+  const col=up?'var(--buy)':'var(--sell)';
+  box.innerHTML=`<svg viewBox="0 0 ${W} ${H}" aria-label="Portfolio index performance">
+    ${grid}
+    <polygon class="perffill" points="${fill}" fill="${col}"></polygon>
+    <polyline class="perfline${up?'':' down'}" points="${pts}"></polyline>
+    ${labels}
+  </svg>`;
+
+  // member chips
+  const mem=(perfData.members||[]).slice()
+    .sort((a,b)=>(a.to?1:0)-(b.to?1:0)||(b.ret_pct??-1e9)-(a.ret_pct??-1e9));
+  memBox.innerHTML=mem.map(m=>{
+    const r=m.ret_pct, rs=r==null?'':`<span class="r ${r>=0?'up':'dn'}">${(r>=0?'+':'')+r.toFixed(1)}%</span>`;
+    const sub=m.to?`out ${esc(m.to.slice(5))}`:`in ${esc((m.from||'').slice(5))}`;
+    return `<span class="perfmem${m.to?' exited':''}"><b>${esc(m.ticker)}</b>${rs}<span>${sub}</span></span>`;
+  }).join('')||'<div class="emptyrow">No members yet.</div>';
+}
+
+/* page nav */
+function showPage(p){
+  $$('.pagetab').forEach(t=>t.classList.toggle('on',t.dataset.page===p));
+  $('#page-ledger').classList.toggle('hidden',p!=='ledger');
+  $('#page-portfolio').classList.toggle('hidden',p!=='portfolio');
+  $('#page-perf').classList.toggle('hidden',p!=='perf');
+  $('#page-roster').classList.toggle('hidden',p!=='roster');
+  if(p==='portfolio')renderPortfolio();
+  if(p==='perf')renderPerf();
+  if(p==='roster')renderRoster();
+}
+$('#pageNav').addEventListener('click',e=>{const b=e.target.closest('[data-page]');if(b)showPage(b.dataset.page)});
+$('#pfq').addEventListener('input',renderPortfolio);
+$('#pfchips').addEventListener('click',e=>{const b=e.target.closest('[data-pfg]');
+  if(b){pfGroup=b.dataset.pfg;renderPortfolio()}});
+$('#pfmetric').addEventListener('click',e=>{const b=e.target.closest('[data-pfm]');
+  if(b){pfMetric=b.dataset.pfm;renderPortfolio()}});
+$('#pflist').addEventListener('click',e=>{const b=e.target.closest('[data-tk]');
+  if(b){$('#q').value=b.dataset.tk;feedLimit=60;showPage('ledger');renderFeed();
+    $('#feed').scrollIntoView({behavior:'smooth',block:'start'})}});
+$('#rsq').addEventListener('input',renderRoster);
+$('#rschips').addEventListener('click',e=>{const b=e.target.closest('[data-rsg]');
+  if(b){rsGroup=b.dataset.rsg;renderRoster()}});
+$('#rslist').addEventListener('click',e=>{const c=e.target.closest('.rscard');
+  if(c)c.classList.toggle('open')});
+$('#perfrange').addEventListener('click',e=>{const b=e.target.closest('[data-pr]');
+  if(b){perfRange=b.dataset.pr;renderPerf()}});
+$('#signals').addEventListener('click',e=>{const b=e.target.closest('[data-tk]');
+  if(b){$('#q').value=b.dataset.tk;feedLimit=60;renderFeed();
+    $('#feed').scrollIntoView({behavior:'smooth',block:'start'})}});
+$('#feed').addEventListener('click',e=>{const tk=e.target&&e.target.dataset&&e.target.dataset.tk;
+  if(tk&&cfg){const el=document.querySelector('[data-k="filters.watch_tickers"]');
+    const cur=el.value.split(',').map(s=>s.trim().toUpperCase()).filter(Boolean);
+    if(!cur.includes(tk)){cur.push(tk);el.value=cur.join(', ');markDirty();
+      $('#drawer').classList.add('open');$('#scrim').classList.add('open')}}});
+
+/* ---------- remember connection ---------- */
+const LS='ctb_conn';
+function lsGet(){try{return JSON.parse(localStorage.getItem(LS)||'{}')}catch(e){return{}}}
+function lsSet(o){try{localStorage.setItem(LS,JSON.stringify(o))}catch(e){}}
+function saveConn(){
+  const o={owner:$('#owner').value.trim(),repo:$('#repo').value.trim(),branch:$('#branch').value.trim()};
+  if($('#rememberTok').checked&&$('#token').value.trim())o.token=$('#token').value.trim();
+  lsSet(o);
+}
+$('#btnForget').addEventListener('click',()=>{
+  try{localStorage.removeItem(LS)}catch(e){}
+  $('#token').value='';$('#rememberTok').checked=false;
+  cfg=null;dash=null;closeDrawer();
+  $('#mainView').classList.add('hidden');$('#connectView').classList.remove('hidden');
+  setConn('','Not connected');status('Disconnected — token cleared from this device.','ok')});
+(function restore(){
+  const o=lsGet();
+  if(o.owner)$('#owner').value=o.owner;
+  if(o.repo)$('#repo').value=o.repo;
+  if(o.branch)$('#branch').value=o.branch;
+  if(o.token){$('#token').value=o.token;$('#rememberTok').checked=true;
+    status('Reconnecting…');connect()}
+})();
+</script>
+</body>
+</html>
