@@ -23,6 +23,10 @@ filters:
                              # e.g. [Pelosi, Tuberville] (case-insensitive)
   lookback_days: 45          # Ignore disclosures older than this many days
                              # (prevents ancient filings from pinging you)
+  ledger_scope: all          # What lands on the dashboard's trade tape:
+                             #   all    = every disclosed buy/sell (full tape;
+                             #            roster still gates Discord ALERTS)
+                             #   roster = only politicians in roster.yaml
 
 discord:
   user_id: "799000426623139850"   # Right-click yourself -> Copy User ID
