@@ -1336,7 +1336,7 @@
   },
   "heartbeat": {
     "last_sent_date": "2026-07-25",
-    "checks": 10,
+    "checks": 11,
     "trades_found": 0,
     "errors": 0,
     "errors_today": 6,
