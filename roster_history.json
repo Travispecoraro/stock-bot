@@ -577,6 +577,19 @@
      "date": "07/24/2026"
     }
    ]
+  },
+  "jared moskowitz": {
+   "name": "Jared Moskowitz",
+   "events": [
+    {
+     "action": "BUY",
+     "issuer": "Home Depot, Inc",
+     "ticker": "HD",
+     "value": "$1,001 - $15,000",
+     "period": "",
+     "date": "7/26/2026"
+    }
+   ]
   }
  }
 }
