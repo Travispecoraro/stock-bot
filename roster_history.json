@@ -590,6 +590,115 @@
      "date": "7/26/2026"
     }
    ]
+  },
+  "david h mccormick": {
+   "name": "David H McCormick",
+   "events": [
+    {
+     "action": "BUY",
+     "issuer": "GS Managed Structured Note Strategy MSCI EAFE Linked Note",
+     "ticker": "",
+     "value": "$100,001 - $250,000",
+     "period": "",
+     "date": "07/29/2026"
+    },
+    {
+     "action": "BUY",
+     "issuer": "PITTSBURGH PA WTR & SWR AUTH WTR & SWR Rate/Coupon: 5% Matures: 2056-09-01",
+     "ticker": "",
+     "value": "$500,001 - $1,000,000",
+     "period": "",
+     "date": "07/29/2026"
+    },
+    {
+     "action": "BUY",
+     "issuer": "ALLEGHENY CNTY PA GO BDS SER. C Rate/Coupon: 5% Matures: 2054-12-01",
+     "ticker": "",
+     "value": "$500,001 - $1,000,000",
+     "period": "",
+     "date": "07/29/2026"
+    },
+    {
+     "action": "BUY",
+     "issuer": "POCONO MTN PA SCH DIST GEN OBLIG BDS Rate/Coupon: 5% Matures: 2051-06-15",
+     "ticker": "",
+     "value": "$250,001 - $500,000",
+     "period": "",
+     "date": "07/29/2026"
+    },
+    {
+     "action": "BUY",
+     "issuer": "GS Managed Structured Note Strategy MSCI EAFE Linked Note",
+     "ticker": "",
+     "value": "$250,001 - $500,000",
+     "period": "",
+     "date": "07/29/2026"
+    },
+    {
+     "action": "BUY",
+     "issuer": "PHILADELPHIA PA AUTH FOR INDL REV Rate/Coupon: 5% Matures: 2028-12-01",
+     "ticker": "",
+     "value": "$100,001 - $250,000",
+     "period": "",
+     "date": "07/29/2026"
+    },
+    {
+     "action": "SELL",
+     "issuer": "PENNSYLVANIA ST TPK COMMN TPK REV Rate/Coupon: 5% Matures: 2030-12-01",
+     "ticker": "",
+     "value": "$100,001 - $250,000",
+     "period": "",
+     "date": "07/29/2026"
+    },
+    {
+     "action": "SELL",
+     "issuer": "CORPUS CHRISTI TEX UTIL SYS REV Rate/Coupon: 5% Matures: 2029-07-15",
+     "ticker": "",
+     "value": "$100,001 - $250,000",
+     "period": "",
+     "date": "07/29/2026"
+    },
+    {
+     "action": "SELL",
+     "issuer": "PENNSYLVANIA ST HIGHER EDL REV Rate/Coupon: 4% Matures: 2031-06-15",
+     "ticker": "",
+     "value": "$100,001 - $250,000",
+     "period": "",
+     "date": "07/29/2026"
+    },
+    {
+     "action": "SELL",
+     "issuer": "PHILADELPHIA PA AUTH FOR INDL REV Rate/Coupon: 5% Matures: 2031-12-01",
+     "ticker": "",
+     "value": "$100,001 - $250,000",
+     "period": "",
+     "date": "07/29/2026"
+    },
+    {
+     "action": "SELL",
+     "issuer": "WASHINGTON ST GO Rate/Coupon: 5% Matures: 2033-02-01",
+     "ticker": "",
+     "value": "$15,001 - $50,000",
+     "period": "",
+     "date": "07/29/2026"
+    },
+    {
+     "action": "SELL",
+     "issuer": "PENNSYLVANIA ST TPK COMMN OIL REV Rate/Coupon: 5% Matures: 2026-12-01",
+     "ticker": "",
+     "value": "$15,001 - $50,000",
+     "period": "",
+     "date": "07/29/2026"
+    },
+    {
+     "action": "SELL",
+     "issuer": "NORTHAMPTON CNTY PA GEN PURP A REV Rate/Coupon: 5% Matures: 2034-11-15",
+     "ticker": "",
+     "value": "$15,001 - $50,000",
+     "period": "",
+     "date": "07/29/2026"
+    }
+   ]
   }
  }
 }
