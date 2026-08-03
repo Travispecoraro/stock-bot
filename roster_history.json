@@ -712,6 +712,99 @@
      "date": "08/03/2026"
     }
    ]
+  },
+  "rick scott": {
+   "name": "Rick Scott",
+   "events": [
+    {
+     "action": "SELL",
+     "issuer": "Chicago Illinois Met Water Reclamation District Bond Rate/Coupon: 5.0% Matures: 2030-12-01",
+     "ticker": "",
+     "value": "$100,001 - $250,000",
+     "period": "",
+     "date": "08/03/2026"
+    },
+    {
+     "action": "SELL",
+     "issuer": "Ohio State Water Dev Auth Revenue Bond Rate/Coupon: 5.0% Matures: 2046-06-01",
+     "ticker": "",
+     "value": "$50,001 - $100,000",
+     "period": "",
+     "date": "08/03/2026"
+    },
+    {
+     "action": "SELL",
+     "issuer": "New Jersey St Educational Facs Auth Revenue Bond Rate/Coupon: 5.0% Matures: 2035-07-01",
+     "ticker": "",
+     "value": "$500,001 - $1,000,000",
+     "period": "",
+     "date": "08/03/2026"
+    },
+    {
+     "action": "SELL",
+     "issuer": "Port Portland Oregon Airport Revenue Bond Rate/Coupon: 5.0% Matures: 2030-07-01",
+     "ticker": "",
+     "value": "$500,001 - $1,000,000",
+     "period": "",
+     "date": "08/03/2026"
+    },
+    {
+     "action": "SELL",
+     "issuer": "California State Public Works Revenue Bond Rate/Coupon: 5.0% Matures: 2030-10-01",
+     "ticker": "",
+     "value": "$250,001 - $500,000",
+     "period": "",
+     "date": "08/03/2026"
+    },
+    {
+     "action": "SELL",
+     "issuer": "King County Washington Sch Dist G.O. Bond Rate/Coupon: 4.0% Matures: 2036-12-01",
+     "ticker": "",
+     "value": "$250,001 - $500,000",
+     "period": "",
+     "date": "08/03/2026"
+    },
+    {
+     "action": "BUY",
+     "issuer": "Atlanta GA Airport Revenue Bond Rate/Coupon: 5.0% Matures: 2054-07-01",
+     "ticker": "",
+     "value": "$500,001 - $1,000,000",
+     "period": "",
+     "date": "08/03/2026"
+    },
+    {
+     "action": "BUY",
+     "issuer": "Atlanta GA Airport Revenue Bond Rate/Coupon: 5.0% Matures: 2054-07-01",
+     "ticker": "",
+     "value": "$250,001 - $500,000",
+     "period": "",
+     "date": "08/03/2026"
+    },
+    {
+     "action": "BUY",
+     "issuer": "Jea Florida Wtr & Swr Sys Revenue Bond Rate/Coupon: 5.0% Matures: 2051-10-01",
+     "ticker": "",
+     "value": "$100,001 - $250,000",
+     "period": "",
+     "date": "08/03/2026"
+    },
+    {
+     "action": "BUY",
+     "issuer": "Jea Florida Wtr & Swr Sys Revenue Bond Rate/Coupon: 5.0% Matures: 2051-10-01",
+     "ticker": "",
+     "value": "$250,001 - $500,000",
+     "period": "",
+     "date": "08/03/2026"
+    },
+    {
+     "action": "BUY",
+     "issuer": "Jea Florida Wtr & Swr Sys Revenue Bond Rate/Coupon: 5.0% Matures: 2051-10-01",
+     "ticker": "",
+     "value": "$500,001 - $1,000,000",
+     "period": "",
+     "date": "08/03/2026"
+    }
+   ]
   }
  }
 }
