@@ -699,6 +699,19 @@
      "date": "07/29/2026"
     }
    ]
+  },
+  "sheldon whitehouse": {
+   "name": "Sheldon Whitehouse",
+   "events": [
+    {
+     "action": "SELL",
+     "issuer": "Lowe's Companies, Inc. Common Stock",
+     "ticker": "LOW",
+     "value": "$1,001 - $15,000",
+     "period": "",
+     "date": "08/03/2026"
+    }
+   ]
   }
  }
 }
