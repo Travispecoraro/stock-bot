@@ -805,6 +805,51 @@
      "date": "08/03/2026"
     }
    ]
+  },
+  "shelley m capito": {
+   "name": "Shelley M Capito",
+   "events": [
+    {
+     "action": "SELL",
+     "issuer": "Microsoft Corporation - Common Stock",
+     "ticker": "MSFT",
+     "value": "$15,001 - $50,000",
+     "period": "",
+     "date": "08/04/2026"
+    },
+    {
+     "action": "SELL",
+     "issuer": "Apple Inc. - Common Stock",
+     "ticker": "AAPL",
+     "value": "$1,001 - $15,000",
+     "period": "",
+     "date": "08/04/2026"
+    },
+    {
+     "action": "SELL",
+     "issuer": "Intel Corporation - Common Stock",
+     "ticker": "INTC",
+     "value": "$1,001 - $15,000",
+     "period": "",
+     "date": "08/04/2026"
+    },
+    {
+     "action": "SELL",
+     "issuer": "Coca-Cola Company (The) Common Stock",
+     "ticker": "KO",
+     "value": "$1,001 - $15,000",
+     "period": "",
+     "date": "08/04/2026"
+    },
+    {
+     "action": "SELL",
+     "issuer": "Cisco Systems, Inc. - Common Stock",
+     "ticker": "CSCO",
+     "value": "$1,001 - $15,000",
+     "period": "",
+     "date": "08/04/2026"
+    }
+   ]
   }
  }
 }
