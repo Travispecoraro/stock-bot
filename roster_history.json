@@ -850,6 +850,1147 @@
      "date": "08/04/2026"
     }
    ]
+  },
+  "thomas h tuberville": {
+   "name": "Thomas H Tuberville",
+   "events": [
+    {
+     "action": "BUY",
+     "issuer": "SPDR Select Sector Fund - Utilities",
+     "ticker": "XLU",
+     "value": "$15,001 - $50,000",
+     "period": "",
+     "date": "08/05/2026"
+    },
+    {
+     "action": "BUY",
+     "issuer": "SPDR Select Sector Fund - Consumer Staples",
+     "ticker": "XLP",
+     "value": "$15,001 - $50,000",
+     "period": "",
+     "date": "08/05/2026"
+    },
+    {
+     "action": "BUY",
+     "issuer": "SPDR Select Sector Fund - Health Care",
+     "ticker": "XLV",
+     "value": "$15,001 - $50,000",
+     "period": "",
+     "date": "08/05/2026"
+    },
+    {
+     "action": "SELL",
+     "issuer": "Apple Inc",
+     "ticker": "AAPL",
+     "value": "$50,001 - $100,000",
+     "period": "",
+     "date": "08/05/2026"
+    },
+    {
+     "action": "SELL",
+     "issuer": "Alphabet Cl A",
+     "ticker": "GOOGL",
+     "value": "$1,001 - $15,000",
+     "period": "",
+     "date": "08/05/2026"
+    },
+    {
+     "action": "SELL",
+     "issuer": "Pepsico Inc",
+     "ticker": "PEP",
+     "value": "$15,001 - $50,000",
+     "period": "",
+     "date": "08/05/2026"
+    },
+    {
+     "action": "SELL",
+     "issuer": "Owens Corning Inc",
+     "ticker": "OC",
+     "value": "$15,001 - $50,000",
+     "period": "",
+     "date": "08/05/2026"
+    },
+    {
+     "action": "SELL",
+     "issuer": "Microsoft Corp",
+     "ticker": "MSFT",
+     "value": "$15,001 - $50,000",
+     "period": "",
+     "date": "08/05/2026"
+    },
+    {
+     "action": "SELL",
+     "issuer": "Apple Inc",
+     "ticker": "AAPL",
+     "value": "$15,001 - $50,000",
+     "period": "",
+     "date": "08/05/2026"
+    },
+    {
+     "action": "SELL",
+     "issuer": "Alphabet Inc. - Class A Common Stock",
+     "ticker": "GOOGL",
+     "value": "$15,001 - $50,000",
+     "period": "",
+     "date": "08/05/2026"
+    },
+    {
+     "action": "SELL",
+     "issuer": "Oracle Corporation Common Stock",
+     "ticker": "ORCL",
+     "value": "$15,001 - $50,000",
+     "period": "",
+     "date": "08/05/2026"
+    },
+    {
+     "action": "SELL",
+     "issuer": "BIRMINGHAM ALA GO WTS SER. 2018 B Rate/Coupon: 5.0% Matures: 12/01/2043",
+     "ticker": "",
+     "value": "$15,001 - $50,000",
+     "period": "",
+     "date": "08/05/2026"
+    },
+    {
+     "action": "SELL",
+     "issuer": "Bristol-Myers Squibb Company",
+     "ticker": "BMY",
+     "value": "$1,001 - $15,000",
+     "period": "",
+     "date": "08/05/2026"
+    },
+    {
+     "action": "SELL",
+     "issuer": "Paypal Holdings",
+     "ticker": "PYPL",
+     "value": "$15,001 - $50,000",
+     "period": "",
+     "date": "08/05/2026"
+    },
+    {
+     "action": "BUY",
+     "issuer": "iShares Broad USD Investment Grade Corporate Bond",
+     "ticker": "USIG",
+     "value": "$50,001 - $100,000",
+     "period": "",
+     "date": "08/05/2026"
+    },
+    {
+     "action": "SELL",
+     "issuer": "JP Morgan Chase & Company",
+     "ticker": "JPM",
+     "value": "$15,001 - $50,000",
+     "period": "",
+     "date": "08/05/2026"
+    },
+    {
+     "action": "SELL",
+     "issuer": "Alphabet Cl A",
+     "ticker": "GOOGL",
+     "value": "$15,001 - $50,000",
+     "period": "",
+     "date": "08/05/2026"
+    },
+    {
+     "action": "SELL",
+     "issuer": "Amgen Inc",
+     "ticker": "AMGN",
+     "value": "$15,001 - $50,000",
+     "period": "",
+     "date": "08/05/2026"
+    },
+    {
+     "action": "SELL",
+     "issuer": "Archer Daniels Midland",
+     "ticker": "ADM",
+     "value": "$15,001 - $50,000",
+     "period": "",
+     "date": "08/05/2026"
+    },
+    {
+     "action": "SELL",
+     "issuer": "CSX Corp",
+     "ticker": "CSX",
+     "value": "$15,001 - $50,000",
+     "period": "",
+     "date": "08/05/2026"
+    },
+    {
+     "action": "SELL",
+     "issuer": "Constellation Brands Inc",
+     "ticker": "STZ",
+     "value": "$15,001 - $50,000",
+     "period": "",
+     "date": "08/05/2026"
+    },
+    {
+     "action": "SELL",
+     "issuer": "Duke Energy Corp",
+     "ticker": "DUK",
+     "value": "$15,001 - $50,000",
+     "period": "",
+     "date": "08/05/2026"
+    },
+    {
+     "action": "SELL",
+     "issuer": "Goldman Sachs Group",
+     "ticker": "GS",
+     "value": "$15,001 - $50,000",
+     "period": "",
+     "date": "08/05/2026"
+    },
+    {
+     "action": "SELL",
+     "issuer": "Eli Lilly and Company",
+     "ticker": "LLY",
+     "value": "$15,001 - $50,000",
+     "period": "",
+     "date": "08/05/2026"
+    },
+    {
+     "action": "SELL",
+     "issuer": "Mastercard Inc",
+     "ticker": "MA",
+     "value": "$15,001 - $50,000",
+     "period": "",
+     "date": "08/05/2026"
+    },
+    {
+     "action": "SELL",
+     "issuer": "Qualcomm Inc",
+     "ticker": "",
+     "value": "$15,001 - $50,000",
+     "period": "",
+     "date": "08/05/2026"
+    },
+    {
+     "action": "SELL",
+     "issuer": "Tractor Supply Company",
+     "ticker": "TSCO",
+     "value": "$15,001 - $50,000",
+     "period": "",
+     "date": "08/05/2026"
+    },
+    {
+     "action": "SELL",
+     "issuer": "Carrier Global Corp",
+     "ticker": "CARR",
+     "value": "$1,001 - $15,000",
+     "period": "",
+     "date": "08/05/2026"
+    },
+    {
+     "action": "SELL",
+     "issuer": "Texas Instruments Incorporated - Common Stock",
+     "ticker": "TXN",
+     "value": "$15,001 - $50,000",
+     "period": "",
+     "date": "08/05/2026"
+    },
+    {
+     "action": "SELL",
+     "issuer": "Diageo Plc ADR",
+     "ticker": "DEO",
+     "value": "$15,001 - $50,000",
+     "period": "",
+     "date": "08/05/2026"
+    },
+    {
+     "action": "SELL",
+     "issuer": "Adobe Inc. - Common Stock",
+     "ticker": "ADBE",
+     "value": "$15,001 - $50,000",
+     "period": "",
+     "date": "08/05/2026"
+    },
+    {
+     "action": "SELL",
+     "issuer": "Apple Inc. - Common Stock",
+     "ticker": "AAPL",
+     "value": "$15,001 - $50,000",
+     "period": "",
+     "date": "08/05/2026"
+    },
+    {
+     "action": "SELL",
+     "issuer": "Corteva, Inc. Common Stock",
+     "ticker": "CTVA",
+     "value": "$1,001 - $15,000",
+     "period": "",
+     "date": "08/05/2026"
+    },
+    {
+     "action": "SELL",
+     "issuer": "Honeywell International Inc. - Common Stock",
+     "ticker": "HON",
+     "value": "$15,001 - $50,000",
+     "period": "",
+     "date": "08/05/2026"
+    },
+    {
+     "action": "SELL",
+     "issuer": "Johnson & Johnson Common Stock",
+     "ticker": "JNJ",
+     "value": "$15,001 - $50,000",
+     "period": "",
+     "date": "08/05/2026"
+    },
+    {
+     "action": "SELL",
+     "issuer": "Kimberly-Clark Corporation Common Stock",
+     "ticker": "KMB",
+     "value": "$15,001 - $50,000",
+     "period": "",
+     "date": "08/05/2026"
+    },
+    {
+     "action": "SELL",
+     "issuer": "McDonald's Corporation Common Stock",
+     "ticker": "MCD",
+     "value": "$15,001 - $50,000",
+     "period": "",
+     "date": "08/05/2026"
+    },
+    {
+     "action": "SELL",
+     "issuer": "Microsoft Corporation - Common Stock",
+     "ticker": "MSFT",
+     "value": "$15,001 - $50,000",
+     "period": "",
+     "date": "08/05/2026"
+    },
+    {
+     "action": "SELL",
+     "issuer": "Nestle ADR",
+     "ticker": "",
+     "value": "$15,001 - $50,000",
+     "period": "",
+     "date": "08/05/2026"
+    },
+    {
+     "action": "SELL",
+     "issuer": "Otis Worldwide Corporation Common Stock",
+     "ticker": "",
+     "value": "$1,001 - $15,000",
+     "period": "",
+     "date": "08/05/2026"
+    },
+    {
+     "action": "SELL",
+     "issuer": "Owens Corning Inc Common Stock New",
+     "ticker": "OC",
+     "value": "$15,001 - $50,000",
+     "period": "",
+     "date": "08/05/2026"
+    },
+    {
+     "action": "SELL",
+     "issuer": "The Travelers Companies, Inc. Common Stock",
+     "ticker": "TRV",
+     "value": "$15,001 - $50,000",
+     "period": "",
+     "date": "08/05/2026"
+    },
+    {
+     "action": "SELL",
+     "issuer": "Medtronic plc. Ordinary Shares",
+     "ticker": "MDT",
+     "value": "$15,001 - $50,000",
+     "period": "",
+     "date": "08/05/2026"
+    },
+    {
+     "action": "SELL",
+     "issuer": "CVS Health Corporation Common Stock",
+     "ticker": "CVS",
+     "value": "$1,001 - $15,000",
+     "period": "",
+     "date": "08/05/2026"
+    },
+    {
+     "action": "SELL",
+     "issuer": "United Parcel Service, Inc. Common Stock",
+     "ticker": "UPS",
+     "value": "$15,001 - $50,000",
+     "period": "",
+     "date": "08/05/2026"
+    },
+    {
+     "action": "SELL",
+     "issuer": "Eaton Vance Floating Rate Fund Insti Share Company: EATON VANCE FLOATING RATE CLASS I",
+     "ticker": "EIBLX",
+     "value": "$50,001 - $100,000",
+     "period": "",
+     "date": "08/05/2026"
+    },
+    {
+     "action": "BUY",
+     "issuer": "The Bond Fd of America Class F-2 Shares Company: AMERICAN BOND FUND OF AMERICA CL F2",
+     "ticker": "ABNFX",
+     "value": "$50,001 - $100,000",
+     "period": "",
+     "date": "08/05/2026"
+    },
+    {
+     "action": "BUY",
+     "issuer": "Ark Innovation ETF Option Type: Call Strike price: $51.00 Expires: 12/20/2024",
+     "ticker": "ARKK",
+     "value": "$1,001 - $15,000",
+     "period": "",
+     "date": "08/05/2026"
+    },
+    {
+     "action": "BUY",
+     "issuer": "Ark Innovation ETF Option Type: Put Strike price: $45.00 Expires: 09/20/2024",
+     "ticker": "ARKK",
+     "value": "$1,001 - $15,000",
+     "period": "",
+     "date": "08/05/2026"
+    },
+    {
+     "action": "BUY",
+     "issuer": "S&P Biotech SPDR Option Type: Call Strike price: $100.00 Expires: 10/18/2024",
+     "ticker": "XBI",
+     "value": "$1,001 - $15,000",
+     "period": "",
+     "date": "08/05/2026"
+    },
+    {
+     "action": "BUY",
+     "issuer": "S&P Biotech SPDR Option Type: Put Strike price: $90.00 Expires: 10/18/2024",
+     "ticker": "XBI",
+     "value": "$1,001 - $15,000",
+     "period": "",
+     "date": "08/05/2026"
+    },
+    {
+     "action": "SELL",
+     "issuer": "Intel Corp",
+     "ticker": "INTC",
+     "value": "$100,001 - $250,000",
+     "period": "",
+     "date": "08/05/2026"
+    },
+    {
+     "action": "SELL",
+     "issuer": "Cleveland-Cliffs Inc",
+     "ticker": "CLF",
+     "value": "$100,001 - $250,000",
+     "period": "",
+     "date": "08/05/2026"
+    },
+    {
+     "action": "BUY",
+     "issuer": "Cleveland-Cliffs Inc Option Type: Call Strike price: $20.00 Expires: 07/19/2024",
+     "ticker": "CLF",
+     "value": "$1,001 - $15,000",
+     "period": "",
+     "date": "08/05/2026"
+    },
+    {
+     "action": "BUY",
+     "issuer": "Cleveland-Cliffs Inc Option Type: Call Strike price: $20.00 Expires: 01/17/2025",
+     "ticker": "CLF",
+     "value": "$1,001 - $15,000",
+     "period": "",
+     "date": "08/05/2026"
+    },
+    {
+     "action": "BUY",
+     "issuer": "Cleveland-Cliffs Inc Option Type: Put Strike price: $17.00 Expires: 01/17/2025",
+     "ticker": "CLF",
+     "value": "$1,001 - $15,000",
+     "period": "",
+     "date": "08/05/2026"
+    },
+    {
+     "action": "BUY",
+     "issuer": "Gilead Sciences Inc Option Type: Put Strike price: $70.00 Expires: 11/15/2024",
+     "ticker": "GILD",
+     "value": "$1,001 - $15,000",
+     "period": "",
+     "date": "08/05/2026"
+    },
+    {
+     "action": "SELL",
+     "issuer": "Paramount Global Cl B",
+     "ticker": "PARA",
+     "value": "$100,001 - $250,000",
+     "period": "",
+     "date": "08/05/2026"
+    },
+    {
+     "action": "BUY",
+     "issuer": "Cleveland-Cliffs Inc Option Type: Call Strike price: $17.00 Expires: 06/21/2024",
+     "ticker": "CLF",
+     "value": "$1,001 - $15,000",
+     "period": "",
+     "date": "08/05/2026"
+    },
+    {
+     "action": "SELL",
+     "issuer": "Intel Corporation - Common Stock",
+     "ticker": "INTC",
+     "value": "$100,001 - $250,000",
+     "period": "",
+     "date": "08/05/2026"
+    },
+    {
+     "action": "SELL",
+     "issuer": "Cleveland-Cliffs Inc",
+     "ticker": "CLF",
+     "value": "$1,001 - $15,000",
+     "period": "",
+     "date": "08/05/2026"
+    },
+    {
+     "action": "SELL",
+     "issuer": "Cleveland-Cliffs Inc",
+     "ticker": "CLF",
+     "value": "$15,001 - $50,000",
+     "period": "",
+     "date": "08/05/2026"
+    },
+    {
+     "action": "SELL",
+     "issuer": "Cleveland-Cliffs Inc",
+     "ticker": "CLF",
+     "value": "$50,001 - $100,000",
+     "period": "",
+     "date": "08/05/2026"
+    },
+    {
+     "action": "BUY",
+     "issuer": "Keycorp Option Type: Put Strike price: $15.00 Expires: 09/20/2024",
+     "ticker": "KEY",
+     "value": "$1,001 - $15,000",
+     "period": "",
+     "date": "08/05/2026"
+    },
+    {
+     "action": "BUY",
+     "issuer": "Intel Corporation - Common Stock",
+     "ticker": "INTC",
+     "value": "$50,001 - $100,000",
+     "period": "",
+     "date": "08/05/2026"
+    },
+    {
+     "action": "BUY",
+     "issuer": "Barrick Gold Corp Option Type: Put Strike price: $17.00 Expires: 01/17/2025",
+     "ticker": "GOLD",
+     "value": "$1,001 - $15,000",
+     "period": "",
+     "date": "08/05/2026"
+    },
+    {
+     "action": "BUY",
+     "issuer": "Adobe Systems Inc Option Type: Put Strike price: $500.00 Expires: 12/20/2024",
+     "ticker": "ADBE",
+     "value": "$15,001 - $50,000",
+     "period": "",
+     "date": "08/05/2026"
+    },
+    {
+     "action": "SELL",
+     "issuer": "Skyworks Solutions, Inc. - Common Stock",
+     "ticker": "SWKS",
+     "value": "$1,001 - $15,000",
+     "period": "",
+     "date": "08/05/2026"
+    },
+    {
+     "action": "BUY",
+     "issuer": "Intel Corporation - Common Stock",
+     "ticker": "INTC",
+     "value": "$100,001 - $250,000",
+     "period": "",
+     "date": "08/05/2026"
+    },
+    {
+     "action": "SELL",
+     "issuer": "Gilead Sciences, Inc. - Common Stock",
+     "ticker": "GILD",
+     "value": "$1,001 - $15,000",
+     "period": "",
+     "date": "08/05/2026"
+    },
+    {
+     "action": "BUY",
+     "issuer": "Fifth Third Bancorp - Common Stock Option Type: Call Strike price: $30.00 Expires: 05/17/2024",
+     "ticker": "FITB",
+     "value": "$1,001 - $15,000",
+     "period": "",
+     "date": "08/05/2026"
+    },
+    {
+     "action": "BUY",
+     "issuer": "Barrick Gold Corp Option Type: Call Strike price: $20.00 Expires: 01/17/2025",
+     "ticker": "GOLD",
+     "value": "$1,001 - $15,000",
+     "period": "",
+     "date": "08/05/2026"
+    },
+    {
+     "action": "BUY",
+     "issuer": "Cleveland-Cliffs Inc Option Type: Call Strike price: $20.00 Expires: 06/21/2024",
+     "ticker": "CLF",
+     "value": "$1,001 - $15,000",
+     "period": "",
+     "date": "08/05/2026"
+    },
+    {
+     "action": "BUY",
+     "issuer": "Chevron Corporation Common Stock Option Type: Put Strike price: $145.00 Expires: 09/20/2024",
+     "ticker": "CVX",
+     "value": "$1,001 - $15,000",
+     "period": "",
+     "date": "08/05/2026"
+    },
+    {
+     "action": "BUY",
+     "issuer": "Cleveland-Cliffs Inc Option Type: Call Strike price: $20.00 Expires: 11/15/2024",
+     "ticker": "CLF",
+     "value": "$1,001 - $15,000",
+     "period": "",
+     "date": "08/05/2026"
+    },
+    {
+     "action": "BUY",
+     "issuer": "Cameco Corporation Common Stock Option Type: Put Strike price: $45.00 Expires: 09/20/2024",
+     "ticker": "CCJ",
+     "value": "$1,001 - $15,000",
+     "period": "",
+     "date": "08/05/2026"
+    },
+    {
+     "action": "SELL",
+     "issuer": "Lattice Semiconductor Corporation - Common Stock",
+     "ticker": "LSCC",
+     "value": "$1,001 - $15,000",
+     "period": "",
+     "date": "08/05/2026"
+    },
+    {
+     "action": "SELL",
+     "issuer": "Fifth Third Bancorp - Common Stock",
+     "ticker": "FITB",
+     "value": "$15,001 - $50,000",
+     "period": "",
+     "date": "08/05/2026"
+    },
+    {
+     "action": "SELL",
+     "issuer": "Barrick Gold Corp",
+     "ticker": "GOLD",
+     "value": "$100,001 - $250,000",
+     "period": "",
+     "date": "08/05/2026"
+    },
+    {
+     "action": "SELL",
+     "issuer": "Advanced Drainage Systems, Inc. Common Stock",
+     "ticker": "WMS",
+     "value": "$1,001 - $15,000",
+     "period": "",
+     "date": "08/05/2026"
+    },
+    {
+     "action": "SELL",
+     "issuer": "Waters Corporation Common Stock",
+     "ticker": "WAT",
+     "value": "$1,001 - $15,000",
+     "period": "",
+     "date": "08/05/2026"
+    },
+    {
+     "action": "SELL",
+     "issuer": "Visa Inc.",
+     "ticker": "V",
+     "value": "$1,001 - $15,000",
+     "period": "",
+     "date": "08/05/2026"
+    },
+    {
+     "action": "SELL",
+     "issuer": "Vertex Pharmaceuticals Incorporated - Common Stock",
+     "ticker": "VRTX",
+     "value": "$1,001 - $15,000",
+     "period": "",
+     "date": "08/05/2026"
+    },
+    {
+     "action": "SELL",
+     "issuer": "Verisk Analytics, Inc. - Common Stock",
+     "ticker": "VRSK",
+     "value": "$1,001 - $15,000",
+     "period": "",
+     "date": "08/05/2026"
+    },
+    {
+     "action": "SELL",
+     "issuer": "Ubiquiti Inc. Common Stock",
+     "ticker": "UI",
+     "value": "$1,001 - $15,000",
+     "period": "",
+     "date": "08/05/2026"
+    },
+    {
+     "action": "SELL",
+     "issuer": "Teradyne, Inc. - Common Stock",
+     "ticker": "TER",
+     "value": "$1,001 - $15,000",
+     "period": "",
+     "date": "08/05/2026"
+    },
+    {
+     "action": "SELL",
+     "issuer": "Te Connectivity Ltd",
+     "ticker": "TEL",
+     "value": "$1,001 - $15,000",
+     "period": "",
+     "date": "08/05/2026"
+    },
+    {
+     "action": "SELL",
+     "issuer": "Synopsys, Inc. - Common Stock",
+     "ticker": "SNPS",
+     "value": "$1,001 - $15,000",
+     "period": "",
+     "date": "08/05/2026"
+    },
+    {
+     "action": "SELL",
+     "issuer": "Solventum Corporation Common Stock",
+     "ticker": "SOLV",
+     "value": "$1,001 - $15,000",
+     "period": "",
+     "date": "08/05/2026"
+    },
+    {
+     "action": "SELL",
+     "issuer": "ROLLS-ROYCE HOLDINGS PLC ADR",
+     "ticker": "",
+     "value": "$1,001 - $15,000",
+     "period": "",
+     "date": "08/05/2026"
+    },
+    {
+     "action": "SELL",
+     "issuer": "ResMed Inc. Common Stock",
+     "ticker": "RMD",
+     "value": "$1,001 - $15,000",
+     "period": "",
+     "date": "08/05/2026"
+    },
+    {
+     "action": "SELL",
+     "issuer": "Relx Plc ADR",
+     "ticker": "RELX",
+     "value": "$1,001 - $15,000",
+     "period": "",
+     "date": "08/05/2026"
+    },
+    {
+     "action": "SELL",
+     "issuer": "Qualys, Inc. - Common Stock",
+     "ticker": "QLYS",
+     "value": "$1,001 - $15,000",
+     "period": "",
+     "date": "08/05/2026"
+    },
+    {
+     "action": "SELL",
+     "issuer": "Procter & Gamble Company (The) Common Stock",
+     "ticker": "PG",
+     "value": "$1,001 - $15,000",
+     "period": "",
+     "date": "08/05/2026"
+    },
+    {
+     "action": "SELL",
+     "issuer": "Pfizer, Inc. Common Stock",
+     "ticker": "PFE",
+     "value": "$15,001 - $50,000",
+     "period": "",
+     "date": "08/05/2026"
+    },
+    {
+     "action": "SELL",
+     "issuer": "PepsiCo, Inc. - Common Stock",
+     "ticker": "PEP",
+     "value": "$1,001 - $15,000",
+     "period": "",
+     "date": "08/05/2026"
+    },
+    {
+     "action": "SELL",
+     "issuer": "PayPal Holdings, Inc. - Common Stock",
+     "ticker": "PYPL",
+     "value": "$100,001 - $250,000",
+     "period": "",
+     "date": "08/05/2026"
+    },
+    {
+     "action": "SELL",
+     "issuer": "Paychex, Inc. - Common Stock",
+     "ticker": "PAYX",
+     "value": "$1,001 - $15,000",
+     "period": "",
+     "date": "08/05/2026"
+    },
+    {
+     "action": "SELL",
+     "issuer": "Old Dominion Freight Line, Inc. - Common Stock",
+     "ticker": "ODFL",
+     "value": "$1,001 - $15,000",
+     "period": "",
+     "date": "08/05/2026"
+    },
+    {
+     "action": "SELL",
+     "issuer": "Nordson Corporation - Common Stock",
+     "ticker": "NDSN",
+     "value": "$1,001 - $15,000",
+     "period": "",
+     "date": "08/05/2026"
+    },
+    {
+     "action": "SELL",
+     "issuer": "NXP Semiconductors N.V. - Common Stock",
+     "ticker": "NXPI",
+     "value": "$1,001 - $15,000",
+     "period": "",
+     "date": "08/05/2026"
+    },
+    {
+     "action": "SELL",
+     "issuer": "Netflix, Inc. - Common Stock",
+     "ticker": "NFLX",
+     "value": "$1,001 - $15,000",
+     "period": "",
+     "date": "08/05/2026"
+    },
+    {
+     "action": "SELL",
+     "issuer": "Motorola Solutions, Inc. Common Stock",
+     "ticker": "MSI",
+     "value": "$1,001 - $15,000",
+     "period": "",
+     "date": "08/05/2026"
+    },
+    {
+     "action": "SELL",
+     "issuer": "Moody's Corporation Common Stock",
+     "ticker": "MCO",
+     "value": "$1,001 - $15,000",
+     "period": "",
+     "date": "08/05/2026"
+    },
+    {
+     "action": "SELL",
+     "issuer": "Monolithic Power Systems, Inc. - Common Stock",
+     "ticker": "MPWR",
+     "value": "$1,001 - $15,000",
+     "period": "",
+     "date": "08/05/2026"
+    },
+    {
+     "action": "SELL",
+     "issuer": "Mastercard Incorporated Common Stock",
+     "ticker": "MA",
+     "value": "$1,001 - $15,000",
+     "period": "",
+     "date": "08/05/2026"
+    },
+    {
+     "action": "SELL",
+     "issuer": "lululemon athletica inc. - Common Stock",
+     "ticker": "LULU",
+     "value": "$1,001 - $15,000",
+     "period": "",
+     "date": "08/05/2026"
+    },
+    {
+     "action": "SELL",
+     "issuer": "KLA Corporation - Common Stock",
+     "ticker": "KLAC",
+     "value": "$1,001 - $15,000",
+     "period": "",
+     "date": "08/05/2026"
+    },
+    {
+     "action": "SELL",
+     "issuer": "Infosys Limited American Depositary Shares",
+     "ticker": "INFY",
+     "value": "$1,001 - $15,000",
+     "period": "",
+     "date": "08/05/2026"
+    },
+    {
+     "action": "SELL",
+     "issuer": "Illinois Tool Works Inc. Common Stock",
+     "ticker": "ITW",
+     "value": "$1,001 - $15,000",
+     "period": "",
+     "date": "08/05/2026"
+    },
+    {
+     "action": "SELL",
+     "issuer": "Humacyte, Inc. - Common Stock",
+     "ticker": "HUMA",
+     "value": "$1,001 - $15,000",
+     "period": "",
+     "date": "08/05/2026"
+    },
+    {
+     "action": "SELL",
+     "issuer": "Humacyte, Inc. - Common Stock",
+     "ticker": "HUMA",
+     "value": "$15,001 - $50,000",
+     "period": "",
+     "date": "08/05/2026"
+    },
+    {
+     "action": "SELL",
+     "issuer": "The Hershey Company Common Stock",
+     "ticker": "HSY",
+     "value": "$1,001 - $15,000",
+     "period": "",
+     "date": "08/05/2026"
+    },
+    {
+     "action": "SELL",
+     "issuer": "Jack Henry & Associates, Inc. - Common Stock",
+     "ticker": "JKHY",
+     "value": "$1,001 - $15,000",
+     "period": "",
+     "date": "08/05/2026"
+    },
+    {
+     "action": "SELL",
+     "issuer": "Graco Inc. Common Stock",
+     "ticker": "GGG",
+     "value": "$1,001 - $15,000",
+     "period": "",
+     "date": "08/05/2026"
+    },
+    {
+     "action": "SELL",
+     "issuer": "Garmin Ltd. - Common Stock",
+     "ticker": "GRMN",
+     "value": "$1,001 - $15,000",
+     "period": "",
+     "date": "08/05/2026"
+    },
+    {
+     "action": "SELL",
+     "issuer": "Gaming and Leisure Properties, Inc. - Common Stock",
+     "ticker": "GLPI",
+     "value": "$1,001 - $15,000",
+     "period": "",
+     "date": "08/05/2026"
+    },
+    {
+     "action": "SELL",
+     "issuer": "FactSet Research Systems Inc. Common Stock",
+     "ticker": "FDS",
+     "value": "$1,001 - $15,000",
+     "period": "",
+     "date": "08/05/2026"
+    },
+    {
+     "action": "SELL",
+     "issuer": "Equity Lifestyle Properties, Inc. Common Stock",
+     "ticker": "ELS",
+     "value": "$1,001 - $15,000",
+     "period": "",
+     "date": "08/05/2026"
+    },
+    {
+     "action": "SELL",
+     "issuer": "Deckers Outdoor Corporation Common Stock",
+     "ticker": "DECK",
+     "value": "$1,001 - $15,000",
+     "period": "",
+     "date": "08/05/2026"
+    },
+    {
+     "action": "SELL",
+     "issuer": "Copart, Inc. - Common Stock",
+     "ticker": "CPRT",
+     "value": "$1,001 - $15,000",
+     "period": "",
+     "date": "08/05/2026"
+    },
+    {
+     "action": "SELL",
+     "issuer": "Commerce Bancshares, Inc. - Common Stock",
+     "ticker": "CBSH",
+     "value": "$1,001 - $15,000",
+     "period": "",
+     "date": "08/05/2026"
+    },
+    {
+     "action": "SELL",
+     "issuer": "Cintas Corporation - Common Stock",
+     "ticker": "CTAS",
+     "value": "$1,001 - $15,000",
+     "period": "",
+     "date": "08/05/2026"
+    },
+    {
+     "action": "SELL",
+     "issuer": "Cadence Design Systems, Inc. - Common Stock",
+     "ticker": "CDNS",
+     "value": "$1,001 - $15,000",
+     "period": "",
+     "date": "08/05/2026"
+    },
+    {
+     "action": "SELL",
+     "issuer": "Dow Inc. Common Stock",
+     "ticker": "DOW",
+     "value": "$1,001 - $15,000",
+     "period": "",
+     "date": "08/05/2026"
+    },
+    {
+     "action": "SELL",
+     "issuer": "Brown & Brown, Inc. Common Stock",
+     "ticker": "BRO",
+     "value": "$1,001 - $15,000",
+     "period": "",
+     "date": "08/05/2026"
+    },
+    {
+     "action": "SELL",
+     "issuer": "ASML Holding N.V. - New York Registry Shares",
+     "ticker": "ASML",
+     "value": "$15,001 - $50,000",
+     "period": "",
+     "date": "08/05/2026"
+    },
+    {
+     "action": "SELL",
+     "issuer": "Agilent Technologies, Inc. Common Stock",
+     "ticker": "A",
+     "value": "$1,001 - $15,000",
+     "period": "",
+     "date": "08/05/2026"
+    },
+    {
+     "action": "BUY",
+     "issuer": "Walgreens Boots Alliance, Inc. - Common Stock",
+     "ticker": "WBA",
+     "value": "$15,001 - $50,000",
+     "period": "",
+     "date": "08/05/2026"
+    },
+    {
+     "action": "BUY",
+     "issuer": "Paramount Global - Class B Common Stock",
+     "ticker": "PARA",
+     "value": "$15,001 - $50,000",
+     "period": "",
+     "date": "08/05/2026"
+    },
+    {
+     "action": "BUY",
+     "issuer": "ROLLS-ROYCE HOLDINGS PLC SPONSORED ADR",
+     "ticker": "",
+     "value": "$1,001 - $15,000",
+     "period": "",
+     "date": "08/05/2026"
+    },
+    {
+     "action": "BUY",
+     "issuer": "Humacyte Inc",
+     "ticker": "HUMA",
+     "value": "$1,001 - $15,000",
+     "period": "",
+     "date": "08/05/2026"
+    },
+    {
+     "action": "BUY",
+     "issuer": "Humacyte, Inc. - Common Stock",
+     "ticker": "HUMA",
+     "value": "$1,001 - $15,000",
+     "period": "",
+     "date": "08/05/2026"
+    },
+    {
+     "action": "BUY",
+     "issuer": "Humacyte, Inc. - Common Stock",
+     "ticker": "HUMA",
+     "value": "$15,001 - $50,000",
+     "period": "",
+     "date": "08/05/2026"
+    },
+    {
+     "action": "SELL",
+     "issuer": "QUALCOMM Incorporated - Common Stock Option Type: Put Strike price: $155.00 Expires: 12/20/2024",
+     "ticker": "QCOM",
+     "value": "$15,001 - $50,000",
+     "period": "",
+     "date": "08/05/2026"
+    },
+    {
+     "action": "SELL",
+     "issuer": "Adobe Systems Inc Option Type: Put Strike price: $500.00 Expires: 12/20/2024",
+     "ticker": "ADBE",
+     "value": "$1,001 - $15,000",
+     "period": "",
+     "date": "08/05/2026"
+    },
+    {
+     "action": "SELL",
+     "issuer": "Applied Materials, Inc. - Common Stock Option Type: Put Strike price: $175.00 Expires: 01/17/2025",
+     "ticker": "AMAT",
+     "value": "$1,001 - $15,000",
+     "period": "",
+     "date": "08/05/2026"
+    },
+    {
+     "action": "BUY",
+     "issuer": "FEDERAL HOME LN MTG CORP MTN Rate/Coupon: 5.375% Matures: 02/08/2027",
+     "ticker": "",
+     "value": "$100,001 - $250,000",
+     "period": "",
+     "date": "08/05/2026"
+    },
+    {
+     "action": "SELL",
+     "issuer": "Accenture Plc",
+     "ticker": "ACN",
+     "value": "$1,001 - $15,000",
+     "period": "",
+     "date": "08/05/2026"
+    },
+    {
+     "action": "SELL",
+     "issuer": "CSX Corporation - Common Stock",
+     "ticker": "CSX",
+     "value": "$15,001 - $50,000",
+     "period": "",
+     "date": "08/05/2026"
+    },
+    {
+     "action": "SELL",
+     "issuer": "JP Morgan Chase & Co. Common Stock",
+     "ticker": "JPM",
+     "value": "$1,001 - $15,000",
+     "period": "",
+     "date": "08/05/2026"
+    },
+    {
+     "action": "SELL",
+     "issuer": "Texas Instruments Incorporated - Common Stock",
+     "ticker": "TXN",
+     "value": "$1,001 - $15,000",
+     "period": "",
+     "date": "08/05/2026"
+    }
+   ]
   }
  }
 }
