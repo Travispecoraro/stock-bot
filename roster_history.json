@@ -2150,6 +2150,19 @@
      "date": "8/6/2026"
     }
    ]
+  },
+  "gary c peters": {
+   "name": "Gary C Peters",
+   "events": [
+    {
+     "action": "BUY",
+     "issuer": "Realty Income Corporation Common Stock",
+     "ticker": "O",
+     "value": "$1,001 - $15,000",
+     "period": "",
+     "date": "08/07/2026"
+    }
+   ]
   }
  }
 }
