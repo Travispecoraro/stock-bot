@@ -2137,6 +2137,19 @@
      "date": "8/5/2026"
     }
    ]
+  },
+  "david j. taylor": {
+   "name": "David J. Taylor",
+   "events": [
+    {
+     "action": "BUY",
+     "issuer": "Kroger Company",
+     "ticker": "KR",
+     "value": "$1,001 - $15,000",
+     "period": "",
+     "date": "8/6/2026"
+    }
+   ]
   }
  }
 }
