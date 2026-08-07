@@ -1991,6 +1991,152 @@
      "date": "08/05/2026"
     }
    ]
+  },
+  "lloyd doggett": {
+   "name": "Lloyd Doggett",
+   "events": [
+    {
+     "action": "BUY",
+     "issuer": "Coca-Cola Company",
+     "ticker": "KO",
+     "value": "$1,001 - $15,000",
+     "period": "",
+     "date": "8/5/2026"
+    }
+   ]
+  },
+  "julie johnson": {
+   "name": "Julie Johnson",
+   "events": [
+    {
+     "action": "BUY",
+     "issuer": "JT Boeing Company",
+     "ticker": "BA",
+     "value": "$1,001 - $15,000",
+     "period": "",
+     "date": "8/5/2026"
+    },
+    {
+     "action": "SELL",
+     "issuer": "JT Boeing Company",
+     "ticker": "BA",
+     "value": "$1,001 - $15,000",
+     "period": "",
+     "date": "8/5/2026"
+    },
+    {
+     "action": "BUY",
+     "issuer": "JT DaVita Inc. Common Stock",
+     "ticker": "DVA",
+     "value": "$1,001 - $15,000",
+     "period": "",
+     "date": "8/5/2026"
+    },
+    {
+     "action": "SELL",
+     "issuer": "JT DaVita Inc. Common Stock",
+     "ticker": "DVA",
+     "value": "$1,001 - $15,000",
+     "period": "",
+     "date": "8/5/2026"
+    },
+    {
+     "action": "SELL",
+     "issuer": "JT DBA Sempra Common Stock",
+     "ticker": "SRE",
+     "value": "$1,001 - $15,000",
+     "period": "",
+     "date": "8/5/2026"
+    },
+    {
+     "action": "BUY",
+     "issuer": "JT DBA Sempra Common Stock",
+     "ticker": "SRE",
+     "value": "$1,001 - $15,000",
+     "period": "",
+     "date": "8/5/2026"
+    },
+    {
+     "action": "BUY",
+     "issuer": "JT F5, Inc. - Common Stock",
+     "ticker": "FFIV",
+     "value": "$1,001 - $15,000",
+     "period": "",
+     "date": "8/5/2026"
+    },
+    {
+     "action": "SELL",
+     "issuer": "JT F5, Inc. - Common Stock",
+     "ticker": "FFIV",
+     "value": "$1,001 - $15,000",
+     "period": "",
+     "date": "8/5/2026"
+    },
+    {
+     "action": "SELL",
+     "issuer": "JT KeyCorp Common Stock",
+     "ticker": "KEY",
+     "value": "$1,001 - $15,000",
+     "period": "",
+     "date": "8/5/2026"
+    },
+    {
+     "action": "BUY",
+     "issuer": "JT KeyCorp Common Stock",
+     "ticker": "KEY",
+     "value": "$1,001 - $15,000",
+     "period": "",
+     "date": "8/5/2026"
+    },
+    {
+     "action": "BUY",
+     "issuer": "JT Kroger Company",
+     "ticker": "KR",
+     "value": "$1,001 - $15,000",
+     "period": "",
+     "date": "8/5/2026"
+    },
+    {
+     "action": "SELL",
+     "issuer": "JT Kroger Company",
+     "ticker": "KR",
+     "value": "$1,001 - $15,000",
+     "period": "",
+     "date": "8/5/2026"
+    },
+    {
+     "action": "BUY",
+     "issuer": "JT Rollins, Inc. Common Stock",
+     "ticker": "ROL",
+     "value": "$1,001 - $15,000",
+     "period": "",
+     "date": "8/5/2026"
+    },
+    {
+     "action": "SELL",
+     "issuer": "JT Rollins, Inc. Common Stock",
+     "ticker": "ROL",
+     "value": "$1,001 - $15,000",
+     "period": "",
+     "date": "8/5/2026"
+    },
+    {
+     "action": "SELL",
+     "issuer": "JT UDR, Inc. Common Stock",
+     "ticker": "UDR",
+     "value": "$1,001 - $15,000",
+     "period": "",
+     "date": "8/5/2026"
+    },
+    {
+     "action": "BUY",
+     "issuer": "JT UDR, Inc. Common Stock",
+     "ticker": "UDR",
+     "value": "$1,001 - $15,000",
+     "period": "",
+     "date": "8/5/2026"
+    }
+   ]
   }
  }
 }
