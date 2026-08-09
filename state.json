@@ -1537,7 +1537,7 @@
   },
   "heartbeat": {
     "last_sent_date": "2026-08-08",
-    "checks": 9,
+    "checks": 10,
     "trades_found": 0,
     "errors": 0,
     "errors_today": 6,
@@ -7320,7 +7320,8 @@
       "https://efdsearch.senate.gov/search/view/ptr/2758f09a-fda9-4fb4-a465-270173a8125d/",
       "https://efdsearch.senate.gov/search/view/ptr/0a25588d-a3f8-4ed6-971a-706097f78e3a/",
       "https://efdsearch.senate.gov/search/view/ptr/548cacbf-7cf2-42cb-9f23-71250938caae/",
-      "https://efdsearch.senate.gov/search/view/ptr/328a9b36-1205-4117-bdc4-cd7c3ccbcbbc/"
+      "https://efdsearch.senate.gov/search/view/ptr/328a9b36-1205-4117-bdc4-cd7c3ccbcbbc/",
+      "https://efdsearch.senate.gov/search/view/ptr/5ecc9b5c-07c1-4ec1-bd4a-2db759eff299/"
     ],
     "processed_house": [
       "20034740",
