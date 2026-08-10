@@ -2163,6 +2163,43 @@
      "date": "08/07/2026"
     }
    ]
+  },
+  "michael rulli": {
+   "name": "Michael Rulli",
+   "events": [
+    {
+     "action": "SELL",
+     "issuer": "Apple Inc. - Common Stock",
+     "ticker": "AAPL",
+     "value": "$1,001 - $15,000",
+     "period": "",
+     "date": "8/7/2026"
+    },
+    {
+     "action": "BUY",
+     "issuer": "Apple Inc. - Common Stock",
+     "ticker": "AAPL",
+     "value": "$1,001 - $15,000",
+     "period": "",
+     "date": "8/7/2026"
+    },
+    {
+     "action": "BUY",
+     "issuer": "Coca-Cola Company",
+     "ticker": "KO",
+     "value": "$1,001 - $15,000",
+     "period": "",
+     "date": "8/7/2026"
+    },
+    {
+     "action": "SELL",
+     "issuer": "Pfizer, Inc. Common Stock",
+     "ticker": "PFE",
+     "value": "$1,001 - $15,000",
+     "period": "",
+     "date": "8/7/2026"
+    }
+   ]
   }
  }
 }
