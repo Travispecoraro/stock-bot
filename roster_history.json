@@ -2200,6 +2200,35 @@
      "date": "8/7/2026"
     }
    ]
+  },
+  "john fetterman": {
+   "name": "John Fetterman",
+   "events": [
+    {
+     "action": "SELL",
+     "issuer": "Freeport McMoran Rate/Coupon: 9.5% Matures: 2031-06-01",
+     "ticker": "",
+     "value": "$1,001 - $15,000",
+     "period": "",
+     "date": "08/10/2026"
+    },
+    {
+     "action": "SELL",
+     "issuer": "Hasbro Inc Note Rate/Coupon: 3.55% Matures: 2026-11-19",
+     "ticker": "",
+     "value": "$1,001 - $15,000",
+     "period": "",
+     "date": "08/10/2026"
+    },
+    {
+     "action": "SELL",
+     "issuer": "Venus Tex Independent Sch Dist Rate/Coupon: 5.25% Matures: 2055-08-15",
+     "ticker": "",
+     "value": "$1,001 - $15,000",
+     "period": "",
+     "date": "08/10/2026"
+    }
+   ]
   }
  }
 }
