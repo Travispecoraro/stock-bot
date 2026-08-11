@@ -2229,6 +2229,85 @@
      "date": "08/10/2026"
     }
    ]
+  },
+  "josh gottheimer": {
+   "name": "Josh Gottheimer",
+   "events": [
+    {
+     "action": "SELL",
+     "issuer": "JT Chart Industries, Inc",
+     "ticker": "GTLS",
+     "value": "$1,001 - $15,000",
+     "period": "",
+     "date": "8/10/2026"
+    },
+    {
+     "action": "SELL",
+     "issuer": "JT Fabrinet Ordinary Shares",
+     "ticker": "FN",
+     "value": "$1,001 - $15,000",
+     "period": "",
+     "date": "8/10/2026"
+    },
+    {
+     "action": "BUY",
+     "issuer": "JT Palo Alto Networks, Inc",
+     "ticker": "PANW",
+     "value": "$1,001 - $15,000",
+     "period": "",
+     "date": "8/10/2026"
+    }
+   ]
+  },
+  "kevin hern": {
+   "name": "Kevin Hern",
+   "events": [
+    {
+     "action": "SELL",
+     "issuer": "JT Diageo plc Common Stock",
+     "ticker": "DEO",
+     "value": "$1,001 - $15,000",
+     "period": "",
+     "date": "8/10/2026"
+    },
+    {
+     "action": "SELL",
+     "issuer": "JT Estee Lauder Companies, Inc",
+     "ticker": "EL",
+     "value": "$1,001 - $15,000",
+     "period": "",
+     "date": "8/10/2026"
+    },
+    {
+     "action": "SELL",
+     "issuer": "JT Kenvue Inc. Common Stock",
+     "ticker": "KVUE",
+     "value": "$1,001 - $15,000",
+     "period": "",
+     "date": "8/10/2026"
+    },
+    {
+     "action": "SELL",
+     "issuer": "JT Organon & Co. Common Stock",
+     "ticker": "OGN",
+     "value": "$1,001 - $15,000",
+     "period": "",
+     "date": "8/10/2026"
+    }
+   ]
+  },
+  "john j mr mcguire": {
+   "name": "John J Mr McGuire",
+   "events": [
+    {
+     "action": "SELL",
+     "issuer": "SP BlackRock, Inc. Common Stock",
+     "ticker": "BLK",
+     "value": "$1,001 - $15,000",
+     "period": "",
+     "date": "8/10/2026"
+    }
+   ]
   }
  }
 }
