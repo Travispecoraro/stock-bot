@@ -2308,6 +2308,27 @@
      "date": "8/10/2026"
     }
    ]
+  },
+  "mike kelly": {
+   "name": "Mike Kelly",
+   "events": [
+    {
+     "action": "SELL",
+     "issuer": "SP Pepsico, Inc",
+     "ticker": "PEP",
+     "value": "$15,001 - $50,000",
+     "period": "",
+     "date": "8/12/2026"
+    },
+    {
+     "action": "SELL",
+     "issuer": "SP Walt Disney Company",
+     "ticker": "DIS",
+     "value": "$1,001 - $15,000",
+     "period": "",
+     "date": "8/12/2026"
+    }
+   ]
   }
  }
 }
