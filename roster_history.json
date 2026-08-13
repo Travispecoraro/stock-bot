@@ -803,6 +803,54 @@
      "value": "$500,001 - $1,000,000",
      "period": "",
      "date": "08/03/2026"
+    },
+    {
+     "action": "SELL",
+     "issuer": "Central Texas Regional Mobility Auth Revenue Bond Rate/Coupon: 5.0% Matures: 2040-01-01",
+     "ticker": "",
+     "value": "$500,001 - $1,000,000",
+     "period": "",
+     "date": "08/13/2026"
+    },
+    {
+     "action": "SELL",
+     "issuer": "Port of Seattle Washington Revenue Bond Rate/Coupon: 5.0% Matures: 05/01/2026",
+     "ticker": "",
+     "value": "$100,001 - $250,000",
+     "period": "",
+     "date": "08/13/2026"
+    },
+    {
+     "action": "SELL",
+     "issuer": "Port of Seattle Washington Revenue Bond Rate/Coupon: 5.0% Matures: 05/01/2026",
+     "ticker": "",
+     "value": "$250,001 - $500,000",
+     "period": "",
+     "date": "08/13/2026"
+    },
+    {
+     "action": "BUY",
+     "issuer": "Charlotte NC Water & Sewer Sys Revenue Bond Rate/Coupon: 5.0% Matures: 07/01/2054",
+     "ticker": "",
+     "value": "$100,001 - $250,000",
+     "period": "",
+     "date": "08/13/2026"
+    },
+    {
+     "action": "BUY",
+     "issuer": "Charlotte NC Water & Sewer Sys Revenue Bond Rate/Coupon: 5.0% Matures: 07/01/2054",
+     "ticker": "",
+     "value": "$500,001 - $1,000,000",
+     "period": "",
+     "date": "08/13/2026"
+    },
+    {
+     "action": "BUY",
+     "issuer": "Charlotte NC Water & Sewer Sys Revenue Bond Rate/Coupon: 5.0% Matures: 07/01/2054",
+     "ticker": "",
+     "value": "$250,001 - $500,000",
+     "period": "",
+     "date": "08/13/2026"
     }
    ]
   },
