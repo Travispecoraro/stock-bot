@@ -2377,6 +2377,51 @@
      "date": "8/12/2026"
     }
    ]
+  },
+  "timothy p sheehy": {
+   "name": "Timothy P Sheehy",
+   "events": [
+    {
+     "action": "SELL",
+     "issuer": "Ansett Aerospace Holdings LLC - Regaero Holdings Pty Ltd Company: Regaero Holdings Pty Ltd Description: Aviation Training Facilities",
+     "ticker": "",
+     "value": "$500,001 - $1,000,000",
+     "period": "",
+     "date": "08/13/2026"
+    },
+    {
+     "action": "SELL",
+     "issuer": "Max Ventures New World Opportunities Fund LP - Sana Labs AB Company: Sana Labs AB Description: Education/Training",
+     "ticker": "",
+     "value": "$50,001 - $100,000",
+     "period": "",
+     "date": "08/13/2026"
+    },
+    {
+     "action": "BUY",
+     "issuer": "WCAS XIV Co-Investors LLC - Grant Street Group Company: Grant Street Group Description: Software Company",
+     "ticker": "",
+     "value": "$1,001 - $15,000",
+     "period": "",
+     "date": "08/13/2026"
+    },
+    {
+     "action": "BUY",
+     "issuer": "WCAS XIV Co-Investors LLC - AIA Contract Documents Company: AIA Contract Documents Description: Construction Contract Software",
+     "ticker": "",
+     "value": "$1,001 - $15,000",
+     "period": "",
+     "date": "08/13/2026"
+    },
+    {
+     "action": "BUY",
+     "issuer": "WCAS XIV Co-Investors LLC - Constitution Surgery Alliance Company: Constitution Surgery Alliance Description: Healthcare Company",
+     "ticker": "",
+     "value": "$1,001 - $15,000",
+     "period": "",
+     "date": "08/13/2026"
+    }
+   ]
   }
  }
 }
