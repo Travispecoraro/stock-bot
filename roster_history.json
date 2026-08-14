@@ -410,6 +410,14 @@
      "value": 0.0,
      "period": "",
      "date": "2026-07-21"
+    },
+    {
+     "action": "SNAPSHOT",
+     "issuer": "",
+     "ticker": "",
+     "value": 0.0,
+     "period": "",
+     "date": "2026-08-14"
     }
    ],
    "latest_top": [],
