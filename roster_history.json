@@ -2573,6 +2573,59 @@
      "date": "8/14/2026"
     }
    ]
+  },
+  "john boozman": {
+   "name": "John Boozman",
+   "events": [
+    {
+     "action": "BUY",
+     "issuer": "Aptiv PLC Ordinary Shares",
+     "ticker": "APTV",
+     "value": "$1,001 - $15,000",
+     "period": "",
+     "date": "08/17/2026"
+    },
+    {
+     "action": "BUY",
+     "issuer": "PayPal Holdings, Inc. - Common Stock",
+     "ticker": "PYPL",
+     "value": "$1,001 - $15,000",
+     "period": "",
+     "date": "08/17/2026"
+    },
+    {
+     "action": "BUY",
+     "issuer": "Tradr 2X Long SPY Monthly ETF",
+     "ticker": "SPYM",
+     "value": "$1,001 - $15,000",
+     "period": "",
+     "date": "08/17/2026"
+    },
+    {
+     "action": "BUY",
+     "issuer": "Estee Lauder Companies, Inc. (The) Common Stock",
+     "ticker": "EL",
+     "value": "$1,001 - $15,000",
+     "period": "",
+     "date": "08/17/2026"
+    },
+    {
+     "action": "BUY",
+     "issuer": "Chevron Corporation Common Stock",
+     "ticker": "CVX",
+     "value": "$1,001 - $15,000",
+     "period": "",
+     "date": "08/17/2026"
+    },
+    {
+     "action": "BUY",
+     "issuer": "SPYM - Tradr 2X Long SPY Monthly ETF",
+     "ticker": "",
+     "value": "$1,001 - $15,000",
+     "period": "",
+     "date": "08/17/2026"
+    }
+   ]
   }
  }
 }
