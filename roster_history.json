@@ -2624,6 +2624,38 @@
      "value": "$1,001 - $15,000",
      "period": "",
      "date": "08/17/2026"
+    },
+    {
+     "action": "SELL",
+     "issuer": "Cboe Global Markets, Inc. Common Stock",
+     "ticker": "CBOE",
+     "value": "$1,001 - $15,000",
+     "period": "",
+     "date": "08/17/2026"
+    },
+    {
+     "action": "SELL",
+     "issuer": "JP Morgan Chase & Co. Common Stock",
+     "ticker": "JPM",
+     "value": "$1,001 - $15,000",
+     "period": "",
+     "date": "08/17/2026"
+    },
+    {
+     "action": "SELL",
+     "issuer": "Home Depot, Inc. (The) Common Stock",
+     "ticker": "HD",
+     "value": "$1,001 - $15,000",
+     "period": "",
+     "date": "08/17/2026"
+    },
+    {
+     "action": "SELL",
+     "issuer": "The Travelers Companies, Inc. Common Stock",
+     "ticker": "TRV",
+     "value": "$1,001 - $15,000",
+     "period": "",
+     "date": "08/17/2026"
     }
    ]
   }
