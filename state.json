@@ -1280,7 +1280,14 @@
     "25a70e78e28579fdd428ee7b",
     "6609552ab38aad1263895437",
     "78b69648b2775fb720d8eb3f",
-    "e878715e6d75b39c718c8a9e"
+    "e878715e6d75b39c718c8a9e",
+    "d881602c00d4989b303d1ea6",
+    "2b793415fce96c05fc2c87bf",
+    "bf809b6092349a37f9f5167c",
+    "187479871afde1c3a62b6583",
+    "0d0d02508971e75a892f32dd",
+    "32bc0677837e1b2a515ce961",
+    "c4b03ad18bd710027a7d7e1c"
   ],
   "seen_filings": [
     "https://efdsearch.senate.gov/search/view/ptr/392ac3e5-07f6-4f8c-840f-84e9066ffb29/",
@@ -1570,8 +1577,8 @@
   },
   "heartbeat": {
     "last_sent_date": "2026-08-17",
-    "checks": 3,
-    "trades_found": 0,
+    "checks": 4,
+    "trades_found": 7,
     "errors": 0,
     "errors_today": 6,
     "pinged_today": 20
@@ -7430,6 +7437,97 @@
         "disclosure_date": "8/13/2026",
         "link": "",
         "logged": "2026-08-14"
+      },
+      {
+        "chamber": "House",
+        "person": "Richard Dean Dr McCormick",
+        "ticker": "AAPL",
+        "asset": "Apple Inc. - Common Stock",
+        "side": "sell",
+        "amount": "$1,001 - $15,000",
+        "owner": "",
+        "transaction_date": "07/30/2026",
+        "disclosure_date": "8/14/2026",
+        "link": "",
+        "logged": "2026-08-17"
+      },
+      {
+        "chamber": "House",
+        "person": "Richard Dean Dr McCormick",
+        "ticker": "BLK",
+        "asset": "BlackRock, Inc. Common Stock",
+        "side": "sell",
+        "amount": "$1,001 - $15,000",
+        "owner": "",
+        "transaction_date": "07/30/2026",
+        "disclosure_date": "8/14/2026",
+        "link": "",
+        "logged": "2026-08-17"
+      },
+      {
+        "chamber": "House",
+        "person": "Richard Dean Dr McCormick",
+        "ticker": "HD",
+        "asset": "Home Depot, Inc",
+        "side": "sell",
+        "amount": "$1,001 - $15,000",
+        "owner": "",
+        "transaction_date": "07/30/2026",
+        "disclosure_date": "8/14/2026",
+        "link": "",
+        "logged": "2026-08-17"
+      },
+      {
+        "chamber": "House",
+        "person": "Richard Dean Dr McCormick",
+        "ticker": "PEP",
+        "asset": "Pepsico, Inc",
+        "side": "sell",
+        "amount": "$1,001 - $15,000",
+        "owner": "",
+        "transaction_date": "07/30/2026",
+        "disclosure_date": "8/14/2026",
+        "link": "",
+        "logged": "2026-08-17"
+      },
+      {
+        "chamber": "House",
+        "person": "Richard Dean Dr McCormick",
+        "ticker": "PG",
+        "asset": "Procter & Gamble Company",
+        "side": "sell",
+        "amount": "$1,001 - $15,000",
+        "owner": "",
+        "transaction_date": "07/30/2026",
+        "disclosure_date": "8/14/2026",
+        "link": "",
+        "logged": "2026-08-17"
+      },
+      {
+        "chamber": "House",
+        "person": "Richard Dean Dr McCormick",
+        "ticker": "V",
+        "asset": "Visa Inc",
+        "side": "sell",
+        "amount": "$1,001 - $15,000",
+        "owner": "",
+        "transaction_date": "07/30/2026",
+        "disclosure_date": "8/14/2026",
+        "link": "",
+        "logged": "2026-08-17"
+      },
+      {
+        "chamber": "House",
+        "person": "Richard Dean Dr McCormick",
+        "ticker": "WMT",
+        "asset": "Walmart Inc. - Common Stock",
+        "side": "sell",
+        "amount": "$1,001 - $15,000",
+        "owner": "",
+        "transaction_date": "07/30/2026",
+        "disclosure_date": "8/14/2026",
+        "link": "",
+        "logged": "2026-08-17"
       }
     ],
     "alerted_clusters": [],
@@ -7769,7 +7867,9 @@
       "9116292",
       "20033779",
       "20033910",
-      "20035183"
+      "20035183",
+      "20035130",
+      "20035204"
     ]
   },
   "activists": {

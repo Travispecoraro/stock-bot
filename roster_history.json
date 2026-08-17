@@ -2512,6 +2512,67 @@
      "date": "8/13/2026"
     }
    ]
+  },
+  "richard dean dr mccormick": {
+   "name": "Richard Dean Dr McCormick",
+   "events": [
+    {
+     "action": "SELL",
+     "issuer": "Apple Inc. - Common Stock",
+     "ticker": "AAPL",
+     "value": "$1,001 - $15,000",
+     "period": "",
+     "date": "8/14/2026"
+    },
+    {
+     "action": "SELL",
+     "issuer": "BlackRock, Inc. Common Stock",
+     "ticker": "BLK",
+     "value": "$1,001 - $15,000",
+     "period": "",
+     "date": "8/14/2026"
+    },
+    {
+     "action": "SELL",
+     "issuer": "Home Depot, Inc",
+     "ticker": "HD",
+     "value": "$1,001 - $15,000",
+     "period": "",
+     "date": "8/14/2026"
+    },
+    {
+     "action": "SELL",
+     "issuer": "Pepsico, Inc",
+     "ticker": "PEP",
+     "value": "$1,001 - $15,000",
+     "period": "",
+     "date": "8/14/2026"
+    },
+    {
+     "action": "SELL",
+     "issuer": "Procter & Gamble Company",
+     "ticker": "PG",
+     "value": "$1,001 - $15,000",
+     "period": "",
+     "date": "8/14/2026"
+    },
+    {
+     "action": "SELL",
+     "issuer": "Visa Inc",
+     "ticker": "V",
+     "value": "$1,001 - $15,000",
+     "period": "",
+     "date": "8/14/2026"
+    },
+    {
+     "action": "SELL",
+     "issuer": "Walmart Inc. - Common Stock",
+     "ticker": "WMT",
+     "value": "$1,001 - $15,000",
+     "period": "",
+     "date": "8/14/2026"
+    }
+   ]
   }
  }
 }
