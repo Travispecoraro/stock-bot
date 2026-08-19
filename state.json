@@ -1588,7 +1588,7 @@
   },
   "heartbeat": {
     "last_sent_date": "2026-08-18",
-    "checks": 16,
+    "checks": 17,
     "trades_found": 0,
     "errors": 2,
     "errors_today": 6,
