@@ -2658,6 +2658,32 @@
      "date": "08/17/2026"
     }
    ]
+  },
+  "richard w. allen": {
+   "name": "Richard W. Allen",
+   "events": [
+    {
+     "action": "BUY",
+     "issuer": "SP Advanced Micro Devices, Inc",
+     "ticker": "AMD",
+     "value": "$1,001 - $15,000",
+     "period": "",
+     "date": "8/18/2026"
+    }
+   ]
+  },
+  "ed case": {
+   "name": "Ed Case",
+   "events": [
+    {
+     "action": "BUY",
+     "issuer": "SP Apple Inc. - Common Stock",
+     "ticker": "AAPL",
+     "value": "$1,001 - $15,000",
+     "period": "",
+     "date": "8/18/2026"
+    }
+   ]
   }
  }
 }
