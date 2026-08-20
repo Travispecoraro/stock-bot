@@ -2656,6 +2656,70 @@
      "value": "$1,001 - $15,000",
      "period": "",
      "date": "08/17/2026"
+    },
+    {
+     "action": "BUY",
+     "issuer": "Unitedhealth Group Inc",
+     "ticker": "UNH",
+     "value": "$1,001 - $15,000",
+     "period": "",
+     "date": "08/20/2026"
+    },
+    {
+     "action": "BUY",
+     "issuer": "Oracle Corp",
+     "ticker": "ORCL",
+     "value": "$1,001 - $15,000",
+     "period": "",
+     "date": "08/20/2026"
+    },
+    {
+     "action": "BUY",
+     "issuer": "Microsoft Corp",
+     "ticker": "MSFT",
+     "value": "$1,001 - $15,000",
+     "period": "",
+     "date": "08/20/2026"
+    },
+    {
+     "action": "BUY",
+     "issuer": "Meta Platforms Inc",
+     "ticker": "META",
+     "value": "$1,001 - $15,000",
+     "period": "",
+     "date": "08/20/2026"
+    },
+    {
+     "action": "BUY",
+     "issuer": "iShares iBoxx $ High Yield Corporate Bond ETF",
+     "ticker": "HYG",
+     "value": "$1,001 - $15,000",
+     "period": "",
+     "date": "08/20/2026"
+    },
+    {
+     "action": "BUY",
+     "issuer": "COLGATE PALMOLIVE LTD.",
+     "ticker": "COLPAL",
+     "value": "$1,001 - $15,000",
+     "period": "",
+     "date": "08/20/2026"
+    },
+    {
+     "action": "BUY",
+     "issuer": "Cboe Global Markets, Inc. Common Stock",
+     "ticker": "CBOE",
+     "value": "$1,001 - $15,000",
+     "period": "",
+     "date": "08/20/2026"
+    },
+    {
+     "action": "BUY",
+     "issuer": "Broadcom Inc. - Common Stock",
+     "ticker": "AVGO",
+     "value": "$1,001 - $15,000",
+     "period": "",
+     "date": "08/20/2026"
     }
    ]
   },
