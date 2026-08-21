@@ -2244,6 +2244,14 @@
      "value": "$1,001 - $15,000",
      "period": "",
      "date": "8/6/2026"
+    },
+    {
+     "action": "BUY",
+     "issuer": "Procter & Gamble Company",
+     "ticker": "PG",
+     "value": "$1,001 - $15,000",
+     "period": "",
+     "date": "8/20/2026"
     }
    ]
   },
@@ -2746,6 +2754,19 @@
      "value": "$1,001 - $15,000",
      "period": "",
      "date": "8/18/2026"
+    }
+   ]
+  },
+  "tim moore": {
+   "name": "Tim Moore",
+   "events": [
+    {
+     "action": "SELL",
+     "issuer": "AT&T Inc",
+     "ticker": "T",
+     "value": "$50,001 - $100,000",
+     "period": "",
+     "date": "8/20/2026"
     }
    ]
   }
