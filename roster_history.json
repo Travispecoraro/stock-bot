@@ -2728,6 +2728,118 @@
      "value": "$1,001 - $15,000",
      "period": "",
      "date": "08/20/2026"
+    },
+    {
+     "action": "SELL",
+     "issuer": "Vanguard FTSE Developed Markets ETF",
+     "ticker": "VEA",
+     "value": "$1,001 - $15,000",
+     "period": "",
+     "date": "08/24/2026"
+    },
+    {
+     "action": "SELL",
+     "issuer": "Vanguard Global ex-U.S. Real Estate ETF",
+     "ticker": "VNQI",
+     "value": "$1,001 - $15,000",
+     "period": "",
+     "date": "08/24/2026"
+    },
+    {
+     "action": "SELL",
+     "issuer": "Tortoise North Amer Pipeline Fund",
+     "ticker": "TPYP",
+     "value": "$1,001 - $15,000",
+     "period": "",
+     "date": "08/24/2026"
+    },
+    {
+     "action": "SELL",
+     "issuer": "Salesforce Inc",
+     "ticker": "CRM",
+     "value": "$1,001 - $15,000",
+     "period": "",
+     "date": "08/24/2026"
+    },
+    {
+     "action": "SELL",
+     "issuer": "NEW WORLD FUND INC - Class R-6",
+     "ticker": "RNWGX",
+     "value": "$1,001 - $15,000",
+     "period": "",
+     "date": "08/24/2026"
+    },
+    {
+     "action": "SELL",
+     "issuer": "Eli Lilly and Company",
+     "ticker": "LLY",
+     "value": "$1,001 - $15,000",
+     "period": "",
+     "date": "08/24/2026"
+    },
+    {
+     "action": "SELL",
+     "issuer": "iShares Core S&P 500 ETF",
+     "ticker": "IVV",
+     "value": "$1,001 - $15,000",
+     "period": "",
+     "date": "08/24/2026"
+    },
+    {
+     "action": "SELL",
+     "issuer": "iShares Russell 2000 ETF",
+     "ticker": "IWM",
+     "value": "$1,001 - $15,000",
+     "period": "",
+     "date": "08/24/2026"
+    },
+    {
+     "action": "SELL",
+     "issuer": "iShares MSCI EAFE ETF",
+     "ticker": "EFA",
+     "value": "$1,001 - $15,000",
+     "period": "",
+     "date": "08/24/2026"
+    },
+    {
+     "action": "SELL",
+     "issuer": "iShares MSCI All Country Asia ex Japan ETF",
+     "ticker": "AAXJ",
+     "value": "$1,001 - $15,000",
+     "period": "",
+     "date": "08/24/2026"
+    },
+    {
+     "action": "SELL",
+     "issuer": "Goldman Sachs ActiveBeta Emerging Markets Equity E",
+     "ticker": "GEM",
+     "value": "$1,001 - $15,000",
+     "period": "",
+     "date": "08/24/2026"
+    },
+    {
+     "action": "SELL",
+     "issuer": "Fiserv Inc",
+     "ticker": "FISV",
+     "value": "$1,001 - $15,000",
+     "period": "",
+     "date": "08/24/2026"
+    },
+    {
+     "action": "SELL",
+     "issuer": "First Trust Global Tactical Commodity Strategy Fun",
+     "ticker": "FTGC",
+     "value": "$1,001 - $15,000",
+     "period": "",
+     "date": "08/24/2026"
+    },
+    {
+     "action": "SELL",
+     "issuer": "First Trust Exchange-Traded Fund VIII FT Energy In",
+     "ticker": "EIPI",
+     "value": "$1,001 - $15,000",
+     "period": "",
+     "date": "08/24/2026"
     }
    ]
   },
