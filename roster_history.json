@@ -745,6 +745,310 @@
      "value": "$15,001 - $50,000",
      "period": "",
      "date": "07/29/2026"
+    },
+    {
+     "action": "BUY",
+     "issuer": "GS Managed Structured Note Strategy S&P 500 Linked Note",
+     "ticker": "",
+     "value": "$50,001 - $100,000",
+     "period": "",
+     "date": "08/27/2026"
+    },
+    {
+     "action": "BUY",
+     "issuer": "GS Managed Structured Note Strategy MSCI EAFE Linked Note",
+     "ticker": "",
+     "value": "$250,001 - $500,000",
+     "period": "",
+     "date": "08/27/2026"
+    },
+    {
+     "action": "BUY",
+     "issuer": "GS Managed Structured Note Strategy S&P 500 Linked Note",
+     "ticker": "",
+     "value": "$100,001 - $250,000",
+     "period": "",
+     "date": "08/27/2026"
+    },
+    {
+     "action": "BUY",
+     "issuer": "GS Managed Structured Note Strategy MSCI EAFE Linked Note",
+     "ticker": "",
+     "value": "$100,001 - $250,000",
+     "period": "",
+     "date": "08/27/2026"
+    },
+    {
+     "action": "BUY",
+     "issuer": "GS Managed Structured Note Strategy S&P 500 Linked Note",
+     "ticker": "",
+     "value": "$250,001 - $500,000",
+     "period": "",
+     "date": "08/27/2026"
+    },
+    {
+     "action": "SELL",
+     "issuer": "PENNSYLVANIA ST TPK COMMN OIL REV Rate/Coupon: 5% Matures: 2026-12-01",
+     "ticker": "",
+     "value": "$100,001 - $250,000",
+     "period": "",
+     "date": "08/27/2026"
+    },
+    {
+     "action": "SELL",
+     "issuer": "WASHINGTON ST GO Rate/Coupon: 5% Matures: 2033-02-01",
+     "ticker": "",
+     "value": "$50,001 - $100,000",
+     "period": "",
+     "date": "08/27/2026"
+    },
+    {
+     "action": "SELL",
+     "issuer": "SPRINGFIELD TWP SCH DIST PA GO Rate/Coupon: 5% Matures: 2030-11-15",
+     "ticker": "",
+     "value": "$50,001 - $100,000",
+     "period": "",
+     "date": "08/27/2026"
+    },
+    {
+     "action": "SELL",
+     "issuer": "PHILADELPHIA PA AUTH FOR INDL REV Rate/Coupon: 5% Matures: 2031-12-01",
+     "ticker": "",
+     "value": "$15,001 - $50,000",
+     "period": "",
+     "date": "08/27/2026"
+    },
+    {
+     "action": "SELL",
+     "issuer": "PENNSYLVANIA ST TPK COMMN REV Rate/Coupon: 5.25% Matures: 2030-07-15",
+     "ticker": "",
+     "value": "$15,001 - $50,000",
+     "period": "",
+     "date": "08/27/2026"
+    },
+    {
+     "action": "SELL",
+     "issuer": "PENNSYLVANIA ST HIGHER EDL REV Rate/Coupon: 4% Matures: 2031-06-15",
+     "ticker": "",
+     "value": "$15,001 - $50,000",
+     "period": "",
+     "date": "08/27/2026"
+    },
+    {
+     "action": "SELL",
+     "issuer": "PENNSYLVANIA ST GO Rate/Coupon: 5% Matures: 2035-04-01",
+     "ticker": "",
+     "value": "$50,001 - $100,000",
+     "period": "",
+     "date": "08/27/2026"
+    },
+    {
+     "action": "SELL",
+     "issuer": "PENNSYLVANIA ST GO Rate/Coupon: 5% Matures: 2034-04-01",
+     "ticker": "",
+     "value": "$15,001 - $50,000",
+     "period": "",
+     "date": "08/27/2026"
+    },
+    {
+     "action": "SELL",
+     "issuer": "PENNSYLVANIA ST GO Rate/Coupon: 5% Matures: 2033-08-15",
+     "ticker": "",
+     "value": "$50,001 - $100,000",
+     "period": "",
+     "date": "08/27/2026"
+    },
+    {
+     "action": "SELL",
+     "issuer": "PENNSYLVANIA ST GO Rate/Coupon: 5% Matures: 2035-08-15",
+     "ticker": "",
+     "value": "$50,001 - $100,000",
+     "period": "",
+     "date": "08/27/2026"
+    },
+    {
+     "action": "SELL",
+     "issuer": "OXFORD PA AREA SCH DIST GO Rate/Coupon: 5% Matures: 2032-09-01",
+     "ticker": "",
+     "value": "$15,001 - $50,000",
+     "period": "",
+     "date": "08/27/2026"
+    },
+    {
+     "action": "SELL",
+     "issuer": "NORTHAMPTON CNTY PA GEN PURP A REV Rate/Coupon: 5% Matures: 2034-11-15",
+     "ticker": "",
+     "value": "$50,001 - $100,000",
+     "period": "",
+     "date": "08/27/2026"
+    },
+    {
+     "action": "SELL",
+     "issuer": "DEL CNTY PA AUTH COLLEGE REV Rate/Coupon: 5% Matures: 2026-10-01",
+     "ticker": "",
+     "value": "$50,001 - $100,000",
+     "period": "",
+     "date": "08/27/2026"
+    },
+    {
+     "action": "SELL",
+     "issuer": "DALLAS TEX INDPT SCH DIST GO Rate/Coupon: 5% Matures: 2033-02-15",
+     "ticker": "",
+     "value": "$50,001 - $100,000",
+     "period": "",
+     "date": "08/27/2026"
+    },
+    {
+     "action": "SELL",
+     "issuer": "CORPUS CHRISTI TEX UTIL SYS REV Rate/Coupon: 5% Matures: 2029-07-15",
+     "ticker": "",
+     "value": "$50,001 - $100,000",
+     "period": "",
+     "date": "08/27/2026"
+    },
+    {
+     "action": "SELL",
+     "issuer": "CHESTER CNTY PA SCH AUTH SCH REV Rate/Coupon: 5% Matures: 2027-03-01",
+     "ticker": "",
+     "value": "$50,001 - $100,000",
+     "period": "",
+     "date": "08/27/2026"
+    },
+    {
+     "action": "SELL",
+     "issuer": "ALVIN TEX INDPT SCH DIST GO Rate/Coupon: 5% Matures: 2035-02-15",
+     "ticker": "",
+     "value": "$50,001 - $100,000",
+     "period": "",
+     "date": "08/27/2026"
+    },
+    {
+     "action": "SELL",
+     "issuer": "ALLEGHENY CNTY HIGHER ED BLDG REV Rate/Coupon: 5% Matures: 2032-02-01",
+     "ticker": "",
+     "value": "$50,001 - $100,000",
+     "period": "",
+     "date": "08/27/2026"
+    },
+    {
+     "action": "SELL",
+     "issuer": "WASHINGTON ST GO Rate/Coupon: 5% Matures: 2033-02-01",
+     "ticker": "",
+     "value": "$100,001 - $250,000",
+     "period": "",
+     "date": "08/27/2026"
+    },
+    {
+     "action": "SELL",
+     "issuer": "SPRINGFIELD TWP SCH DIST PA GO Rate/Coupon: 5% Matures: 2030-11-15",
+     "ticker": "",
+     "value": "$100,001 - $250,000",
+     "period": "",
+     "date": "08/27/2026"
+    },
+    {
+     "action": "SELL",
+     "issuer": "PHILADELPHIA PA AUTH FOR INDL REV Rate/Coupon: 5% Matures: 2031-12-01",
+     "ticker": "",
+     "value": "$100,001 - $250,000",
+     "period": "",
+     "date": "08/27/2026"
+    },
+    {
+     "action": "SELL",
+     "issuer": "PENNSYLVANIA ST TPK COMMN TPK REV Rate/Coupon: 5% Matures: 2030-12-01",
+     "ticker": "",
+     "value": "$100,001 - $250,000",
+     "period": "",
+     "date": "08/27/2026"
+    },
+    {
+     "action": "SELL",
+     "issuer": "PENNSYLVANIA ST HIGHER EDL REV Rate/Coupon: 4% Matures: 2031-06-15",
+     "ticker": "",
+     "value": "$100,001 - $250,000",
+     "period": "",
+     "date": "08/27/2026"
+    },
+    {
+     "action": "SELL",
+     "issuer": "PENNSYLVANIA ST GO Rate/Coupon: 5% Matures: 2034-04-01",
+     "ticker": "",
+     "value": "$100,001 - $250,000",
+     "period": "",
+     "date": "08/27/2026"
+    },
+    {
+     "action": "SELL",
+     "issuer": "PENNSYLVANIA ST GO Rate/Coupon: 5% Matures: 2033-08-15",
+     "ticker": "",
+     "value": "$100,001 - $250,000",
+     "period": "",
+     "date": "08/27/2026"
+    },
+    {
+     "action": "SELL",
+     "issuer": "OXFORD PA AREA SCH DIST GO Rate/Coupon: 5% Matures: 2032-09-01",
+     "ticker": "",
+     "value": "$50,001 - $100,000",
+     "period": "",
+     "date": "08/27/2026"
+    },
+    {
+     "action": "SELL",
+     "issuer": "NORTHAMPTON CNTY PA GEN PURP A REV Rate/Coupon: 5% Matures: 2034-11-15",
+     "ticker": "",
+     "value": "$100,001 - $250,000",
+     "period": "",
+     "date": "08/27/2026"
+    },
+    {
+     "action": "SELL",
+     "issuer": "DALLAS TEX INDPT SCH DIST GO Rate/Coupon: 5% Matures: 2033-02-15",
+     "ticker": "",
+     "value": "$15,001 - $50,000",
+     "period": "",
+     "date": "08/27/2026"
+    },
+    {
+     "action": "SELL",
+     "issuer": "CORPUS CHRISTI TEX UTIL SYS REV Rate/Coupon: 5% Matures: 2029-07-15",
+     "ticker": "",
+     "value": "$100,001 - $250,000",
+     "period": "",
+     "date": "08/27/2026"
+    },
+    {
+     "action": "SELL",
+     "issuer": "CHESTER CNTY PA SCH AUTH SCH REV Rate/Coupon: 5% Matures: 2027-03-01",
+     "ticker": "",
+     "value": "$100,001 - $250,000",
+     "period": "",
+     "date": "08/27/2026"
+    },
+    {
+     "action": "SELL",
+     "issuer": "ALVIN TEX INDPT SCH DIST GO Rate/Coupon: 5% Matures: 2035-02-15",
+     "ticker": "",
+     "value": "$100,001 - $250,000",
+     "period": "",
+     "date": "08/27/2026"
+    },
+    {
+     "action": "SELL",
+     "issuer": "ALLEGHENY CNTY HIGHER ED BLDG REV Rate/Coupon: 5% Matures: 2032-02-01",
+     "ticker": "",
+     "value": "$250,001 - $500,000",
+     "period": "",
+     "date": "08/27/2026"
+    },
+    {
+     "action": "BUY",
+     "issuer": "NORTHERN YORK CNTY PA SCH DIST GEN Rate/Coupon: 5.25% Matures: 2051-11-15",
+     "ticker": "",
+     "value": "$250,001 - $500,000",
+     "period": "",
+     "date": "08/27/2026"
     }
    ]
   },
