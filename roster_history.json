@@ -3185,6 +3185,19 @@
      "date": "8/20/2026"
     }
    ]
+  },
+  "christopher a coons": {
+   "name": "Christopher A Coons",
+   "events": [
+    {
+     "action": "SELL",
+     "issuer": "W.L. Gore & Associates, Inc. Company: W.L. Gore & Associates, Inc. Description: Advanced materials manufacturing",
+     "ticker": "",
+     "value": "$100,001 - $250,000",
+     "period": "",
+     "date": "08/28/2026"
+    }
+   ]
   }
  }
 }
