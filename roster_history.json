@@ -636,6 +636,14 @@
      "value": "$1,001 - $15,000",
      "period": "",
      "date": "7/26/2026"
+    },
+    {
+     "action": "SELL",
+     "issuer": "STERIS plc",
+     "ticker": "STE",
+     "value": "$1,001 - $15,000",
+     "period": "",
+     "date": "8/27/2026"
     }
    ]
   },
