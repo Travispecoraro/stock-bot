@@ -1070,6 +1070,46 @@
      "value": "$1,001 - $15,000",
      "period": "",
      "date": "08/03/2026"
+    },
+    {
+     "action": "SELL",
+     "issuer": "SDZNY- Sandoz Group AG ADR",
+     "ticker": "",
+     "value": "$1,001 - $15,000",
+     "period": "",
+     "date": "09/02/2026"
+    },
+    {
+     "action": "SELL",
+     "issuer": "NVIDIA Corporation - Common Stock",
+     "ticker": "NVDA",
+     "value": "$15,001 - $50,000",
+     "period": "",
+     "date": "09/02/2026"
+    },
+    {
+     "action": "SELL",
+     "issuer": "NVIDIA Corporation - Common Stock",
+     "ticker": "NVDA",
+     "value": "$1,001 - $15,000",
+     "period": "",
+     "date": "09/02/2026"
+    },
+    {
+     "action": "SELL",
+     "issuer": "Lam Research Corporation - Common Stock",
+     "ticker": "LRCX",
+     "value": "$1,001 - $15,000",
+     "period": "",
+     "date": "09/02/2026"
+    },
+    {
+     "action": "SELL",
+     "issuer": "Amgen Inc. - Common Stock",
+     "ticker": "AMGN",
+     "value": "$1,001 - $15,000",
+     "period": "",
+     "date": "09/02/2026"
     }
    ]
   },
@@ -2709,6 +2749,78 @@
      "value": "$1,001 - $15,000",
      "period": "",
      "date": "8/10/2026"
+    },
+    {
+     "action": "SELL",
+     "issuer": "Alcon Inc. Ordinary Shares",
+     "ticker": "ALC",
+     "value": "$1,001 - $15,000",
+     "period": "",
+     "date": "9/1/2026"
+    },
+    {
+     "action": "SELL",
+     "issuer": "Biogen Inc. - Common Stock",
+     "ticker": "BIIB",
+     "value": "$1,001 - $15,000",
+     "period": "",
+     "date": "9/1/2026"
+    },
+    {
+     "action": "SELL",
+     "issuer": "JT Boeing Company",
+     "ticker": "BA",
+     "value": "$1,001 - $15,000",
+     "period": "",
+     "date": "9/1/2026"
+    },
+    {
+     "action": "SELL",
+     "issuer": "JT Boeing Company",
+     "ticker": "BA",
+     "value": "$15,001 - $50,000",
+     "period": "",
+     "date": "9/1/2026"
+    },
+    {
+     "action": "SELL",
+     "issuer": "Gap, Inc",
+     "ticker": "GAP",
+     "value": "$1,001 - $15,000",
+     "period": "",
+     "date": "9/1/2026"
+    },
+    {
+     "action": "SELL",
+     "issuer": "JT Marsh Common Stock",
+     "ticker": "MRSH",
+     "value": "$1,001 - $15,000",
+     "period": "",
+     "date": "9/1/2026"
+    },
+    {
+     "action": "SELL",
+     "issuer": "JT Procter & Gamble Company",
+     "ticker": "PG",
+     "value": "$1,001 - $15,000",
+     "period": "",
+     "date": "9/1/2026"
+    },
+    {
+     "action": "SELL",
+     "issuer": "JT Veralto Corp Common Stock",
+     "ticker": "VLTO",
+     "value": "$1,001 - $15,000",
+     "period": "",
+     "date": "9/1/2026"
+    },
+    {
+     "action": "SELL",
+     "issuer": "JT Walt Disney Company",
+     "ticker": "DIS",
+     "value": "$15,001 - $50,000",
+     "period": "",
+     "date": "9/1/2026"
     }
    ]
   },
