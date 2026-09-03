@@ -2654,6 +2654,22 @@
      "value": "$1,001 - $15,000",
      "period": "",
      "date": "8/7/2026"
+    },
+    {
+     "action": "SELL",
+     "issuer": "Allstate Corporation",
+     "ticker": "ALL",
+     "value": "$1,001 - $15,000",
+     "period": "",
+     "date": "9/2/2026"
+    },
+    {
+     "action": "BUY",
+     "issuer": "Equinix, Inc. - Common Stock",
+     "ticker": "EQIX",
+     "value": "$1,001 - $15,000",
+     "period": "",
+     "date": "9/2/2026"
     }
    ]
   },
@@ -3316,6 +3332,19 @@
      "value": "$100,001 - $250,000",
      "period": "",
      "date": "08/28/2026"
+    }
+   ]
+  },
+  "cleo fields": {
+   "name": "Cleo Fields",
+   "events": [
+    {
+     "action": "BUY",
+     "issuer": "Apple Inc. - Common Stock",
+     "ticker": "AAPL",
+     "value": "$1,001 - $15,000",
+     "period": "",
+     "date": "9/2/2026"
     }
    ]
   }
