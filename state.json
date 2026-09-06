@@ -1682,7 +1682,7 @@
   },
   "heartbeat": {
     "last_sent_date": "2026-09-05",
-    "checks": 4,
+    "checks": 5,
     "trades_found": 0,
     "errors": 0,
     "errors_today": 6,
@@ -7266,19 +7266,6 @@
         "amount": "$1,001 - $15,000",
         "owner": "",
         "transaction_date": "10/27/2025",
-        "disclosure_date": "8/7/2026",
-        "link": "",
-        "logged": "2026-08-10"
-      },
-      {
-        "chamber": "House",
-        "person": "Michael Rulli",
-        "ticker": "AAPL",
-        "asset": "Apple Inc. - Common Stock",
-        "side": "buy",
-        "amount": "$1,001 - $15,000",
-        "owner": "",
-        "transaction_date": "08/01/2025",
         "disclosure_date": "8/7/2026",
         "link": "",
         "logged": "2026-08-10"
