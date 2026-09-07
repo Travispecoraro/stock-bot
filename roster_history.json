@@ -2604,6 +2604,14 @@
      "value": "$1,001 - $15,000",
      "period": "",
      "date": "8/20/2026"
+    },
+    {
+     "action": "SELL",
+     "issuer": "Amgen Inc. - Common Stock",
+     "ticker": "AMGN",
+     "value": "$1,001 - $15,000",
+     "period": "",
+     "date": "9/5/2026"
     }
    ]
   },
@@ -3345,6 +3353,59 @@
      "value": "$1,001 - $15,000",
      "period": "",
      "date": "9/2/2026"
+    }
+   ]
+  },
+  "gilbert cisneros": {
+   "name": "Gilbert Cisneros",
+   "events": [
+    {
+     "action": "BUY",
+     "issuer": "Advanced Micro Devices, Inc",
+     "ticker": "AMD",
+     "value": "$1,001 - $15,000",
+     "period": "",
+     "date": "9/4/2026"
+    },
+    {
+     "action": "BUY",
+     "issuer": "Artivion, Inc. Common Stock",
+     "ticker": "AORT",
+     "value": "$1,001 - $15,000",
+     "period": "",
+     "date": "9/4/2026"
+    },
+    {
+     "action": "SELL",
+     "issuer": "Fabrinet Ordinary Shares",
+     "ticker": "FN",
+     "value": "$15,001 - $50,000",
+     "period": "",
+     "date": "9/4/2026"
+    },
+    {
+     "action": "BUY",
+     "issuer": "Glacier Bancorp, Inc",
+     "ticker": "GBCI",
+     "value": "$1,001 - $15,000",
+     "period": "",
+     "date": "9/4/2026"
+    },
+    {
+     "action": "BUY",
+     "issuer": "SailPoint, Inc. - Common Stock",
+     "ticker": "SAIL",
+     "value": "$1,001 - $15,000",
+     "period": "",
+     "date": "9/4/2026"
+    },
+    {
+     "action": "BUY",
+     "issuer": "Vaxcyte, Inc. - Common Stock",
+     "ticker": "PCVX",
+     "value": "$1,001 - $15,000",
+     "period": "",
+     "date": "9/4/2026"
     }
    ]
   }
