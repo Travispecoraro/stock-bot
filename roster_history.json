@@ -2450,6 +2450,14 @@
      "value": "$1,001 - $15,000",
      "period": "",
      "date": "8/5/2026"
+    },
+    {
+     "action": "BUY",
+     "issuer": "Procter & Gamble Company",
+     "ticker": "PG",
+     "value": "$1,001 - $15,000",
+     "period": "",
+     "date": "9/8/2026"
     }
    ]
   },
