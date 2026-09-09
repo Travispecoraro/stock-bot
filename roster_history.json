@@ -3416,6 +3416,67 @@
      "date": "9/4/2026"
     }
    ]
+  },
+  "cory a booker": {
+   "name": "Cory A Booker",
+   "events": [
+    {
+     "action": "SELL",
+     "issuer": "webAI, Inc. Company: webAI, Inc. Description: Technology Company",
+     "ticker": "",
+     "value": "$50,001 - $100,000",
+     "period": "",
+     "date": "09/09/2026"
+    },
+    {
+     "action": "SELL",
+     "issuer": "NVIDIA Corporation - Common Stock",
+     "ticker": "NVDA",
+     "value": "$15,001 - $50,000",
+     "period": "",
+     "date": "09/09/2026"
+    },
+    {
+     "action": "SELL",
+     "issuer": "Netflix, Inc. - Common Stock",
+     "ticker": "NFLX",
+     "value": "$1,001 - $15,000",
+     "period": "",
+     "date": "09/09/2026"
+    },
+    {
+     "action": "SELL",
+     "issuer": "McDonald's Corporation Common Stock",
+     "ticker": "MCD",
+     "value": "$15,001 - $50,000",
+     "period": "",
+     "date": "09/09/2026"
+    },
+    {
+     "action": "SELL",
+     "issuer": "Amazon.com, Inc. - Common Stock",
+     "ticker": "AMZN",
+     "value": "$100,001 - $250,000",
+     "period": "",
+     "date": "09/09/2026"
+    },
+    {
+     "action": "SELL",
+     "issuer": "Alnylam Pharmaceuticals, Inc. - Common Stock",
+     "ticker": "ALNY",
+     "value": "$1,001 - $15,000",
+     "period": "",
+     "date": "09/09/2026"
+    },
+    {
+     "action": "SELL",
+     "issuer": "JD.com, Inc. - American Depositary Shares",
+     "ticker": "JD",
+     "value": "$1,001 - $15,000",
+     "period": "",
+     "date": "09/09/2026"
+    }
+   ]
   }
  }
 }
