@@ -3485,6 +3485,35 @@
      "date": "09/09/2026"
     }
    ]
+  },
+  "april mcclain delaney": {
+   "name": "April McClain Delaney",
+   "events": [
+    {
+     "action": "BUY",
+     "issuer": "DC Hubbell Inc Common Stock",
+     "ticker": "HUBB",
+     "value": "$1,001 - $15,000",
+     "period": "",
+     "date": "9/9/2026"
+    },
+    {
+     "action": "SELL",
+     "issuer": "DC ITT Inc. Common Stock",
+     "ticker": "ITT",
+     "value": "$250,001 - $500,000",
+     "period": "",
+     "date": "9/9/2026"
+    },
+    {
+     "action": "SELL",
+     "issuer": "DC STERIS plc",
+     "ticker": "STE",
+     "value": "$100,001 - $250,000",
+     "period": "",
+     "date": "9/9/2026"
+    }
+   ]
   }
  }
 }
