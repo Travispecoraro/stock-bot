@@ -2715,6 +2715,14 @@
      "value": "$1,001 - $15,000",
      "period": "",
      "date": "08/10/2026"
+    },
+    {
+     "action": "BUY",
+     "issuer": "TRANSCANADA PIPELINES LTD SER 2026-A Rate/Coupon: 6.125% Matures: 2056-10-17",
+     "ticker": "",
+     "value": "$1,001 - $15,000",
+     "period": "",
+     "date": "09/09/2026"
     }
    ]
   },
