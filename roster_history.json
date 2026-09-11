@@ -3304,6 +3304,46 @@
      "value": "$1,001 - $15,000",
      "period": "",
      "date": "08/24/2026"
+    },
+    {
+     "action": "BUY",
+     "issuer": "Otis Worldwide Corporation Common Stock",
+     "ticker": "OTIS",
+     "value": "$1,001 - $15,000",
+     "period": "",
+     "date": "09/11/2026"
+    },
+    {
+     "action": "BUY",
+     "issuer": "Tradr 2X Long SPY Monthly ETF",
+     "ticker": "SPYM",
+     "value": "$1,001 - $15,000",
+     "period": "",
+     "date": "09/11/2026"
+    },
+    {
+     "action": "BUY",
+     "issuer": "iShares Core S&P Small-Cap ETF",
+     "ticker": "IJR",
+     "value": "$1,001 - $15,000",
+     "period": "",
+     "date": "09/11/2026"
+    },
+    {
+     "action": "BUY",
+     "issuer": "Avantis U.S. Small Cap Value ETF",
+     "ticker": "AVUV",
+     "value": "$1,001 - $15,000",
+     "period": "",
+     "date": "09/11/2026"
+    },
+    {
+     "action": "BUY",
+     "issuer": "First Solar, Inc. - Common Stock",
+     "ticker": "FSLR",
+     "value": "$1,001 - $15,000",
+     "period": "",
+     "date": "09/11/2026"
     }
    ]
   },
