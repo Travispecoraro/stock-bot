@@ -3344,6 +3344,38 @@
      "value": "$1,001 - $15,000",
      "period": "",
      "date": "09/11/2026"
+    },
+    {
+     "action": "SELL",
+     "issuer": "iShares Core S&P 500 ETF",
+     "ticker": "IVV",
+     "value": "$1,001 - $15,000",
+     "period": "",
+     "date": "09/11/2026"
+    },
+    {
+     "action": "SELL",
+     "issuer": "Johnson & Johnson Common Stock",
+     "ticker": "JNJ",
+     "value": "$1,001 - $15,000",
+     "period": "",
+     "date": "09/11/2026"
+    },
+    {
+     "action": "SELL",
+     "issuer": "Westwood Quality SmallCap Fund - Westwood Quality SmallCap Fund Ultra Shares",
+     "ticker": "WWSYX",
+     "value": "$15,001 - $50,000",
+     "period": "",
+     "date": "09/11/2026"
+    },
+    {
+     "action": "SELL",
+     "issuer": "Constellation Energy Corporation - Common Stock When-Issued",
+     "ticker": "CEG",
+     "value": "$1,001 - $15,000",
+     "period": "",
+     "date": "09/11/2026"
     }
    ]
   },
@@ -3462,6 +3494,70 @@
      "value": "$1,001 - $15,000",
      "period": "",
      "date": "9/4/2026"
+    },
+    {
+     "action": "BUY",
+     "issuer": "Artivion, Inc. Common Stock",
+     "ticker": "AORT",
+     "value": "$1,001 - $15,000",
+     "period": "",
+     "date": "9/10/2026"
+    },
+    {
+     "action": "BUY",
+     "issuer": "CarMax Inc",
+     "ticker": "KMX",
+     "value": "$1,001 - $15,000",
+     "period": "",
+     "date": "9/10/2026"
+    },
+    {
+     "action": "SELL",
+     "issuer": "Coherent Corp",
+     "ticker": "COHR",
+     "value": "$1,001 - $15,000",
+     "period": "",
+     "date": "9/10/2026"
+    },
+    {
+     "action": "BUY",
+     "issuer": "Goldman Sachs Group, Inc",
+     "ticker": "GS",
+     "value": "$1,001 - $15,000",
+     "period": "",
+     "date": "9/10/2026"
+    },
+    {
+     "action": "BUY",
+     "issuer": "Intuit Inc. - Common Stock",
+     "ticker": "INTU",
+     "value": "$1,001 - $15,000",
+     "period": "",
+     "date": "9/10/2026"
+    },
+    {
+     "action": "SELL",
+     "issuer": "Nike, Inc. Common Stock",
+     "ticker": "NKE",
+     "value": "$15,001 - $50,000",
+     "period": "",
+     "date": "9/10/2026"
+    },
+    {
+     "action": "SELL",
+     "issuer": "Phreesia, Inc. Common Stock",
+     "ticker": "PHR",
+     "value": "$1,001 - $15,000",
+     "period": "",
+     "date": "9/10/2026"
+    },
+    {
+     "action": "BUY",
+     "issuer": "Walmart Inc. - Common Stock",
+     "ticker": "WMT",
+     "value": "$1,001 - $15,000",
+     "period": "",
+     "date": "9/10/2026"
     }
    ]
   },
