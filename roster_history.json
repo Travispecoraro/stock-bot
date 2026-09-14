@@ -3650,6 +3650,19 @@
      "date": "9/9/2026"
     }
    ]
+  },
+  "angus s king, jr.": {
+   "name": "Angus S King, Jr.",
+   "events": [
+    {
+     "action": "SELL",
+     "issuer": "EA - Electronic Arts Inc",
+     "ticker": "",
+     "value": "$15,001 - $50,000",
+     "period": "",
+     "date": "09/14/2026"
+    }
+   ]
   }
  }
 }
