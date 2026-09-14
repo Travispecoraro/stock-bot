@@ -3663,6 +3663,27 @@
      "date": "09/14/2026"
     }
    ]
+  },
+  "thomas h. kean": {
+   "name": "Thomas H. Kean",
+   "events": [
+    {
+     "action": "BUY",
+     "issuer": "Linde plc - Ordinary Shares",
+     "ticker": "LIN",
+     "value": "$1,001 - $15,000",
+     "period": "",
+     "date": "9/12/2026"
+    },
+    {
+     "action": "BUY",
+     "issuer": "MasTec, Inc. Common Stock",
+     "ticker": "MTZ",
+     "value": "$1,001 - $15,000",
+     "period": "",
+     "date": "9/12/2026"
+    }
+   ]
   }
  }
 }
