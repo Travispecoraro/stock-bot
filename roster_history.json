@@ -3684,6 +3684,27 @@
      "date": "9/12/2026"
     }
    ]
+  },
+  "byron donalds": {
+   "name": "Byron Donalds",
+   "events": [
+    {
+     "action": "BUY",
+     "issuer": "SP Netflix, Inc. - Common Stock",
+     "ticker": "NFLX",
+     "value": "$1,001 - $15,000",
+     "period": "",
+     "date": "9/15/2026"
+    },
+    {
+     "action": "BUY",
+     "issuer": "Netflix, Inc. - Common Stock",
+     "ticker": "NFLX",
+     "value": "$1,001 - $15,000",
+     "period": "",
+     "date": "9/15/2026"
+    }
+   ]
   }
  }
 }
