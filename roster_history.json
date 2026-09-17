@@ -3705,6 +3705,35 @@
      "date": "9/15/2026"
     }
    ]
+  },
+  "alan armstrong": {
+   "name": "Alan Armstrong",
+   "events": [
+    {
+     "action": "BUY",
+     "issuer": "Williams Companies, Inc. (The) Common Stock Option Type: Call Strike price: $75.00 Expires: 2026-08-21",
+     "ticker": "WMB",
+     "value": "$15,001 - $50,000",
+     "period": "",
+     "date": "09/17/2026"
+    },
+    {
+     "action": "SELL",
+     "issuer": "Electronic Arts Inc",
+     "ticker": "EA",
+     "value": "$1,001 - $15,000",
+     "period": "",
+     "date": "09/17/2026"
+    },
+    {
+     "action": "BUY",
+     "issuer": "Williams Companies, Inc. (The) Common Stock Option Type: Call Strike price: $75.00 Expires: 2026-08-21",
+     "ticker": "WMB",
+     "value": "$1,001 - $15,000",
+     "period": "",
+     "date": "09/17/2026"
+    }
+   ]
   }
  }
 }
