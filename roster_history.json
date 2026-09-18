@@ -2620,6 +2620,14 @@
      "value": "$1,001 - $15,000",
      "period": "",
      "date": "9/5/2026"
+    },
+    {
+     "action": "BUY",
+     "issuer": "Procter & Gamble Company",
+     "ticker": "PG",
+     "value": "$1,001 - $15,000",
+     "period": "",
+     "date": "9/17/2026"
     }
    ]
   },
@@ -3732,6 +3740,27 @@
      "value": "$1,001 - $15,000",
      "period": "",
      "date": "09/17/2026"
+    }
+   ]
+  },
+  "scott scott franklin": {
+   "name": "Scott Scott Franklin",
+   "events": [
+    {
+     "action": "BUY",
+     "issuer": "Pepsico, Inc",
+     "ticker": "PEP",
+     "value": "$1,001 - $15,000",
+     "period": "",
+     "date": "9/17/2026"
+    },
+    {
+     "action": "BUY",
+     "issuer": "SP Pepsico, Inc",
+     "ticker": "PEP",
+     "value": "$1,001 - $15,000",
+     "period": "",
+     "date": "9/17/2026"
     }
    ]
   }
