@@ -3763,6 +3763,19 @@
      "date": "9/17/2026"
     }
    ]
+  },
+  "a. mitchell mcconnell, jr.": {
+   "name": "A. Mitchell McConnell, Jr.",
+   "events": [
+    {
+     "action": "BUY",
+     "issuer": "Wells Fargo & Company Common Stock",
+     "ticker": "WFC",
+     "value": "$15,001 - $50,000",
+     "period": "",
+     "date": "09/21/2026"
+    }
+   ]
   }
  }
 }
