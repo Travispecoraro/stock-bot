@@ -2869,6 +2869,78 @@
      "value": "$15,001 - $50,000",
      "period": "",
      "date": "9/1/2026"
+    },
+    {
+     "action": "SELL",
+     "issuer": "CenterPoint Energy, Inc",
+     "ticker": "CNP",
+     "value": "$15,001 - $50,000",
+     "period": "",
+     "date": "9/25/2026"
+    },
+    {
+     "action": "BUY",
+     "issuer": "JT Chubb Limited Common Stock",
+     "ticker": "CB",
+     "value": "$1,001 - $15,000",
+     "period": "",
+     "date": "9/25/2026"
+    },
+    {
+     "action": "BUY",
+     "issuer": "JT Coca-Cola Company",
+     "ticker": "KO",
+     "value": "$1,001 - $15,000",
+     "period": "",
+     "date": "9/25/2026"
+    },
+    {
+     "action": "SELL",
+     "issuer": "JT Home Depot, Inc",
+     "ticker": "HD",
+     "value": "$15,001 - $50,000",
+     "period": "",
+     "date": "9/25/2026"
+    },
+    {
+     "action": "SELL",
+     "issuer": "Home Depot, Inc",
+     "ticker": "HD",
+     "value": "$1,001 - $15,000",
+     "period": "",
+     "date": "9/25/2026"
+    },
+    {
+     "action": "SELL",
+     "issuer": "JT PTC Inc. - Common Stock",
+     "ticker": "PTC",
+     "value": "$50,001 - $100,000",
+     "period": "",
+     "date": "9/25/2026"
+    },
+    {
+     "action": "SELL",
+     "issuer": "STERIS plc",
+     "ticker": "STE",
+     "value": "$15,001 - $50,000",
+     "period": "",
+     "date": "9/25/2026"
+    },
+    {
+     "action": "SELL",
+     "issuer": "TJX Companies, Inc",
+     "ticker": "TJX",
+     "value": "$1,001 - $15,000",
+     "period": "",
+     "date": "9/25/2026"
+    },
+    {
+     "action": "SELL",
+     "issuer": "DC Vuzix Corporation",
+     "ticker": "VUZI",
+     "value": "$1,001 - $15,000",
+     "period": "",
+     "date": "9/25/2026"
     }
    ]
   },
@@ -3774,6 +3846,144 @@
      "value": "$15,001 - $50,000",
      "period": "",
      "date": "09/21/2026"
+    }
+   ]
+  },
+  "james conley justice, ii": {
+   "name": "James Conley Justice, II",
+   "events": [
+    {
+     "action": "SELL",
+     "issuer": "Greenbrier Hotel Corporation and Affiliates Company: Greenbrier Hotel Corporation and Affiliates Description: Hospitality",
+     "ticker": "",
+     "value": "Over $50,000,000",
+     "period": "",
+     "date": "09/28/2026"
+    }
+   ]
+  },
+  "richard blumenthal": {
+   "name": "Richard Blumenthal",
+   "events": [
+    {
+     "action": "BUY",
+     "issuer": "Not Fade Away LLC Company: Not Fade Away LLC Description: Hedge Fund",
+     "ticker": "",
+     "value": "$1,001 - $15,000",
+     "period": "",
+     "date": "09/28/2026"
+    },
+    {
+     "action": "BUY",
+     "issuer": "Not Fade Away LLC Company: Not Fade Away LLC Description: Hedge Fund",
+     "ticker": "",
+     "value": "$15,001 - $50,000",
+     "period": "",
+     "date": "09/28/2026"
+    },
+    {
+     "action": "BUY",
+     "issuer": "Not Fade Away LLC Company: Not Fade Away LLC Description: Hedge Fund",
+     "ticker": "",
+     "value": "$50,001 - $100,000",
+     "period": "",
+     "date": "09/28/2026"
+    },
+    {
+     "action": "BUY",
+     "issuer": "Not Fade Away LLC Company: Not Fade Away LLC Description: Hedge Fund",
+     "ticker": "",
+     "value": "$250,001 - $500,000",
+     "period": "",
+     "date": "09/28/2026"
+    },
+    {
+     "action": "BUY",
+     "issuer": "Days Between LLC Company: Days Between LLC Description: Partnership",
+     "ticker": "",
+     "value": "$15,001 - $50,000",
+     "period": "",
+     "date": "09/28/2026"
+    },
+    {
+     "action": "BUY",
+     "issuer": "Days Between LLC Company: Days Between LLC Description: Partnership",
+     "ticker": "",
+     "value": "$250,001 - $500,000",
+     "period": "",
+     "date": "09/28/2026"
+    },
+    {
+     "action": "BUY",
+     "issuer": "MH Built to Last LLC Company: MH Built to Last LLC Description: Partnership",
+     "ticker": "",
+     "value": "$1,001 - $15,000",
+     "period": "",
+     "date": "09/28/2026"
+    },
+    {
+     "action": "BUY",
+     "issuer": "Days Between LLC Company: Days Between LLC Description: Partnership",
+     "ticker": "",
+     "value": "$100,001 - $250,000",
+     "period": "",
+     "date": "09/28/2026"
+    },
+    {
+     "action": "BUY",
+     "issuer": "MH Built to Last LLC Company: MH Built to Last LLC Description: Partnership",
+     "ticker": "",
+     "value": "$15,001 - $50,000",
+     "period": "",
+     "date": "09/28/2026"
+    },
+    {
+     "action": "BUY",
+     "issuer": "MH Built to Last LLC Company: MH Built to Last LLC Description: Partnership",
+     "ticker": "",
+     "value": "$50,001 - $100,000",
+     "period": "",
+     "date": "09/28/2026"
+    },
+    {
+     "action": "SELL",
+     "issuer": "MH Built to Last LLC Company: MH Built to Last LLC Description: Partnership",
+     "ticker": "",
+     "value": "$1,001 - $15,000",
+     "period": "",
+     "date": "09/28/2026"
+    },
+    {
+     "action": "SELL",
+     "issuer": "MH Built to Last LLC Company: MH Built to Last LLC Description: Partnership",
+     "ticker": "",
+     "value": "$15,001 - $50,000",
+     "period": "",
+     "date": "09/28/2026"
+    },
+    {
+     "action": "SELL",
+     "issuer": "MH Built to Last LLC Company: MH Built to Last LLC Description: Partnership",
+     "ticker": "",
+     "value": "$50,001 - $100,000",
+     "period": "",
+     "date": "09/28/2026"
+    },
+    {
+     "action": "SELL",
+     "issuer": "MH Built to Last LLC Company: MH Built to Last LLC Description: Partnership",
+     "ticker": "",
+     "value": "$250,001 - $500,000",
+     "period": "",
+     "date": "09/28/2026"
+    },
+    {
+     "action": "SELL",
+     "issuer": "MH Built to Last LLC Company: MH Built to Last LLC Description: Partnership",
+     "ticker": "",
+     "value": "$100,001 - $250,000",
+     "period": "",
+     "date": "09/28/2026"
     }
    ]
   }
