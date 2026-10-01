@@ -1110,6 +1110,30 @@
      "value": "$1,001 - $15,000",
      "period": "",
      "date": "09/02/2026"
+    },
+    {
+     "action": "SELL",
+     "issuer": "JP Morgan Chase & Co. Common Stock",
+     "ticker": "JPM",
+     "value": "$15,001 - $50,000",
+     "period": "",
+     "date": "10/01/2026"
+    },
+    {
+     "action": "SELL",
+     "issuer": "Analog Devices, Inc. - Common Stock",
+     "ticker": "ADI",
+     "value": "$1,001 - $15,000",
+     "period": "",
+     "date": "10/01/2026"
+    },
+    {
+     "action": "SELL",
+     "issuer": "Visa Inc.",
+     "ticker": "V",
+     "value": "$1,001 - $15,000",
+     "period": "",
+     "date": "10/01/2026"
     }
    ]
   },
