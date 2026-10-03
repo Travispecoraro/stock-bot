@@ -2652,6 +2652,22 @@
      "value": "$1,001 - $15,000",
      "period": "",
      "date": "9/17/2026"
+    },
+    {
+     "action": "BUY",
+     "issuer": "Amgen Inc. - Common Stock",
+     "ticker": "AMGN",
+     "value": "$1,001 - $15,000",
+     "period": "",
+     "date": "10/1/2026"
+    },
+    {
+     "action": "BUY",
+     "issuer": "Home Depot, Inc",
+     "ticker": "HD",
+     "value": "$1,001 - $15,000",
+     "period": "",
+     "date": "10/1/2026"
     }
    ]
   },
@@ -3545,6 +3561,22 @@
      "value": "$1,001 - $15,000",
      "period": "",
      "date": "9/2/2026"
+    },
+    {
+     "action": "BUY",
+     "issuer": "Apple Inc. - Common Stock",
+     "ticker": "AAPL",
+     "value": "$1,001 - $15,000",
+     "period": "",
+     "date": "10/1/2026"
+    },
+    {
+     "action": "BUY",
+     "issuer": "Netflix, Inc. - Common Stock",
+     "ticker": "NFLX",
+     "value": "$1,001 - $15,000",
+     "period": "",
+     "date": "10/1/2026"
     }
    ]
   },
