@@ -2734,6 +2734,14 @@
      "value": "$1,001 - $15,000",
      "period": "",
      "date": "9/2/2026"
+    },
+    {
+     "action": "BUY",
+     "issuer": "Goldman Sachs Group, Inc",
+     "ticker": "GS",
+     "value": "$1,001 - $15,000",
+     "period": "",
+     "date": "10/2/2026"
     }
    ]
   },
