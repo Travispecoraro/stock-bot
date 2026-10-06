@@ -2482,6 +2482,14 @@
      "value": "$1,001 - $15,000",
      "period": "",
      "date": "9/8/2026"
+    },
+    {
+     "action": "BUY",
+     "issuer": "Home Depot, Inc",
+     "ticker": "HD",
+     "value": "$1,001 - $15,000",
+     "period": "",
+     "date": "10/5/2026"
     }
    ]
   },
