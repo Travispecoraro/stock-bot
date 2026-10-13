@@ -3718,6 +3718,22 @@
      "value": "$1,001 - $15,000",
      "period": "",
      "date": "9/10/2026"
+    },
+    {
+     "action": "SELL",
+     "issuer": "Deckers Outdoor Corporation",
+     "ticker": "DECK",
+     "value": "$1,001 - $15,000",
+     "period": "",
+     "date": "10/12/2026"
+    },
+    {
+     "action": "SELL",
+     "issuer": "ITT Inc. Common Stock",
+     "ticker": "ITT",
+     "value": "$15,001 - $50,000",
+     "period": "",
+     "date": "10/12/2026"
     }
    ]
   },
@@ -4064,6 +4080,48 @@
      "value": "$100,001 - $250,000",
      "period": "",
      "date": "09/28/2026"
+    }
+   ]
+  },
+  "rick larsen": {
+   "name": "Rick Larsen",
+   "events": [
+    {
+     "action": "SELL",
+     "issuer": "Home Depot, Inc",
+     "ticker": "HD",
+     "value": "$1,001 - $15,000",
+     "period": "",
+     "date": "10/12/2026"
+    }
+   ]
+  },
+  "lisa mcclain": {
+   "name": "Lisa McClain",
+   "events": [
+    {
+     "action": "BUY",
+     "issuer": "SP Caterpillar, Inc. Common Stock",
+     "ticker": "CAT",
+     "value": "$1,001 - $15,000",
+     "period": "",
+     "date": "10/12/2026"
+    },
+    {
+     "action": "BUY",
+     "issuer": "SP Novagold Resources Inc",
+     "ticker": "NG",
+     "value": "$1,001 - $15,000",
+     "period": "",
+     "date": "10/12/2026"
+    },
+    {
+     "action": "BUY",
+     "issuer": "SP Transocean Ltd",
+     "ticker": "RIG",
+     "value": "$15,001 - $50,000",
+     "period": "",
+     "date": "10/12/2026"
     }
    ]
   }
