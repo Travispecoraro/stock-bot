@@ -2676,6 +2676,22 @@
      "value": "$1,001 - $15,000",
      "period": "",
      "date": "10/1/2026"
+    },
+    {
+     "action": "BUY",
+     "issuer": "AT&T Inc",
+     "ticker": "T",
+     "value": "$1,001 - $15,000",
+     "period": "",
+     "date": "10/15/2026"
+    },
+    {
+     "action": "SELL",
+     "issuer": "Procter & Gamble Company",
+     "ticker": "PG",
+     "value": "$1,001 - $15,000",
+     "period": "",
+     "date": "10/15/2026"
     }
    ]
   },
