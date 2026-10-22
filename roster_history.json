@@ -3560,6 +3560,134 @@
      "value": "$1,001 - $15,000",
      "period": "",
      "date": "09/11/2026"
+    },
+    {
+     "action": "SELL",
+     "issuer": "Aptiv PLC Ordinary Shares",
+     "ticker": "APTV",
+     "value": "$1,001 - $15,000",
+     "period": "",
+     "date": "10/21/2026"
+    },
+    {
+     "action": "SELL",
+     "issuer": "Micron Technology, Inc. - Common Stock",
+     "ticker": "MU",
+     "value": "$1,001 - $15,000",
+     "period": "",
+     "date": "10/21/2026"
+    },
+    {
+     "action": "SELL",
+     "issuer": "iShares 10-20 Year Treasury Bond ETF",
+     "ticker": "TLH",
+     "value": "$1,001 - $15,000",
+     "period": "",
+     "date": "10/21/2026"
+    },
+    {
+     "action": "SELL",
+     "issuer": "Vanguard Developed Markets Index Fund - ETF Shares",
+     "ticker": "VEA",
+     "value": "$1,001 - $15,000",
+     "period": "",
+     "date": "10/21/2026"
+    },
+    {
+     "action": "SELL",
+     "issuer": "Tradr 2X Long SPY Monthly ETF",
+     "ticker": "SPYM",
+     "value": "$1,001 - $15,000",
+     "period": "",
+     "date": "10/21/2026"
+    },
+    {
+     "action": "SELL",
+     "issuer": "iShares MSCI EAFE ETF",
+     "ticker": "EFA",
+     "value": "$1,001 - $15,000",
+     "period": "",
+     "date": "10/21/2026"
+    },
+    {
+     "action": "BUY",
+     "issuer": "Cisco Systems, Inc. - Common Stock",
+     "ticker": "CSCO",
+     "value": "$1,001 - $15,000",
+     "period": "",
+     "date": "10/21/2026"
+    },
+    {
+     "action": "BUY",
+     "issuer": "Realty Income Corporation Common Stock",
+     "ticker": "O",
+     "value": "$1,001 - $15,000",
+     "period": "",
+     "date": "10/21/2026"
+    },
+    {
+     "action": "BUY",
+     "issuer": "BondBloxx Bloomberg Two Year Target Duration US Treasury ETF",
+     "ticker": "XTWO",
+     "value": "$1,001 - $15,000",
+     "period": "",
+     "date": "10/21/2026"
+    },
+    {
+     "action": "BUY",
+     "issuer": "Goldman Sachs Access Investment Grade Corporate Bond ETF",
+     "ticker": "GIGB",
+     "value": "$1,001 - $15,000",
+     "period": "",
+     "date": "10/21/2026"
+    },
+    {
+     "action": "BUY",
+     "issuer": "Janus Henderson Mortgage-Backed Securities ETF",
+     "ticker": "JMBS",
+     "value": "$1,001 - $15,000",
+     "period": "",
+     "date": "10/21/2026"
+    },
+    {
+     "action": "BUY",
+     "issuer": "BondBloxx Bloomberg Five Year Target Duration US Treasury ETF",
+     "ticker": "XFIV",
+     "value": "$1,001 - $15,000",
+     "period": "",
+     "date": "10/21/2026"
+    },
+    {
+     "action": "BUY",
+     "issuer": "iShares MBS ETF",
+     "ticker": "MBB",
+     "value": "$1,001 - $15,000",
+     "period": "",
+     "date": "10/21/2026"
+    },
+    {
+     "action": "BUY",
+     "issuer": "iShares 7-10 Year Treasury Bond ETF",
+     "ticker": "IEF",
+     "value": "$1,001 - $15,000",
+     "period": "",
+     "date": "10/21/2026"
+    },
+    {
+     "action": "BUY",
+     "issuer": "iShares 10-20 Year Treasury Bond ETF",
+     "ticker": "TLH",
+     "value": "$1,001 - $15,000",
+     "period": "",
+     "date": "10/21/2026"
+    },
+    {
+     "action": "BUY",
+     "issuer": "iShares CMBS ETF",
+     "ticker": "CMBS",
+     "value": "$1,001 - $15,000",
+     "period": "",
+     "date": "10/21/2026"
     }
    ]
   },
