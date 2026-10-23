@@ -1511,7 +1511,8 @@
     "3d85c008bcabf929495cfe61",
     "163ae83db1f44154d9e4e526",
     "358b083846bcad61e77528d6",
-    "aff6e11ccc5921ba28997d68"
+    "aff6e11ccc5921ba28997d68",
+    "d59f6ea8a5004086cf46b194"
   ],
   "seen_filings": [
     "https://efdsearch.senate.gov/search/view/ptr/392ac3e5-07f6-4f8c-840f-84e9066ffb29/",
@@ -1801,8 +1802,8 @@
   },
   "heartbeat": {
     "last_sent_date": "2026-10-22",
-    "checks": 3,
-    "trades_found": 0,
+    "checks": 4,
+    "trades_found": 1,
     "errors": 0,
     "errors_today": 6,
     "pinged_today": 20
@@ -10521,6 +10522,19 @@
         "disclosure_date": "10/21/2026",
         "link": "https://efdsearch.senate.gov/search/view/ptr/94c5f7b9-cdbc-40b4-aeba-de920da58588/",
         "logged": "2026-10-22"
+      },
+      {
+        "chamber": "Senate",
+        "person": "Alan Armstrong",
+        "ticker": "WMB",
+        "asset": "Williams Companies, Inc. (The) Common Stock Option Type: Call Strike price: $80.00 Expires: 2026-12-18",
+        "side": "sell",
+        "amount": "$250,001 - $500,000",
+        "owner": "Joint",
+        "transaction_date": "09/08/2026",
+        "disclosure_date": "10/22/2026",
+        "link": "https://efdsearch.senate.gov/search/view/ptr/6aa5ccb2-ff27-491a-9314-778b9ab37964/",
+        "logged": "2026-10-23"
       }
     ],
     "alerted_clusters": [],
@@ -10769,7 +10783,8 @@
       "https://efdsearch.senate.gov/search/view/ptr/6bf3b6f7-9e1b-499a-bd5a-990292ce2e72/",
       "https://efdsearch.senate.gov/search/view/ptr/0541be4f-4f96-4d84-8d6f-d349f218bb2a/",
       "https://efdsearch.senate.gov/search/view/ptr/7dfdae57-9401-4bf1-9059-85d1e5ee4a84/",
-      "https://efdsearch.senate.gov/search/view/ptr/94c5f7b9-cdbc-40b4-aeba-de920da58588/"
+      "https://efdsearch.senate.gov/search/view/ptr/94c5f7b9-cdbc-40b4-aeba-de920da58588/",
+      "https://efdsearch.senate.gov/search/view/ptr/6aa5ccb2-ff27-491a-9314-778b9ab37964/"
     ],
     "processed_house": [
       "20034740",

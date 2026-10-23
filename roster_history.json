@@ -4076,6 +4076,14 @@
      "value": "$1,001 - $15,000",
      "period": "",
      "date": "09/17/2026"
+    },
+    {
+     "action": "SELL",
+     "issuer": "Williams Companies, Inc. (The) Common Stock Option Type: Call Strike price: $80.00 Expires: 2026-12-18",
+     "ticker": "WMB",
+     "value": "$250,001 - $500,000",
+     "period": "",
+     "date": "10/22/2026"
     }
    ]
   },
