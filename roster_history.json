@@ -4313,6 +4313,67 @@
      "date": "10/16/2026"
     }
    ]
+  },
+  "pete sessions": {
+   "name": "Pete Sessions",
+   "events": [
+    {
+     "action": "SELL",
+     "issuer": "Home Depot, Inc",
+     "ticker": "HD",
+     "value": "$1,001 - $15,000",
+     "period": "",
+     "date": "10/27/2026"
+    },
+    {
+     "action": "SELL",
+     "issuer": "Honeywell International Inc",
+     "ticker": "HON",
+     "value": "$1,001 - $15,000",
+     "period": "",
+     "date": "10/27/2026"
+    },
+    {
+     "action": "SELL",
+     "issuer": "Pepsico, Inc",
+     "ticker": "PEP",
+     "value": "$1,001 - $15,000",
+     "period": "",
+     "date": "10/27/2026"
+    },
+    {
+     "action": "SELL",
+     "issuer": "Procter & Gamble Company",
+     "ticker": "PG",
+     "value": "$1,001 - $15,000",
+     "period": "",
+     "date": "10/27/2026"
+    },
+    {
+     "action": "SELL",
+     "issuer": "SP TJX Companies, Inc",
+     "ticker": "TJX",
+     "value": "$15,001 - $50,000",
+     "period": "",
+     "date": "10/27/2026"
+    },
+    {
+     "action": "SELL",
+     "issuer": "SP Visa Inc",
+     "ticker": "V",
+     "value": "$15,001 - $50,000",
+     "period": "",
+     "date": "10/27/2026"
+    },
+    {
+     "action": "SELL",
+     "issuer": "Walt Disney Company",
+     "ticker": "DIS",
+     "value": "$1,001 - $15,000",
+     "period": "",
+     "date": "10/27/2026"
+    }
+   ]
   }
  }
 }
