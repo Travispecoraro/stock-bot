@@ -1812,9 +1812,9 @@
   },
   "heartbeat": {
     "last_sent_date": "2026-10-30",
-    "checks": 3,
+    "checks": 4,
     "trades_found": 3,
-    "errors": 3,
+    "errors": 4,
     "errors_today": 6,
     "pinged_today": 20
   },
