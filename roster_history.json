@@ -4398,6 +4398,19 @@
      "date": "10/27/2026"
     }
    ]
+  },
+  "maria elvira salazar": {
+   "name": "Maria Elvira Salazar",
+   "events": [
+    {
+     "action": "BUY",
+     "issuer": "Procter & Gamble Company",
+     "ticker": "PG",
+     "value": "$1,001 - $15,000",
+     "period": "",
+     "date": "11/5/2026"
+    }
+   ]
   }
  }
 }
