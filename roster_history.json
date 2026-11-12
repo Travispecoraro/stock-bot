@@ -4118,6 +4118,54 @@
      "value": "$15,001 - $50,000",
      "period": "",
      "date": "10/12/2026"
+    },
+    {
+     "action": "BUY",
+     "issuer": "Alliant Energy Corporation",
+     "ticker": "LNT",
+     "value": "$1,001 - $15,000",
+     "period": "",
+     "date": "11/10/2026"
+    },
+    {
+     "action": "SELL",
+     "issuer": "BNP PARIBAS ORD",
+     "ticker": "BNPQF",
+     "value": "$1,001 - $15,000",
+     "period": "",
+     "date": "11/10/2026"
+    },
+    {
+     "action": "SELL",
+     "issuer": "Ciena Corporation",
+     "ticker": "CIEN",
+     "value": "$1,001 - $15,000",
+     "period": "",
+     "date": "11/10/2026"
+    },
+    {
+     "action": "SELL",
+     "issuer": "ENGIE SA ORD",
+     "ticker": "ENGQF",
+     "value": "$1,001 - $15,000",
+     "period": "",
+     "date": "11/10/2026"
+    },
+    {
+     "action": "BUY",
+     "issuer": "SONY GROUP CORP",
+     "ticker": "SNEJF",
+     "value": "$1,001 - $15,000",
+     "period": "",
+     "date": "11/10/2026"
+    },
+    {
+     "action": "BUY",
+     "issuer": "The Cooper Companies, Inc",
+     "ticker": "COO",
+     "value": "$1,001 - $15,000",
+     "period": "",
+     "date": "11/10/2026"
     }
    ]
   },

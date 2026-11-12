@@ -1562,7 +1562,13 @@
     "5e039c52c92e8fb7b2bf38c2",
     "c0c3ea66781280087de18546",
     "0916b99bf4fca700100b86a3",
-    "a2d0fbc92fdffa6b53c6fd13"
+    "a2d0fbc92fdffa6b53c6fd13",
+    "94622dc3d6323000fcb47c2f",
+    "63fd10288c0f9d0d177dd509",
+    "04ee9f3ae14203df5d23ddcb",
+    "8fabdfa3f58794c060b6e44d",
+    "f96f633a233ba3cced0795e2",
+    "5cd74fc8194134f234fcb188"
   ],
   "seen_filings": [
     "https://efdsearch.senate.gov/search/view/ptr/392ac3e5-07f6-4f8c-840f-84e9066ffb29/",
@@ -1852,8 +1858,8 @@
   },
   "heartbeat": {
     "last_sent_date": "2026-11-11",
-    "checks": 1,
-    "trades_found": 0,
+    "checks": 2,
+    "trades_found": 6,
     "errors": 1,
     "errors_today": 6,
     "pinged_today": 20
@@ -7077,97 +7083,6 @@
         "logged": "2026-08-05"
       },
       {
-        "chamber": "Senate",
-        "person": "Thomas H Tuberville",
-        "ticker": "PEP",
-        "asset": "Pepsico Inc",
-        "side": "sell",
-        "amount": "$15,001 - $50,000",
-        "owner": "Joint",
-        "transaction_date": "10/07/2025",
-        "disclosure_date": "08/05/2026",
-        "link": "https://efdsearch.senate.gov/search/view/ptr/1a5e6752-653a-4b11-82b6-efd51d466bb6/",
-        "logged": "2026-08-05"
-      },
-      {
-        "chamber": "Senate",
-        "person": "Thomas H Tuberville",
-        "ticker": "OC",
-        "asset": "Owens Corning Inc",
-        "side": "sell",
-        "amount": "$15,001 - $50,000",
-        "owner": "Joint",
-        "transaction_date": "10/07/2025",
-        "disclosure_date": "08/05/2026",
-        "link": "https://efdsearch.senate.gov/search/view/ptr/1a5e6752-653a-4b11-82b6-efd51d466bb6/",
-        "logged": "2026-08-05"
-      },
-      {
-        "chamber": "Senate",
-        "person": "Thomas H Tuberville",
-        "ticker": "MSFT",
-        "asset": "Microsoft Corp",
-        "side": "sell",
-        "amount": "$15,001 - $50,000",
-        "owner": "Joint",
-        "transaction_date": "10/07/2025",
-        "disclosure_date": "08/05/2026",
-        "link": "https://efdsearch.senate.gov/search/view/ptr/1a5e6752-653a-4b11-82b6-efd51d466bb6/",
-        "logged": "2026-08-05"
-      },
-      {
-        "chamber": "Senate",
-        "person": "Thomas H Tuberville",
-        "ticker": "AAPL",
-        "asset": "Apple Inc",
-        "side": "sell",
-        "amount": "$15,001 - $50,000",
-        "owner": "Joint",
-        "transaction_date": "10/07/2025",
-        "disclosure_date": "08/05/2026",
-        "link": "https://efdsearch.senate.gov/search/view/ptr/1a5e6752-653a-4b11-82b6-efd51d466bb6/",
-        "logged": "2026-08-05"
-      },
-      {
-        "chamber": "Senate",
-        "person": "Thomas H Tuberville",
-        "ticker": "GOOGL",
-        "asset": "Alphabet Inc. - Class A Common Stock",
-        "side": "sell",
-        "amount": "$15,001 - $50,000",
-        "owner": "Joint",
-        "transaction_date": "10/07/2025",
-        "disclosure_date": "08/05/2026",
-        "link": "https://efdsearch.senate.gov/search/view/ptr/1a5e6752-653a-4b11-82b6-efd51d466bb6/",
-        "logged": "2026-08-05"
-      },
-      {
-        "chamber": "Senate",
-        "person": "Thomas H Tuberville",
-        "ticker": "ORCL",
-        "asset": "Oracle Corporation Common Stock",
-        "side": "sell",
-        "amount": "$15,001 - $50,000",
-        "owner": "Joint",
-        "transaction_date": "10/07/2025",
-        "disclosure_date": "08/05/2026",
-        "link": "https://efdsearch.senate.gov/search/view/ptr/1a5e6752-653a-4b11-82b6-efd51d466bb6/",
-        "logged": "2026-08-05"
-      },
-      {
-        "chamber": "Senate",
-        "person": "Thomas H Tuberville",
-        "ticker": "",
-        "asset": "BIRMINGHAM ALA GO WTS SER. 2018 B Rate/Coupon: 5.0% Matures: 12/01/2043",
-        "side": "sell",
-        "amount": "$15,001 - $50,000",
-        "owner": "Joint",
-        "transaction_date": "10/07/2025",
-        "disclosure_date": "08/05/2026",
-        "link": "https://efdsearch.senate.gov/search/view/ptr/1a5e6752-653a-4b11-82b6-efd51d466bb6/",
-        "logged": "2026-08-05"
-      },
-      {
         "chamber": "House",
         "person": "Lloyd Doggett",
         "ticker": "KO",
@@ -11079,6 +10994,84 @@
         "disclosure_date": "10/26/2026",
         "link": "https://efdsearch.senate.gov/search/view/ptr/e67780bf-56e4-46f0-a81e-574a701dd539/",
         "logged": "2026-11-09"
+      },
+      {
+        "chamber": "House",
+        "person": "Gilbert Cisneros",
+        "ticker": "LNT",
+        "asset": "Alliant Energy Corporation",
+        "side": "buy",
+        "amount": "$1,001 - $15,000",
+        "owner": "",
+        "transaction_date": "10/20/2026",
+        "disclosure_date": "11/10/2026",
+        "link": "",
+        "logged": "2026-11-12"
+      },
+      {
+        "chamber": "House",
+        "person": "Gilbert Cisneros",
+        "ticker": "BNPQF",
+        "asset": "BNP PARIBAS ORD",
+        "side": "sell",
+        "amount": "$1,001 - $15,000",
+        "owner": "",
+        "transaction_date": "10/13/2026",
+        "disclosure_date": "11/10/2026",
+        "link": "",
+        "logged": "2026-11-12"
+      },
+      {
+        "chamber": "House",
+        "person": "Gilbert Cisneros",
+        "ticker": "CIEN",
+        "asset": "Ciena Corporation",
+        "side": "sell",
+        "amount": "$1,001 - $15,000",
+        "owner": "",
+        "transaction_date": "10/21/2026",
+        "disclosure_date": "11/10/2026",
+        "link": "",
+        "logged": "2026-11-12"
+      },
+      {
+        "chamber": "House",
+        "person": "Gilbert Cisneros",
+        "ticker": "ENGQF",
+        "asset": "ENGIE SA ORD",
+        "side": "sell",
+        "amount": "$1,001 - $15,000",
+        "owner": "",
+        "transaction_date": "10/13/2026",
+        "disclosure_date": "11/10/2026",
+        "link": "",
+        "logged": "2026-11-12"
+      },
+      {
+        "chamber": "House",
+        "person": "Gilbert Cisneros",
+        "ticker": "SNEJF",
+        "asset": "SONY GROUP CORP",
+        "side": "buy",
+        "amount": "$1,001 - $15,000",
+        "owner": "",
+        "transaction_date": "10/14/2026",
+        "disclosure_date": "11/10/2026",
+        "link": "",
+        "logged": "2026-11-12"
+      },
+      {
+        "chamber": "House",
+        "person": "Gilbert Cisneros",
+        "ticker": "COO",
+        "asset": "The Cooper Companies, Inc",
+        "side": "buy",
+        "amount": "$1,001 - $15,000",
+        "owner": "",
+        "transaction_date": "10/14/2026",
+        "disclosure_date": "11/10/2026",
+        "link": "",
+        "logged": "2026-11-12"
       }
     ],
     "alerted_clusters": [],
@@ -11555,7 +11548,10 @@
       "20035775",
       "20035780",
       "20024921",
-      "20035014"
+      "20035014",
+      "20035788",
+      "9116403",
+      "20035806"
     ]
   },
   "activists": {
