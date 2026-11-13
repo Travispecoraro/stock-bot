@@ -2916,6 +2916,54 @@
      "value": "$1,001 - $15,000",
      "period": "",
      "date": "10/29/2026"
+    },
+    {
+     "action": "SELL",
+     "issuer": "Amgen Inc. - Common Stock",
+     "ticker": "AMGN",
+     "value": "$1,001 - $15,000",
+     "period": "",
+     "date": "11/12/2026"
+    },
+    {
+     "action": "BUY",
+     "issuer": "AT&T Inc",
+     "ticker": "T",
+     "value": "$1,001 - $15,000",
+     "period": "",
+     "date": "11/12/2026"
+    },
+    {
+     "action": "SELL",
+     "issuer": "Home Depot, Inc",
+     "ticker": "HD",
+     "value": "$1,001 - $15,000",
+     "period": "",
+     "date": "11/12/2026"
+    },
+    {
+     "action": "SELL",
+     "issuer": "Kroger Company",
+     "ticker": "KR",
+     "value": "$1,001 - $15,000",
+     "period": "",
+     "date": "11/12/2026"
+    },
+    {
+     "action": "SELL",
+     "issuer": "Procter & Gamble Company",
+     "ticker": "PG",
+     "value": "$1,001 - $15,000",
+     "period": "",
+     "date": "11/12/2026"
+    },
+    {
+     "action": "SELL",
+     "issuer": "Visa Inc",
+     "ticker": "V",
+     "value": "$1,001 - $15,000",
+     "period": "",
+     "date": "11/12/2026"
     }
    ]
   },
