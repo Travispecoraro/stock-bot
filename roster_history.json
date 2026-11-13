@@ -2682,6 +2682,14 @@
      "value": "$1,001 - $15,000",
      "period": "",
      "date": "10/5/2026"
+    },
+    {
+     "action": "BUY",
+     "issuer": "Coca-Cola Company",
+     "ticker": "KO",
+     "value": "$1,001 - $15,000",
+     "period": "",
+     "date": "11/11/2026"
     }
    ]
   },
