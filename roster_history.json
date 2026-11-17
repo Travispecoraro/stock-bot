@@ -4787,6 +4787,19 @@
      "date": "11/5/2026"
     }
    ]
+  },
+  "jonathan jackson": {
+   "name": "Jonathan Jackson",
+   "events": [
+    {
+     "action": "BUY",
+     "issuer": "SP Estee Lauder Companies, Inc",
+     "ticker": "EL",
+     "value": "$1,001 - $15,000",
+     "period": "",
+     "date": "11/13/2026"
+    }
+   ]
   }
  }
 }
