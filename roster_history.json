@@ -3960,6 +3960,38 @@
      "value": "$1,001 - $15,000",
      "period": "",
      "date": "10/21/2026"
+    },
+    {
+     "action": "SELL",
+     "issuer": "iShares CMBS ETF",
+     "ticker": "CMBS",
+     "value": "$1,001 - $15,000",
+     "period": "",
+     "date": "11/17/2026"
+    },
+    {
+     "action": "SELL",
+     "issuer": "iShares 10-20 Year Treasury Bond ETF",
+     "ticker": "TLH",
+     "value": "$1,001 - $15,000",
+     "period": "",
+     "date": "11/17/2026"
+    },
+    {
+     "action": "BUY",
+     "issuer": "iShares BB Rated Corporate Bond ETF",
+     "ticker": "HYBB",
+     "value": "$1,001 - $15,000",
+     "period": "",
+     "date": "11/17/2026"
+    },
+    {
+     "action": "BUY",
+     "issuer": "iShares MBS ETF",
+     "ticker": "MBB",
+     "value": "$1,001 - $15,000",
+     "period": "",
+     "date": "11/17/2026"
     }
    ]
   },
