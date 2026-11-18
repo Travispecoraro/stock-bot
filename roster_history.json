@@ -4399,6 +4399,22 @@
      "value": "$1,001 - $15,000",
      "period": "",
      "date": "9/15/2026"
+    },
+    {
+     "action": "SELL",
+     "issuer": "SP Netflix, Inc. - Common Stock",
+     "ticker": "NFLX",
+     "value": "$1,001 - $15,000",
+     "period": "",
+     "date": "11/16/2026"
+    },
+    {
+     "action": "SELL",
+     "issuer": "Netflix, Inc. - Common Stock",
+     "ticker": "NFLX",
+     "value": "$1,001 - $15,000",
+     "period": "",
+     "date": "11/16/2026"
     }
    ]
   },
