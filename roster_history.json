@@ -4848,6 +4848,19 @@
      "date": "11/13/2026"
     }
    ]
+  },
+  "terri a. sewell": {
+   "name": "Terri A. Sewell",
+   "events": [
+    {
+     "action": "SELL",
+     "issuer": "Tapestry, Inc. Common Stock",
+     "ticker": "TPR",
+     "value": "$1,001 - $15,000",
+     "period": "",
+     "date": "11/18/2026"
+    }
+   ]
   }
  }
 }
