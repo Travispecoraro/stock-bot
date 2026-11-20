@@ -4452,6 +4452,190 @@
      "value": "$250,001 - $500,000",
      "period": "",
      "date": "10/22/2026"
+    },
+    {
+     "action": "BUY",
+     "issuer": "Alabama Toll Rd Brdg & Tunl Auth Revenue Bond Rate/Coupon: 5.0% Matures: 2032-10-01",
+     "ticker": "",
+     "value": "$1,001 - $15,000",
+     "period": "",
+     "date": "11/20/2026"
+    },
+    {
+     "action": "BUY",
+     "issuer": "Illinois St General Obligation Bond Rate/Coupon: 5.0% Matures: 2029-05-01",
+     "ticker": "",
+     "value": "$1,001 - $15,000",
+     "period": "",
+     "date": "11/20/2026"
+    },
+    {
+     "action": "BUY",
+     "issuer": "Illinois St General Obligation Bond Rate/Coupon: 5.0% Matures: 2031-02-01",
+     "ticker": "",
+     "value": "$1,001 - $15,000",
+     "period": "",
+     "date": "11/20/2026"
+    },
+    {
+     "action": "BUY",
+     "issuer": "Indiana St Fin Auth Revenue Bond Rate/Coupon: 5.0% Matures: 2035-11-15",
+     "ticker": "",
+     "value": "$250,001 - $500,000",
+     "period": "",
+     "date": "11/20/2026"
+    },
+    {
+     "action": "BUY",
+     "issuer": "Idaho St Tax Revenue Bond Rate/Coupon: 4.0% Matures: 2027-06-30",
+     "ticker": "",
+     "value": "$500,001 - $1,000,000",
+     "period": "",
+     "date": "11/20/2026"
+    },
+    {
+     "action": "BUY",
+     "issuer": "Barbers Hill TX Independent Sch Revenue Bond Rate/Coupon: 5.0% Matures: 2027-02-15",
+     "ticker": "",
+     "value": "$100,001 - $250,000",
+     "period": "",
+     "date": "11/20/2026"
+    },
+    {
+     "action": "BUY",
+     "issuer": "Texas Transn Commn General Obligation Mobility Bond Rate/Coupon: 5.0% Matures: 2039-10-01",
+     "ticker": "",
+     "value": "$500,001 - $1,000,000",
+     "period": "",
+     "date": "11/20/2026"
+    },
+    {
+     "action": "BUY",
+     "issuer": "New Jersey Economic Dev Auth Revenue Bond Rate/Coupon: 5.0% Matures: 2032-06-15",
+     "ticker": "",
+     "value": "$250,001 - $500,000",
+     "period": "",
+     "date": "11/20/2026"
+    },
+    {
+     "action": "BUY",
+     "issuer": "Harris Cnty Tex Cultural Ed Facs Revenue Bond Rate/Coupon: 5.0% Matures: 2033-12-01",
+     "ticker": "",
+     "value": "$250,001 - $500,000",
+     "period": "",
+     "date": "11/20/2026"
+    },
+    {
+     "action": "BUY",
+     "issuer": "Texas Wtr Dev Brd Revenue Bond Rate/Coupon: 5.0% Matures: 2033-10-15",
+     "ticker": "",
+     "value": "$250,001 - $500,000",
+     "period": "",
+     "date": "11/20/2026"
+    },
+    {
+     "action": "BUY",
+     "issuer": "Colorado Health Facs Auth Revenue Bond Rate/Coupon: 5.0% Matures: 2029-11-15",
+     "ticker": "",
+     "value": "$500,001 - $1,000,000",
+     "period": "",
+     "date": "11/20/2026"
+    },
+    {
+     "action": "BUY",
+     "issuer": "Illinois St General Obligation Bond Rate/Coupon: 5.0% Matures: 2029-03-01",
+     "ticker": "",
+     "value": "$250,001 - $500,000",
+     "period": "",
+     "date": "11/20/2026"
+    },
+    {
+     "action": "BUY",
+     "issuer": "Ohio St Wtr Dev Auth Revenue Bond Rate/Coupon: 5.0% Matures: 2040-12-01",
+     "ticker": "",
+     "value": "$500,001 - $1,000,000",
+     "period": "",
+     "date": "11/20/2026"
+    },
+    {
+     "action": "BUY",
+     "issuer": "Connecticut St General Obligation Bond Rate/Coupon: 5.0% Matures: 2038-01-15",
+     "ticker": "",
+     "value": "$100,001 - $250,000",
+     "period": "",
+     "date": "11/20/2026"
+    },
+    {
+     "action": "BUY",
+     "issuer": "Connecticut St General Obligation Bond Rate/Coupon: 5.25% Matures: 2039-10-15",
+     "ticker": "",
+     "value": "$250,001 - $500,000",
+     "period": "",
+     "date": "11/20/2026"
+    },
+    {
+     "action": "BUY",
+     "issuer": "New Jersey St Transntr Fd Auth Revenue Bond Rate/Coupon: 5.0% Matures: 2041-06-15",
+     "ticker": "",
+     "value": "$250,001 - $500,000",
+     "period": "",
+     "date": "11/20/2026"
+    },
+    {
+     "action": "BUY",
+     "issuer": "Philadelphia PA General Obligation Bond Rate/Coupon: 5.0% Matures: 2027-10-01",
+     "ticker": "",
+     "value": "$100,001 - $250,000",
+     "period": "",
+     "date": "11/20/2026"
+    },
+    {
+     "action": "BUY",
+     "issuer": "Philadelphia PA General Obligation Bond Rate/Coupon: 5.0% Matures: 2036-10-01",
+     "ticker": "",
+     "value": "$500,001 - $1,000,000",
+     "period": "",
+     "date": "11/20/2026"
+    },
+    {
+     "action": "SELL",
+     "issuer": "WBD",
+     "ticker": "",
+     "value": "$1,001 - $15,000",
+     "period": "",
+     "date": "11/20/2026"
+    },
+    {
+     "action": "BUY",
+     "issuer": "Missouri St Hwys & Trans Commn St Rd Revenue Bond Rate/Coupon: 5.0% Matures: 2030-05-01",
+     "ticker": "",
+     "value": "$100,001 - $250,000",
+     "period": "",
+     "date": "11/20/2026"
+    },
+    {
+     "action": "BUY",
+     "issuer": "North Tex Twy Auth Revenue Bond Rate/Coupon: 5.0% Matures: 2031-01-01",
+     "ticker": "",
+     "value": "$100,001 - $250,000",
+     "period": "",
+     "date": "11/20/2026"
+    },
+    {
+     "action": "BUY",
+     "issuer": "Huntsville Ala Health Care Auth Revenue Bond Rate/Coupon: 5.0% Matures: 2035-06-01",
+     "ticker": "",
+     "value": "$250,001 - $500,000",
+     "period": "",
+     "date": "11/20/2026"
+    },
+    {
+     "action": "BUY",
+     "issuer": "Grand Prairie Tex Indpt Sch Dist Revenue Bond Rate/Coupon: 5.0% Matures: 2031-02-15",
+     "ticker": "",
+     "value": "$500,001 - $1,000,000",
+     "period": "",
+     "date": "11/20/2026"
     }
    ]
   },
@@ -4859,6 +5043,19 @@
      "value": "$1,001 - $15,000",
      "period": "",
      "date": "11/18/2026"
+    }
+   ]
+  },
+  "rafael e cruz": {
+   "name": "Rafael E Cruz",
+   "events": [
+    {
+     "action": "SELL",
+     "issuer": "Goldman Sachs Group, Inc. (The) Common Stock",
+     "ticker": "GS",
+     "value": "$250,001 - $500,000",
+     "period": "",
+     "date": "11/20/2026"
     }
    ]
   }
