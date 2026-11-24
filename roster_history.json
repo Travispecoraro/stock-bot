@@ -4896,6 +4896,78 @@
      "value": "$1,001 - $15,000",
      "period": "",
      "date": "10/26/2026"
+    },
+    {
+     "action": "SELL",
+     "issuer": "MH Built to Last LLC Company: MH Built to Last LLC Description: Partnership",
+     "ticker": "",
+     "value": "$1,001 - $15,000",
+     "period": "",
+     "date": "11/24/2026"
+    },
+    {
+     "action": "SELL",
+     "issuer": "Starling Oncology, Inc. - Common Stock",
+     "ticker": "STLN",
+     "value": "$1,001 - $15,000",
+     "period": "",
+     "date": "11/24/2026"
+    },
+    {
+     "action": "BUY",
+     "issuer": "MH Built to Last LLC Company: MH Built to Last LLC Description: Partnership",
+     "ticker": "",
+     "value": "$1,001 - $15,000",
+     "period": "",
+     "date": "11/24/2026"
+    },
+    {
+     "action": "BUY",
+     "issuer": "MH Four Winds LLC Company: MH Four Winds LLC Description: Partnership",
+     "ticker": "",
+     "value": "$50,001 - $100,000",
+     "period": "",
+     "date": "11/24/2026"
+    },
+    {
+     "action": "BUY",
+     "issuer": "MH Four Winds LLC Company: MH Four Winds LLC Description: Partnership",
+     "ticker": "",
+     "value": "$15,001 - $50,000",
+     "period": "",
+     "date": "11/24/2026"
+    },
+    {
+     "action": "BUY",
+     "issuer": "MH Four Winds LLC Company: MH Four Winds LLC Description: Partnership",
+     "ticker": "",
+     "value": "$250,001 - $500,000",
+     "period": "",
+     "date": "11/24/2026"
+    },
+    {
+     "action": "BUY",
+     "issuer": "MH Four Winds LLC Company: MH Four Winds LLC Description: Partnership",
+     "ticker": "",
+     "value": "$500,001 - $1,000,000",
+     "period": "",
+     "date": "11/24/2026"
+    },
+    {
+     "action": "BUY",
+     "issuer": "MH Four Winds LLC Company: MH Four Winds LLC Description: Partnership",
+     "ticker": "",
+     "value": "$1,001 - $15,000",
+     "period": "",
+     "date": "11/24/2026"
+    },
+    {
+     "action": "BUY",
+     "issuer": "MH Four Winds LLC Company: MH Four Winds LLC Description: Partnership",
+     "ticker": "",
+     "value": "$100,001 - $250,000",
+     "period": "",
+     "date": "11/24/2026"
     }
    ]
   },
@@ -5064,6 +5136,163 @@
      "value": "$250,001 - $500,000",
      "period": "",
      "date": "11/20/2026"
+    }
+   ]
+  },
+  "harriet hageman": {
+   "name": "Harriet Hageman",
+   "events": [
+    {
+     "action": "SELL",
+     "issuer": "SP Advanced Micro Devices, Inc",
+     "ticker": "AMD",
+     "value": "$1,001 - $15,000",
+     "period": "",
+     "date": "11/23/2026"
+    },
+    {
+     "action": "BUY",
+     "issuer": "SP AMETEK, Inc",
+     "ticker": "AME",
+     "value": "$1,001 - $15,000",
+     "period": "",
+     "date": "11/23/2026"
+    },
+    {
+     "action": "BUY",
+     "issuer": "SP AT&T Inc",
+     "ticker": "T",
+     "value": "$1,001 - $15,000",
+     "period": "",
+     "date": "11/23/2026"
+    },
+    {
+     "action": "BUY",
+     "issuer": "SP Charles Schwab Corporation",
+     "ticker": "SCHW",
+     "value": "$1,001 - $15,000",
+     "period": "",
+     "date": "11/23/2026"
+    },
+    {
+     "action": "BUY",
+     "issuer": "SP Citigroup, Inc. Common Stock",
+     "ticker": "C",
+     "value": "$1,001 - $15,000",
+     "period": "",
+     "date": "11/23/2026"
+    },
+    {
+     "action": "SELL",
+     "issuer": "SP Flex Ltd. - Ordinary Shares",
+     "ticker": "FLEX",
+     "value": "$1,001 - $15,000",
+     "period": "",
+     "date": "11/23/2026"
+    },
+    {
+     "action": "BUY",
+     "issuer": "SP Flex Ltd. - Ordinary Shares",
+     "ticker": "FLEX",
+     "value": "$1,001 - $15,000",
+     "period": "",
+     "date": "11/23/2026"
+    },
+    {
+     "action": "BUY",
+     "issuer": "SP Home Depot, Inc",
+     "ticker": "HD",
+     "value": "$1,001 - $15,000",
+     "period": "",
+     "date": "11/23/2026"
+    },
+    {
+     "action": "BUY",
+     "issuer": "SP Marsh Common Stock",
+     "ticker": "MRSH",
+     "value": "$1,001 - $15,000",
+     "period": "",
+     "date": "11/23/2026"
+    },
+    {
+     "action": "BUY",
+     "issuer": "SP Nike, Inc. Common Stock",
+     "ticker": "NKE",
+     "value": "$1,001 - $15,000",
+     "period": "",
+     "date": "11/23/2026"
+    },
+    {
+     "action": "SELL",
+     "issuer": "SP Palo Alto Networks, Inc",
+     "ticker": "PANW",
+     "value": "$1,001 - $15,000",
+     "period": "",
+     "date": "11/23/2026"
+    },
+    {
+     "action": "BUY",
+     "issuer": "SP Pepsico, Inc",
+     "ticker": "PEP",
+     "value": "$1,001 - $15,000",
+     "period": "",
+     "date": "11/23/2026"
+    },
+    {
+     "action": "BUY",
+     "issuer": "SP Pfizer, Inc. Common Stock",
+     "ticker": "PFE",
+     "value": "$1,001 - $15,000",
+     "period": "",
+     "date": "11/23/2026"
+    },
+    {
+     "action": "BUY",
+     "issuer": "SP Procter & Gamble Company",
+     "ticker": "PG",
+     "value": "$1,001 - $15,000",
+     "period": "",
+     "date": "11/23/2026"
+    },
+    {
+     "action": "BUY",
+     "issuer": "SP Prologis, Inc. Common Stock",
+     "ticker": "PLD",
+     "value": "$1,001 - $15,000",
+     "period": "",
+     "date": "11/23/2026"
+    },
+    {
+     "action": "BUY",
+     "issuer": "SP Public Storage Common Stock",
+     "ticker": "PSA",
+     "value": "$1,001 - $15,000",
+     "period": "",
+     "date": "11/23/2026"
+    },
+    {
+     "action": "BUY",
+     "issuer": "SP Southern Company",
+     "ticker": "SO",
+     "value": "$1,001 - $15,000",
+     "period": "",
+     "date": "11/23/2026"
+    },
+    {
+     "action": "BUY",
+     "issuer": "SP Tesla, Inc. - Common Stock",
+     "ticker": "TSLA",
+     "value": "$1,001 - $15,000",
+     "period": "",
+     "date": "11/23/2026"
+    },
+    {
+     "action": "SELL",
+     "issuer": "SP Xylem Inc. Common Stock New",
+     "ticker": "XYL",
+     "value": "$1,001 - $15,000",
+     "period": "",
+     "date": "11/23/2026"
     }
    ]
   }
