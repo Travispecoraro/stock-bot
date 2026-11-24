@@ -4018,6 +4018,14 @@
      "value": "$1,001 - $15,000",
      "period": "",
      "date": "8/18/2026"
+    },
+    {
+     "action": "BUY",
+     "issuer": "SP Apple Inc. - Common Stock",
+     "ticker": "AAPL",
+     "value": "$1,001 - $15,000",
+     "period": "",
+     "date": "11/21/2026"
     }
    ]
   },
