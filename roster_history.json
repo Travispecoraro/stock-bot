@@ -5295,6 +5295,56 @@
      "date": "11/23/2026"
     }
    ]
+  },
+  "rand paul": {
+   "name": "Rand Paul",
+   "events": [
+    {
+     "action": "BUY",
+     "issuer": "NVIDIA Corporation - Common Stock",
+     "ticker": "NVDA",
+     "value": "$1,001 - $15,000",
+     "period": "",
+     "date": "11/25/2026"
+    }
+   ]
+  },
+  "robert for onder": {
+   "name": "Robert For Onder",
+   "events": [
+    {
+     "action": "SELL",
+     "issuer": "Duke Energy Corporation",
+     "ticker": "DUK",
+     "value": "$15,001 - $50,000",
+     "period": "",
+     "date": "11/24/2026"
+    },
+    {
+     "action": "SELL",
+     "issuer": "HP Inc. Common Stock",
+     "ticker": "HPQ",
+     "value": "$1,001 - $15,000",
+     "period": "",
+     "date": "11/24/2026"
+    },
+    {
+     "action": "SELL",
+     "issuer": "Procter & Gamble Company",
+     "ticker": "PG",
+     "value": "$15,001 - $50,000",
+     "period": "",
+     "date": "11/24/2026"
+    },
+    {
+     "action": "SELL",
+     "issuer": "Walt Disney Company",
+     "ticker": "DIS",
+     "value": "$1,001 - $15,000",
+     "period": "",
+     "date": "11/24/2026"
+    }
+   ]
   }
  }
 }
